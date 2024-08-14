@@ -16,7 +16,8 @@ class CompanyDocController extends Controller
     public function document_addition ($id){
 
 
-        $company= Company::find($id)->first();
+        $company= Company::where('id', $id)->first();
+
         $documents= Document::all();
 
         return view ('main_pages.add_document', compact('documents', 'company'));
@@ -218,9 +219,12 @@ class CompanyDocController extends Controller
 
 
 
-    public function getDocs()
+    public function getDocs(Request $request)
     {
-        $docs = CompanyDocs::all();
+        $companyId = $request->input('company_id'); // Get the company ID from the request
+
+        // Retrieve documents for the specific company ID
+        $docs = CompanyDocs::where('company_id', $companyId)->get();
 
         // Create an array to hold the document data with remaining time
         $data = $docs->map(function($doc) {
@@ -250,9 +254,8 @@ class CompanyDocController extends Controller
             // Join the array to form the final string
             $remainingTimeString = implode(' ', $remainingTime);
 
-            $user= User::where('id', $doc->office_user)->first();
-            $user_name= $user->user_name;
-
+            $user = User::find($doc->office_user); // Use find() for simplicity
+            $userName = $user ? $user->user_name : 'Unknown'; // Handle case where user might not be found
 
             return [
                 'id' => $doc->id,
@@ -260,7 +263,7 @@ class CompanyDocController extends Controller
                 'expiry_date' => $doc->expiry_date,
                 'remaining_time' => $remainingTimeString,
                 'added_by' => $doc->added_by,
-                'office_user' => $user_name,
+                'office_user' => $userName,
             ];
         });
 
@@ -270,9 +273,11 @@ class CompanyDocController extends Controller
 
 
 
+
 public function deleteDoc($id)
 {
-    $doc = CompanyDocs::find($id);
+    $doc = CompanyDocs::where('id', $id)->first();
+
     if ($doc) {
         $doc->delete();
         return response()->json(['message' => 'Document deleted successfully']);
