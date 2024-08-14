@@ -193,9 +193,10 @@
 
 
 
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     const rowContainer = document.getElementById('row-container');
     const tableBody = document.querySelector('table tbody');
+    const companyId = '{{ $company->id ?? '' }}'; // Assume company ID is available in the template
 
     // Function to update the document name input based on the selected document
     function updateDocumentName(selectElement) {
@@ -239,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <input type="text" name="companydoc_id" class="companydoc_id" hidden>
             <input type="text" name="office_user" value="{{ $company->office_user ?? '' }}" class="office_user" hidden>
-            <input type="text" name="company_id" value="{{ $company->id ?? '' }}" class="company_id" hidden>
+            <input type="text" name="company_id" value="${companyId}" class="company_id" hidden>
             <input type="text" name="company_name" value="{{ $company->company_name ?? '' }}" class="company_name" hidden>
             <div class="col-lg-3">
                 <div class="mb-2">
@@ -294,25 +295,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to populate the table with document data
     function populateTable() {
-        fetch('{{ route("get_docs") }}') // Ensure you have a route to fetch documents
-            .then(response => response.json())
-            .then(data => {
-                tableBody.innerHTML = '';
-                data.forEach((doc, index) => {
-                    const row = `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${doc.companydoc_name}</td>
-                            <td>${doc.expiry_date}</td>
-                            <td>${doc.remaining_time}</td> <!-- Updated to use remaining_time from API response -->
-                            <td>${doc.added_by}</td>
-                            <td>${doc.office_user}</td>
-                        </tr>
+    fetch(`{{ route("get_docs") }}?company_id=${companyId}`) // Pass company_id as a query parameter
+        .then(response => response.json())
+        .then(data => {
+            tableBody.innerHTML = '';
+            data.forEach((doc, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${doc.companydoc_name}</td>
+                        <td>${doc.expiry_date}</td>
+                        <td>${doc.remaining_time}</td>
+                        <td>${doc.added_by}</td>
+                        <td>${doc.office_user}</td>
+                        <td>
+
+                            <button class="btn btn-danger delete-row" data-id="${doc.id}">Delete</button>
+                        </td>
+                    </tr>
                 `;
                 tableBody.insertAdjacentHTML('beforeend', row);
-                });
             });
-    }
+        });
+}
 
     // Load the table data on page load
     populateTable();
@@ -322,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target.classList.contains('edit-row')) {
             const docId = event.target.getAttribute('data-id');
             if (docId) {
-                fetch(`{{ route("get_doc", ":id") }}`.replace(':id', docId)) // Ensure you have a route to get a single document
+                fetch(`{{ route("get_doc", ":id") }}`.replace(':id', docId)) // Fetch single document details
                     .then(response => response.json())
                     .then(doc => {
                         document.querySelector('.companydoc_id').value = doc.companydoc_id;
@@ -341,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target.classList.contains('delete-row')) {
             const docId = event.target.getAttribute('data-id');
             if (docId) {
-                fetch(`{{ route("delete_doc", ":id") }}`.replace(':id', docId), { // Ensure you have a route to delete a document
+                fetch(`{{ route("delete_doc", ":id") }}`.replace(':id', docId), { // Delete document
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -362,6 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
 
 
 
