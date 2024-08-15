@@ -112,12 +112,13 @@
                 <thead>
                     <tr class="bg-transparent">
 
-                        <th style="width: 120px;">Sr.No </th>
-                        <th>Document Name</th>
-                        <th>Expiry Date</th> 
-                        <th>Added On</th>
-                        <th>Office User</th>
-                        <th>Action</th>
+                        <th style="width: 120px; text-align:center;">Sr.No </th>
+                        <th  style=" text-align:center;">Document Name</th>
+                        <th  style=" text-align:center;">Expiry Date</th>
+                        <th  style=" text-align:center;">Renewel Period</th>
+                        <th  style=" text-align:center;">Added On</th>
+                        <th  style=" text-align:center;">Office User</th>
+                        <th  style=" text-align:center;">Action</th>
 
 
                     </tr>

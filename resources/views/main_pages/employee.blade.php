@@ -14,12 +14,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Invoice List</h4>
+                            <h4 class="mb-sm-0 font-size-18">Employee List</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-                                    <li class="breadcrumb-item active">Invoice List</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Emplyes</a></li>
+                                    <li class="breadcrumb-item active">Employee List</li>
                                 </ol>
                             </div>
 
@@ -37,7 +37,7 @@
                                         <div class="mb-4">
                                             <button type="button" class="btn btn-primary waves-effect waves-light"
                                                 data-bs-toggle="modal" data-bs-target="#employee_modal"><i
-                                                class="bx bx-plus me-1"></i> Add Invoice</button>
+                                                class="bx bx-plus me-1"></i> Add New Employee</button>
                                         </div>
                                     </div>
                                     <div class="col-sm-auto">
@@ -71,70 +71,18 @@
                                         style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_employee">
                                         <thead>
                                             <tr class="bg-transparent">
-                                                {{-- <th style="width: 30px;">
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" name="check" class="form-check-input"
-                                                            id="checkAll">
-                                                        <label class="form-check-label" for="checkAll"></label>
-                                                    </div>
-                                                </th> --}}
+
                                                 <th style="text-align: right;">Sr.No</th>
                                                 <th style="text-align: right; width: 20px;">employee Name</th>
                                                 <th style="text-align: right;">employee Contact</th>
                                                 <th style="text-align: right;">Employee Company</th>
                                                 <th style="text-align: right;">employee Detail</th>
-                                                {{-- <th style="text-align: right;">Employee </th> --}}
                                                 <th style="text-align: right; width: 20px;">Added By</th>
                                                 <th style="text-align: right; width: 20px;">Action</th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
-{{--
-                                            <tr>
-                                                <td>
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="form-check-input">
-                                                        <label class="form-check-label"></label>
-                                                    </div>
-                                                </td>
-
-                                                <td><a href="javascript: void(0);" class="text-body fw-medium">#MN0215</a>
-                                                </td>
-                                                <td>
-                                                    12 Oct, 2020
-                                                </td>
-                                                <td>Connie Franco</td>
-
-                                                <td>
-                                                    $26.30
-                                                </td>
-                                                <td>
-                                                    <div class="badge badge-soft-success font-size-12">Paid</div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <button type="button"
-                                                            class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light"><i
-                                                                class="bx bx-download label-icon"></i> Pdf</button>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="dropdown">
-                                                        <button
-                                                            class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="bx bx-dots-horizontal-rounded"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                            <li><a class="dropdown-item" href="#">Print</a></li>
-                                                            <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr> --}}
 
                                         </tbody>
                                     </table>
