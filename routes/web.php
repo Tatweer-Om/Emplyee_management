@@ -85,15 +85,8 @@ Route::post('delete_doc', [CompanyDocController::class, 'delete_doc'])->name('de
 // web.php
 Route::get('get_documents', [CompanyDocController::class, 'get_documents'])->name('get_documents');
 Route::get('get_all', [CompanyDocController::class, 'get_all'])->name('get_all');
-
 Route::get('/get-docs', [CompanyDocController::class, 'getDocs'])->name('get_docs');
-
-
-
-// Route to delete a document by ID
 Route::delete('/delete-doc/{id}', [CompanyDocController::class, 'deleteDoc'])->name('delete_doc');
-
-
 Route::get('get-doc/{id}', [DocumentController::class, 'getDoc'])->name('get_doc');
 Route::get('get-docs/{id}', [DocumentController::class, 'getDoc'])->name('get_doc');
 

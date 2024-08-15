@@ -18,7 +18,8 @@ class CompanyDocController extends Controller
 
         $company= Company::where('id', $id)->first();
 
-        $documents= Document::all();
+        $documents= Document::where('document_type', 1)->get();
+
 
         return view ('main_pages.add_document', compact('documents', 'company'));
     }
