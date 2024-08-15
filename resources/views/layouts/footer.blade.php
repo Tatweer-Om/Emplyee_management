@@ -242,7 +242,7 @@
         @elseif ($route == 'document')
         @include('custom_js.document_js')
         @elseif ($route == 'document_addition')
-        @include('custom_js.document_js')
+        @include('custom_js.document_add_js')
         @endif
 
 

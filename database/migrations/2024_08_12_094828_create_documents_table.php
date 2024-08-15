@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('document_id')->unique();
             $table->string('document_name')->nullable();
+            $table->string('document_type')->nullable();
             $table->longText('document_detail')->nullable();
             $table->string('added_by')->nullable();
             $table->string('updated_by')->nullable();
