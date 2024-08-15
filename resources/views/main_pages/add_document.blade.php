@@ -54,45 +54,48 @@
                             <div class="card-body">
                                 <!-- Dynamic Rows Container -->
                                 <div class="company-doc-form" id="row-container">
+                                    <form class="add_company_doc" id="add_company_doc" method="POST" action="#">
+                                    @csrf
                                     <!-- Initial Row (Example) -->
-                                    <div class="row form-row">
-                                        <div class="col-md-6 col-lg-3">
-                                            <div class="mb-2">
-                                                <label for="choices-single-groups" class="form-label font-size-13">All Documents</label>
-                                                <select class="all_document form-control" name="all_document">
-                                                    <option value="">Choose a Document</option>
-                                                    @foreach($documents as $doc)
-                                                    <option value="{{ $doc->id }}">{{ $doc->document_name ?? '' }}</option>
-                                                    @endforeach
-                                                </select>
+                                        <div class="row form-row">
+                                            <div class="col-md-6 col-lg-3">
+                                                <div class="mb-2">
+                                                    <label for="choices-single-groups" class="form-label font-size-13">All Documents</label>
+                                                    <select class="all_document form-control" name="all_document">
+                                                        <option value="">Choose a Document</option>
+                                                        @foreach($documents as $doc)
+                                                        <option value="{{ $doc->id }}">{{ $doc->document_name ?? '' }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-3">
+                                                <div class="mb-2">
+                                                    <label class="form-label">Document</label>
+                                                    <input type="text" class="form-control companydoc_name" name="companydoc_name">
+                                                </div>
+                                            </div>
+                                            <input type="text" name="companydoc_id" class="company_doc_id" hidden>
+                                            <input type="text" name="office_user" value="{{ $company->office_user ?? '' }}" class="office_user" hidden>
+                                            <input type="text" name="company_id" value="{{ $company->id ?? '' }}" class="company_id" hidden>
+                                            <input type="text" name="company_name" value="{{ $company->company_name ?? '' }}" class="company_name" hidden>
+                                            <div class="col-lg-3">
+                                                <div class="mb-2">
+                                                    <label class="form-label">Expiry Date</label>
+                                                    <input type="date" class="form-control expiry_date" name="expiry_date">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 mt-4">
+                                                <button type="submit" class="btn btn-success submit-row">Submit</button>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-lg-3">
-                                            <div class="mb-2">
-                                                <label class="form-label">Document</label>
-                                                <input type="text" class="form-control companydoc_name" name="companydoc_name">
-                                            </div>
-                                        </div>
-                                        <input type="text" name="companydoc_id" class="companydoc_id" hidden>
-                                        <input type="text" name="office_user" value="{{ $company->office_user ?? '' }}" class="office_user" hidden>
-                                        <input type="text" name="company_id" value="{{ $company->id ?? '' }}" class="company_id" hidden>
-                                        <input type="text" name="company_name" value="{{ $company->company_name ?? '' }}" class="company_name" hidden>
-                                        <div class="col-lg-3">
-                                            <div class="mb-2">
-                                                <label class="form-label">Expiry Date</label>
-                                                <input type="date" class="form-control" name="expiry_date">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 mt-4">
-                                            <button type="button" class="btn btn-success submit-row">Submit</button>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-lg-3 mt-4">
                                         <button type="button" class="btn btn-success add-row">Add New Document</button>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -105,14 +108,13 @@
         </div>
         <!-- End Page-content -->
         <div class="table-responsive">
-            <table class="table align-middle   dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+            <table id="all_company_doc" class="table align-middle   dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                 <thead>
                     <tr class="bg-transparent">
 
                         <th style="width: 120px;">Sr.No </th>
                         <th>Document Name</th>
-                        <th>Expiry Date</th>
-                        <th>Renewl Period</th>
+                        <th>Expiry Date</th> 
                         <th>Added On</th>
                         <th>Office User</th>
                         <th>Action</th>

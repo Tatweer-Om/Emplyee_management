@@ -26,7 +26,6 @@
             },
 
         });
-
         $('.add_document').off().on('submit', function(e){
             e.preventDefault();
             var formdatas = new FormData($('.add_document')[0]);
@@ -255,118 +254,295 @@
         rowContainer.appendChild(newRow);
     }
 
-    document.querySelector('.add-row').addEventListener('click', addNewRow);
+    // document.querySelector('.add-row').addEventListener('click', addNewRow);
+
+
+    // add document company 
+    
+    $('.company_doc_modal').on('hidden.bs.modal', function() {
+            $(".add_company_doc")[0].reset();
+            $('.company_doc_id').val('');
+            // var imagePath = '{{ asset('images/dummy_image/no_image.png') }}';
+            // $('#img_tag').attr('src',imagePath);
+        });
+
+        $('#all_company_doc').DataTable().clear().destroy();
+        
+        $('#all_company_doc').DataTable({
+    "ajax": {
+        "url": "{{ url('show_doc') }}",
+        "type": "GET",
+        "data": function (d) {
+            d.company_id = $('.company_id').val();  // Add company_doc_id as a parameter
+        }
+    },
+    "bFilter": true,
+    "sDom": 'fBtlpi',
+    'pagingType': 'numbers',
+    "ordering": true,
+    "language": {
+        search: ' ',
+        sLengthMenu: '_MENU_',
+        searchPlaceholder: 'search',
+        info: "_START_ - _END_ of _TOTAL_ items",
+    },
+    initComplete: (settings, json)=>{
+        $('.dataTables_filter').appendTo('#tableSearch');
+        $('.dataTables_filter').appendTo('.search-input');
+    },
+});
+
+        $('.add_company_doc').off().on('submit', function(e) {
+    e.preventDefault();
+    var formdatas = new FormData($('.add_company_doc')[0]);
+    var title = $('.companydoc_name').val();
+    var id = $('.company_doc_id').val();
+
+    if (id != '') {
+        if (title == "") {
+            show_notification('error', '<?php echo trans('messages.data_add_company_doc_name_lang',[],session('locale')); ?>');
+            return false;
+        }
+        var str = $(".add_company_doc").serialize();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('add_doc') }}",
+            data: formdatas,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                show_notification('success', '<?php echo trans('messages.data_update_success_lang',[],session('locale')); ?>');
+                $('#company_doc_modal').modal('hide');
+                $('#all_company_doc').DataTable().ajax.reload();
+                return false;
+            },
+            error: function(data) {
+                show_notification('error', '<?php echo trans('messages.data_update_failed_lang',[],session('locale')); ?>');
+                $('#all_company_doc').DataTable().ajax.reload();
+                console.log(data);
+                return false;
+            }
+        });
+    } else if (id == '') {
+        if (title == "") {
+            show_notification('error', '<?php echo trans('messages.data_add_company_doc_name_lang',[],session('locale')); ?>');
+            return false;
+        }
+        var str = $(".add_company_doc").serialize();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('add_doc') }}",
+            data: formdatas,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                $('#all_company_doc').DataTable().ajax.reload();
+                show_notification('success', '<?php echo trans('messages.data_add_success_lang',[],session('locale')); ?>');
+                $('.company_doc_modal').modal('hide');
+                $(".add_company_doc")[0].reset();
+                return false;
+            },
+            error: function(data) {
+                show_notification('error', '<?php echo trans('messages.data_add_failed_lang',[],session('locale')); ?>');
+                $('#all_company_doc').DataTable().ajax.reload();
+                console.log(data);
+                return false;
+            }
+        });
+    }
+});
+
+    });
+
+
+
+    function edit_company_doc(id){
+
+        console.log(id);
+
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $.ajax ({
+            dataType:'JSON',
+            url : "{{ url('edit_doc') }}",
+            method : "POST",
+            data :   {id:id,_token: csrfToken},
+            success: function(fetch) {
+                // $('#global-loader').hide();
+                // after_submit();
+                if(fetch!=""){
+                    // Define a variable for the image path
+
+
+                    $(".all_document").val(fetch.all_document);
+                    $(".companydoc_name").val(fetch.companydoc_name);
+                    $(".expiry_date").val(fetch.expiry_date); 
+                    $(".company_doc_id").val(fetch.id);
+                    $(".modal-title").html('<?php echo trans('messages.update_lang',[],session('locale')); ?>');
+                }
+            },
+            error: function(html)
+            {
+                // $('#global-loader').hide();
+                // after_submit();
+                show_notification('error','<?php echo trans('messages.edit_failed_lang',[],session('locale')); ?>');
+                console.log(html);
+                return false;
+            }
+        });
+    }
+
+    function del_company_doc(id) {
+        Swal.fire({
+            title:  'Are You sure to Delete',
+            text:  'Delete',
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText:  'Delete',
+            confirmButtonClass: "btn btn-primary",
+            cancelButtonClass: "btn btn-danger ml-1",
+            buttonsStyling: !1
+        }).then(function (result) {
+            if (result.value) {
+                // $('#global-loader').show();
+                // before_submit();
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: "{{ url('delete_doc') }}",
+                    type: 'POST',
+                    data: {id: id,_token: csrfToken},
+                    error: function () {
+                        // $('#global-loader').hide();
+                        // after_submit();
+                        show_notification('error', '<?php echo trans('messages.delete_failed_lang',[],session('locale')); ?>');
+                    },
+                    success: function (data) {
+                        // $('#global-loader').hide();
+                        // after_submit();
+                        $('#all_company_doc').DataTable().ajax.reload();
+                        show_notification('success', '<?php echo trans('messages.delete_success_lang',[],session('locale')); ?>');
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                show_notification('success', '<?php echo trans('messages.safe_lang',[],session('locale')); ?>');
+            }
+        });
+    }
+
+
 
     // Event listener for form submission and row updates
-    rowContainer.addEventListener('click', function(event) {
-        if (event.target.classList.contains('submit-row')) {
-            const formRow = event.target.closest('.form-row');
-            if (formRow) {
-                const formData = new FormData();
-                formRow.querySelectorAll('input, select').forEach(input => {
-                    formData.append(input.name, input.value);
-                });
+    // rowContainer.addEventListener('click', function(event) {
+    //     if (event.target.classList.contains('submit-row')) {
+    //         const formRow = event.target.closest('.form-row');
+    //         if (formRow) {
+    //             const formData = new FormData();
+    //             formRow.querySelectorAll('input, select').forEach(input => {
+    //                 formData.append(input.name, input.value);
+    //             });
 
-                fetch('{{ route("add_doc") }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 1) {
-                        show_notification('success', 'Data added successfully');
-                    } else if (data.status === 2) {
-                        show_notification('success', 'Data updated successfully');
-                    } else {
-                        show_notification('error', 'Failed to add data');
-                    }
-                    populateTable(); // Refresh table after submission
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    show_notification('error', 'An error occurred while processing your request');
-                });
-            }
-        }
-    });
+    //             fetch('{{ route("add_doc") }}', {
+    //                 method: 'POST',
+    //                 body: formData,
+    //                 headers: {
+    //                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    //                 }
+    //             })
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 if (data.status === 1) {
+    //                     show_notification('success', 'Data added successfully');
+    //                 } else if (data.status === 2) {
+    //                     show_notification('success', 'Data updated successfully');
+    //                 } else {
+    //                     show_notification('error', 'Failed to add data');
+    //                 }
+    //                 populateTable(); // Refresh table after submission
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error:', error);
+    //                 show_notification('error', 'An error occurred while processing your request');
+    //             });
+    //         }
+    //     }
+    // });
 
     // Function to populate the table with document data
-    function populateTable() {
-    fetch(`{{ route("get_docs") }}?company_id=${companyId}`) // Pass company_id as a query parameter
-        .then(response => response.json())
-        .then(data => {
-            tableBody.innerHTML = '';
-            data.forEach((doc, index) => {
-                const row = `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${doc.companydoc_name}</td>
-                        <td>${doc.expiry_date}</td>
-                        <td>${doc.remaining_time}</td>
-                        <td>${doc.added_by}</td>
-                        <td>${doc.office_user}</td>
-                        <td>
+//     function populateTable() {
+//     fetch(`{{ route("get_docs") }}?company_id=${companyId}`) // Pass company_id as a query parameter
+//         .then(response => response.json())
+//         .then(data => {
+//             tableBody.innerHTML = '';
+//             data.forEach((doc, index) => {
+//                 const row = `
+//                     <tr>
+//                         <td>${index + 1}</td>
+//                         <td>${doc.companydoc_name}</td>
+//                         <td>${doc.expiry_date}</td>
+//                         <td>${doc.remaining_time}</td>
+//                         <td>${doc.added_by}</td>
+//                         <td>${doc.office_user}</td>
+//                         <td>
 
-                            <button class="btn btn-danger delete-row" data-id="${doc.id}">Delete</button>
-                        </td>
-                    </tr>
-                `;
-                tableBody.insertAdjacentHTML('beforeend', row);
-            });
-        });
-}
+//                             <button class="btn btn-danger delete-row" data-id="${doc.id}">Delete</button>
+//                         </td>
+//                     </tr>
+//                 `;
+//                 tableBody.insertAdjacentHTML('beforeend', row);
+//             });
+//         });
+// }
 
     // Load the table data on page load
-    populateTable();
+    // populateTable();
 
     // Event listener for edit and delete actions in the table
-    tableBody.addEventListener('click', function(event) {
-        if (event.target.classList.contains('edit-row')) {
-            const docId = event.target.getAttribute('data-id');
-            if (docId) {
-                fetch(`{{ route("get_doc", ":id") }}`.replace(':id', docId)) // Fetch single document details
-                    .then(response => response.json())
-                    .then(doc => {
-                        document.querySelector('.companydoc_id').value = doc.companydoc_id;
-                        document.querySelector('.company_name').value = doc.company_name;
-                        document.querySelector('.office_user').value = doc.office_user;
-                        document.querySelector('.all_document').value = doc.all_document;
-                        document.querySelector('.companydoc_name').value = doc.companydoc_name;
-                        document.querySelector('input[name="expiry_date"]').value = doc.expiry_date;
-                    })
-                    .catch(error => console.error('Error:', error));
-            } else {
-                console.error('Document ID is missing');
-            }
-        }
+    // tableBody.addEventListener('click', function(event) {
+    //     if (event.target.classList.contains('edit-row')) {
+    //         const docId = event.target.getAttribute('data-id');
+    //         if (docId) {
+    //             fetch(`{{ route("get_doc", ":id") }}`.replace(':id', docId)) // Fetch single document details
+    //                 .then(response => response.json())
+    //                 .then(doc => {
+    //                     document.querySelector('.companydoc_id').value = doc.companydoc_id;
+    //                     document.querySelector('.company_name').value = doc.company_name;
+    //                     document.querySelector('.office_user').value = doc.office_user;
+    //                     document.querySelector('.all_document').value = doc.all_document;
+    //                     document.querySelector('.companydoc_name').value = doc.companydoc_name;
+    //                     document.querySelector('input[name="expiry_date"]').value = doc.expiry_date;
+    //                 })
+    //                 .catch(error => console.error('Error:', error));
+    //         } else {
+    //             console.error('Document ID is missing');
+    //         }
+    //     }
 
-        if (event.target.classList.contains('delete-row')) {
-            const docId = event.target.getAttribute('data-id');
-            if (docId) {
-                fetch(`{{ route("delete_doc", ":id") }}`.replace(':id', docId), { // Delete document
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(() => {
-                    show_notification('success', 'Document deleted successfully');
-                    populateTable(); // Refresh table after deletion
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    show_notification('error', 'An error occurred while deleting the document');
-                });
-            } else {
-                console.error('Document ID is missing');
-            }
-        }
-    });
-});
+    //     if (event.target.classList.contains('delete-row')) {
+    //         const docId = event.target.getAttribute('data-id');
+    //         if (docId) {
+    //             fetch(`{{ route("delete_doc", ":id") }}`.replace(':id', docId), { // Delete document
+    //                 method: 'DELETE',
+    //                 headers: {
+    //                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    //                 }
+    //             })
+    //             .then(response => response.json())
+    //             .then(() => {
+    //                 show_notification('success', 'Document deleted successfully');
+    //                 populateTable(); // Refresh table after deletion
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error:', error);
+    //                 show_notification('error', 'An error occurred while deleting the document');
+    //             });
+    //         } else {
+    //             console.error('Document ID is missing');
+    //         }
+    //     }
+    // });
+// });
 
 
 
