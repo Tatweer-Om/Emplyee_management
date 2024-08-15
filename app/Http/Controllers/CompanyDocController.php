@@ -24,20 +24,19 @@ class CompanyDocController extends Controller
         return view ('main_pages.add_document', compact('documents', 'company'));
     }
 
-    public function show_doc()
+    public function show_doc(Request $request)
     {
         $sno=0;
-
-        $view_document= Document::all();
+        $company_id = $request->company_id;
+        $view_document = CompanyDocs::where('company_id', $company_id)->get();
         if(count($view_document)>0)
         {
             foreach($view_document as $value)
             {
 
-                $document_name='<p style="text-align:center;" href="javascript:void(0);">'.$value->document_name.'</p>';
+                $document_name='<p style="text-align:center;" href="javascript:void(0);">'.$value->companydoc_name.'</p>';
 
-                $document_detail='<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">'.$value->document_detail.'</p>';
-
+ 
 
                 $modal='<div class="dropdown" style="text-align:center";>
                         <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
@@ -45,9 +44,9 @@ class CompanyDocController extends Controller
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#document_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_company_doc(' . $value->id . ')">Edit</a></li>
                             <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printdocument(' . $value->document_id . ')">Print</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc(' . $value->id . ')">Delete</a></li>
                         </ul>
                     </div>';
                 $add_data=get_date_only($value->created_at);
@@ -56,10 +55,10 @@ class CompanyDocController extends Controller
                 $sno++;
                 $json[]= array(
                             $sno,
-
                             $document_name,
-                            $document_detail,
+                            $value->expiry_date, 
                             $added_by,
+                            $value->office_user,
                             $modal
                         );
             }
@@ -83,33 +82,42 @@ class CompanyDocController extends Controller
     {
         if (empty($request->companydoc_id)) {
             // Add new document
+            
             $companydoc = new CompanyDocs();
             $companydoc->companydoc_id = genUuid() . time(); // Generate a new unique ID
+            // Common fields for both add and update
+            $companydoc->expiry_date = $request->expiry_date;
+            // $companydoc->all_document = $request->all_document;
+            $companydoc->all_document =2;
+            $companydoc->companydoc_name = $request->companydoc_name;
+            $companydoc->company_id = $request->company_id;
+            $companydoc->company_name = $request->company_name;
+            $companydoc->office_user = $request->office_user;
+            $companydoc->user_id = 1;
             $companydoc->added_by = 'admin'; // Set added_by for new records
+            // Save the document
+            $companydoc->save();
+           
             $status = 1; // Status 1 for adding new record
         } else {
             // Update existing document
-            $companydoc = CompanyDocs::where('companydoc_id', $request->companydoc_id)->first();
+            $companydoc = CompanyDocs::where('id', $request->companydoc_id)->first();
 
             if (!$companydoc) {
                 return response()->json(['error' => 'Document not found'], 404);
             }
-
+            $companydoc->expiry_date = $request->expiry_date;
+            // $companydoc->all_document = $request->all_document;
+            $companydoc->all_document = 2;
+            $companydoc->companydoc_name = $request->companydoc_name;
+            $companydoc->company_id = $request->company_id;
+            $companydoc->company_name = $request->company_name;
             $companydoc->updated_by = 'admin'; // Set updated_by for existing records
             $status = 2; // Status 2 for updating existing record
+            $companydoc->save();
         }
 
-        // Common fields for both add and update
-        $companydoc->expiry_date = $request->expiry_date;
-        $companydoc->all_document = $request->all_document;
-        $companydoc->companydoc_name = $request->companydoc_name;
-        $companydoc->company_id = $request->company_id;
-        $companydoc->company_name = $request->company_name;
-        $companydoc->office_user = $request->office_user;
-        $companydoc->user_id = 1;
-
-        // Save the document
-        $companydoc->save();
+        
 
         // Return the response
         return response()->json([
@@ -132,7 +140,7 @@ class CompanyDocController extends Controller
         // $document = new document();
         $document_id = $request->input('id');
         // Use the Eloquent where method to retrieve the document by column name
-        $document_data = Document::where('id', $document_id)->first();
+        $document_data = CompanyDocs::where('id', $document_id)->first();
 
 
 
@@ -142,51 +150,48 @@ class CompanyDocController extends Controller
 
         // Add more attributes as needed
         $data = [
-            'document_id' => $document_data->document_id,
-            'document_name' => $document_data->document_name,
-            'document_detail' => $document_data->document_detail,
+            'companydoc_name' => $document_data->companydoc_name,
+            'id' => $document_data->id,
+            'all_document' => $document_data->all_document, 
+            'expiry_date' => $document_data->expiry_date, 
 
             // Add more attributes as needed
         ];
 
         return response()->json($data);
     }
+     
+    // public function update_doc(Request $request){
 
-    public function update_doc(Request $request){
+    //     // $user_id = Auth::id();
+    //     // $data= User::find( $user_id)->first();
+    //     // $user= $data->username;
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+    //     $document_id = $request->input('document_id');
+    //     $document = Document::where('document_id', $document_id)->first();
+    //     if (!$document) {
+    //         return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.document_not_found', [], session('locale'))], 404);
+    //     }
 
-        $document_id = $request->input('document_id');
-        $document = Document::where('document_id', $document_id)->first();
-        if (!$document) {
-            return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.document_not_found', [], session('locale'))], 404);
-        }
+    //     $document->document_name = $request->input('document_name');
+    //     $document->document_detail = $request->input('document_detail');
 
-        $document->document_name = $request->input('document_name');
-        $document->document_detail = $request->input('document_detail');
-
-        $document->updated_by = 'Admin';
-        $document->save();
-        return response()->json([
-            trans('messages.success_lang', [], session('locale')) => trans('messages.document_update_lang', [], session('locale'))
-        ]);
-    }
+    //     $document->updated_by = 'Admin';
+    //     $document->save();
+    //     return response()->json([
+    //         trans('messages.success_lang', [], session('locale')) => trans('messages.document_update_lang', [], session('locale'))
+    //     ]);
+    // }
 
     public function delete_doc(Request $request){
-
-
-        $document_id = $request->input('id');
-
-
-        $document = Document::where('id', $document_id)->first();
-        if (!$document) {
-            return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.document_not_found', [], session('locale'))], 404);
+        $doc_id = $request->input('id');
+        $company_doc = CompanyDocs::where('id', $doc_id)->first();
+        if (!$company_doc) {
+            return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.company_not_found', [], session('locale'))], 404);
         }
-        $document->delete();
+        $company_doc->delete();
         return response()->json([
-            trans('messages.success_lang', [], session('locale')) => trans('messages.document_deleted_lang', [], session('locale'))
+            trans('messages.success_lang', [], session('locale')) => trans('messages.company_deleted_lang', [], session('locale'))
         ]);
     }
 
