@@ -338,7 +338,7 @@
                         <li class="menu-title" data-key="t-menu">Menu</li>
 
                         <li>
-                            <a href="index.html">
+                            <a href="{{ url('home') }}">
                                 <i data-feather="home"></i>
                                 <span data-key="t-dashboard">Dashboard</span>
                             </a>
@@ -347,22 +347,22 @@
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="grid"></i>
-                                <span data-key="t-apps">Apps</span>
+                                <span data-key="t-apps">Office Management</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li>
-                                    <a href="apps-calendar.html">
-                                        <span data-key="t-calendar">Calendar</span>
+                                    <a href="{{url('user')}}">
+                                        <span data-key="t-calendar">Office Employees</span>
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a href="apps-chat.html">
-                                        <span data-key="t-chat">Chat</span>
+                                    <a href="{{ url('branch') }}">
+                                        <span data-key="t-chat">Office Branches</span>
                                     </a>
                                 </li>
 
-                                <li>
+                                {{-- <li>
                                     <a href="javascript: void(0);" class="has-arrow">
                                         <span data-key="t-email">Email</span>
                                     </a>
@@ -400,11 +400,11 @@
                                         <li><a href="apps-blog-list.html" data-key="t-blog-list">Blog List</a></li>
                                         <li><a href="apps-blog-detail.html" data-key="t-blog-details">Blog Details</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="users"></i>
                                 <span data-key="t-authentication">Authentication</span>
@@ -419,26 +419,21 @@
                                 <li><a href="auth-email-verification.html" data-key="t-email-verification">Email Verification</a></li>
                                 <li><a href="auth-two-step-verification.html" data-key="t-two-step-verification">Two Step Verification</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="file-text"></i>
-                                <span data-key="t-pages">Pages</span>
+                                <span data-key="t-pages">Companies Management</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="pages-starter.html" data-key="t-starter-page">Starter Page</a></li>
-                                <li><a href="pages-maintenance.html" data-key="t-maintenance">Maintenance</a></li>
-                                <li><a href="pages-comingsoon.html" data-key="t-coming-soon">Coming Soon</a></li>
-                                <li><a href="pages-timeline.html" data-key="t-timeline">Timeline</a></li>
-                                <li><a href="pages-faqs.html" data-key="t-faqs">FAQs</a></li>
-                                <li><a href="pages-pricing.html" data-key="t-pricing">Pricing</a></li>
-                                <li><a href="pages-404.html" data-key="t-error-404">Error 404</a></li>
-                                <li><a href="pages-500.html" data-key="t-error-500">Error 500</a></li>
+                                <li><a href="{{ url('company') }}" data-key="t-starter-page">Companies</a></li>
+                                <li><a href="{{ url('employee') }}" data-key="t-maintenance">Employees</a></li>
+
                             </ul>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a href="layouts-horizontal.html">
                                 <i data-feather="layout"></i>
                                 <span data-key="t-horizontal">Horizontal</span>
@@ -573,11 +568,11 @@
                                     </ul>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
 
                     </ul>
 
-                    <div class="card sidebar-alert border-0 text-center mx-4 mb-0 mt-5">
+                    {{-- <div class="card sidebar-alert border-0 text-center mx-4 mb-0 mt-5">
                         <div class="card-body">
                             <img src="{{  asset('images/giftbox.png')}}" alt="">
                             <div class="mt-4">
@@ -586,7 +581,7 @@
                                 <a href="#!" class="btn btn-primary mt-2">Upgrade Now</a>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <!-- Sidebar -->
             </div>

@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Company;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
     public function index (){
 
-        $users= User::all();
-        return view ('main_pages.company', compact('users'));
+
+        $companies= Company::all();
+        return view ('main_pages.company', compact( 'companies' ));
     }
 
     public function show_company()
@@ -25,10 +27,10 @@ class CompanyController extends Controller
             {
 
 
-                $office = User::where('id', $value->office_user)->first();
-                $office_user = $office->user_name;
 
-                $company_name='<a style="width:20px;" href="javascript:void(0);">'.$value->company_name.'</a>';
+                $office_user = $value->added_by;
+
+                $company_name='<a style="width:20px;" href="' . url('company_profile/' . $value->id) . '">'.$value->company_name.'</a>';
                 $office_user='<p tyle="width:20px;" href="javascript:void(0);">'.$office_user.'</p>';
                 $company_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->company_email . ' <br> ' . $value->company_phone . '</p>';
 
@@ -43,7 +45,7 @@ class CompanyController extends Controller
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#company_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printCompany(' . $value->company_id . ')">Print</a></li>
+                            <li><a class="dropdown-item"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal" onclick="add_employee(' . $value->id . ')">Add Employee</a></li>
                             <li><a class="dropdown-item" href="' . url('document_addition/' . $value->id) . '">Add Document</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
                         </ul>
@@ -173,5 +175,40 @@ class CompanyController extends Controller
         return response()->json([
             trans('messages.success_lang', [], session('locale')) => trans('messages.company_deleted_lang', [], session('locale'))
         ]);
+    }
+
+
+
+    //employee
+
+    public function add_employee2(Request $request){
+
+        // $user_id = Auth::id();
+        // $data= User::find( $user_id)->first();
+        // $user= $data->username;
+
+
+
+        $employee = new Employee();
+
+        $employee->employee_id = genUuid() . time();
+        $employee->employee_name = $request['employee_name'];
+        $employee->employee_email = $request['employee_email'];
+        $employee->employee_phone = $request['employee_phone'];
+        $employee->employee_company = $request['employee_company'];
+        $employee->employee_detail = $request['employee_detail'];
+        $employee->added_by = 'admin';
+        $employee->user_id = 1;
+        $employee->save();
+        return response()->json(['employee_id' => $employee->employee_id]);
+
+    }
+
+
+    public function company_profile($id){
+
+        $company = Company::where('id', $id)->first();
+
+        return view('main_pages.company_profile', compact('company'));
     }
 }
