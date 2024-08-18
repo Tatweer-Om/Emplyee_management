@@ -25,6 +25,8 @@ class DocumentController extends Controller
             foreach($view_document as $value)
             {
 
+
+
                 $document_name='<p style="text-align:center;" href="javascript:void(0);">'.$value->document_name.'</p>';
 
                 $document_detail='<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">'.$value->document_detail.'</p>';
@@ -43,12 +45,17 @@ class DocumentController extends Controller
                     </div>';
                 $add_data=get_date_only($value->created_at);
                 $added_by='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $value->added_by . '<br>' . $add_data.'</p>';
-
+                if ($value->document_type == 1) {
+                    $doc = 'Company Document';
+                } else {
+                    $doc = 'Employee Document';
+                }
                 $sno++;
                 $json[]= array(
                             $sno,
 
                             $document_name,
+                            $doc,
                             $document_detail,
                             $added_by,
                             $modal
@@ -83,6 +90,7 @@ class DocumentController extends Controller
         $document->document_id = genUuid() . time();
         $document->document_name = $request['document_name'];
         $document->document_detail = $request['document_detail'];
+        $document->document_type = $request['document_type'];
         $document->added_by = 'admin';
         $document->user_id = 1;
         $document->save();
@@ -107,6 +115,7 @@ class DocumentController extends Controller
         $data = [
             'document_id' => $document_data->document_id,
             'document_name' => $document_data->document_name,
+            'document_type' => $document_data->document_type,
             'document_detail' => $document_data->document_detail,
 
             // Add more attributes as needed
@@ -129,6 +138,7 @@ class DocumentController extends Controller
 
         $document->document_name = $request->input('document_name');
         $document->document_detail = $request->input('document_detail');
+        $document->document_type = $request->input('document_type');
 
         $document->updated_by = 'Admin';
         $document->save();

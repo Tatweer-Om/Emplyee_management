@@ -30,6 +30,7 @@
             e.preventDefault();
             var formdatas = new FormData($('.add_document')[0]);
             var title=$('.document_name').val();
+            var type=$('.document_type').val();
             var id=$('.document_id').val();
 
             if(id!='')
@@ -37,6 +38,9 @@
                 if(title=="" )
                 {
                     show_notification('error','<?php echo trans('messages.data_add_document_name_lang',[],session('locale')); ?>'); return false;
+                }
+                if(type==""){
+                    show_notification('error','PLease Choose Document Type'); return false;
                 }
                 // $('#global-loader').show();
                 // before_submit();
@@ -73,6 +77,9 @@
                 {
                     show_notification('error','<?php echo trans('messages.data_add_document_name_lang',[],session('locale')); ?>'); return false;
 
+                }
+                if(type==""){
+                    show_notification('error','PLease Choose Document Type'); return false;
                 }
 
                 // $('#global-loader').show();
@@ -131,7 +138,7 @@
 
                     $(".document_name").val(fetch.document_name);
                     $(".document_detail").val(fetch.document_detail);
-
+                    $(".document_type").val(fetch.document_type).trigger();
 
                     $(".document_id").val(fetch.document_id);
                     $(".modal-title").html('<?php echo trans('messages.update_lang',[],session('locale')); ?>');
@@ -189,6 +196,7 @@
 
 
 
+ 
 
 
 
@@ -551,6 +559,5 @@
 
 
 
-
-
+ 
     </script>

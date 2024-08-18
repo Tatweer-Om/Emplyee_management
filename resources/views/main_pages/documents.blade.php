@@ -74,9 +74,8 @@
 
                                                 <th style="text-align:right;">Sr.No</th>
                                                 <th  style="text-align:center;">document Name</th>
-
+                                                <th  style="text-align:center;">document Type</th>
                                                 <th style="text-align:center;">document Detail</th>
-
                                                 <th  style="text-align:center;">Added By</th>
                                                 <th  style="text-align:center;">Action</th>
 
@@ -115,6 +114,17 @@
                                 <div class="mb-3">
                                     <label for="document_name" class="col-form-label ">document Name</label>
                                     <input type="text" class="document_name form-control" name="document_name" id="document_name">
+                                </div>
+                                <div class="mb-3">
+
+                                        <label for="choices-single-groups" class="form-label font-size-13"> Document Type</label>
+                                        <select class="document_type form-control" name="document_type">
+                                            <option value="">Choose a Document</option>
+                                            <option value="1">Company Documents</option>
+                                            <option value="2">Employee Documents</option>
+
+                                        </select>
+
                                 </div>
 
                                 <input type="text" class="document_id" name="document_id" id="document_id" hidden>
