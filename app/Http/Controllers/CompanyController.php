@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Employee;
+use App\Models\CompanyDocs;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -30,7 +32,7 @@ class CompanyController extends Controller
 
                 $office_user = $value->added_by;
 
-                $company_name='<a style="width:20px;" href="' . url('company_profile/' . $value->id) . '">'.$value->company_name.'</a>';
+                $company_name = '<a style="width:20px;" href="' . url('company_profile/' . $value->id) . '" class="company-link" data-id="' . $value->id . '">' . $value->company_name . '</a>';
                 $office_user='<p tyle="width:20px;" href="javascript:void(0);">'.$office_user.'</p>';
                 $company_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->company_email . ' <br> ' . $value->company_phone . '</p>';
 
@@ -210,5 +212,102 @@ class CompanyController extends Controller
         $company = Company::where('id', $id)->first();
 
         return view('main_pages.company_profile', compact('company'));
+    }
+
+
+
+    public function show_company_doc(Request $request)
+    {
+        $sno=0;
+        $company_id = $request->company_id;
+
+        $view_document = CompanyDocs::where('company_id', $company_id)->get();
+        if(count($view_document)>0)
+        {
+            foreach($view_document as $value)
+            {
+
+                $document_name='<p style="text-align:center;" href="javascript:void(0);">'.$value->companydoc_name.'</p>';
+
+
+                $expiryDate = Carbon::parse($value->expiry_date);
+
+                // Get the current date
+                $today = Carbon::now();
+
+                // Calculate the difference as exact integers
+                $diffInYears = (int)$today->diffInYears($expiryDate);
+                $diffInMonths = (int)$today->copy()->addYears($diffInYears)->diffInMonths($expiryDate);
+                $diffInDays = (int)$today->copy()->addYears($diffInYears)->addMonths($diffInMonths)->diffInDays($expiryDate);
+
+                // Calculate total days remaining
+                $totalDaysRemaining = (int)$today->diffInDays($expiryDate);
+
+                // Determine if expired
+                if ($totalDaysRemaining < 1) {
+                    $renewl_period = '<p style="text-align:center; color: red;">منتهي الصلاحية</p>';
+                } else {
+                    // Format the difference in Arabic
+                    $yearsText = $diffInYears > 1 ? 'سنوات' : 'سنة';
+                    $monthsText = $diffInMonths > 1 ? 'أشهر' : 'شهر';
+                    $daysText = $diffInDays > 1 ? 'أيام' : 'يوم';
+
+                    $timeLeft = "$diffInYears $yearsText, $diffInMonths $monthsText, $diffInDays $daysText";
+
+                    // Determine badge color based on total days remaining
+                    $badgeClass = $totalDaysRemaining < 60 ? 'badge badge-soft-danger font-size-15' : 'badge badge-soft-success font-size-15';
+
+                    // Output the time left and total days remaining
+                    $renewl_period = '<p style="text-align:center;">' . $timeLeft . '</p>'
+                        . '<br>'
+                        . '<span class="' . $badgeClass . '" >' . $totalDaysRemaining . ' يوم متبقي</span>';
+                }
+
+                    $expiry_date='<p style="text-align:center;" href="javascript:void(0);">'.$value->expiry_date.'</p>';
+
+
+                $office_user = $value->added_by;
+
+                $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
+
+                $modal='<div class="dropdown" style="text-align:center";>
+                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-dots-horizontal-rounded"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_company_doc(' . $value->id . ')">Edit</a></li>
+                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printdocument(' . $value->document_id . ')">Print</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc(' . $value->id . ')">Delete</a></li>
+                        </ul>
+                    </div>';
+                $add_data=get_date_only($value->created_at);
+                $added_by='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $value->added_by . '<br>' . $add_data.'</p>';
+
+                $sno++;
+                $json[]= array(
+                          '<span style="text-align: center; display: block;">' . $sno . '</span>',
+                            $document_name,
+                            $expiry_date,
+                            '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
+                            $added_by,
+                            $sanad_employee,
+                            $modal
+                        );
+            }
+            $response = array();
+            $response['success'] = true;
+            $response['aaData'] = $json;
+            echo json_encode($response);
+        }
+        else
+        {
+            $response = array();
+            $response['sEcho'] = 0;
+            $response['iTotalRecords'] = 0;
+            $response['iTotalDisplayRecords'] = 0;
+            $response['aaData'] = [];
+            echo json_encode($response);
+        }
     }
 }

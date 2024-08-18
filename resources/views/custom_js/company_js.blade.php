@@ -249,4 +249,11 @@ $('.add_employee').off().on('submit', function(e) {
 });
 
 
+
+//company_profile_js
+
+
+
+
+
     </script>
