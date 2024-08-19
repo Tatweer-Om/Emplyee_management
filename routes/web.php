@@ -38,7 +38,7 @@ Route::post('update_company', [CompanyController::class, 'update_company'])->nam
 Route::post('delete_company', [CompanyController::class, 'delete_company'])->name('delete_company');
 Route::post('add_employee2', [CompanyController::class, 'add_employee2'])->name('add_employee2');
 Route::get('company_profile/{id}', [CompanyController::class, 'company_profile'])->name('company_profile');
-Route::get('show_company_doc', [CompanyController::class, 'show_company_doc'])->name('show_company_doc');
+Route::match(['get', 'post'], 'show_company_doc', [CompanyController::class, 'show_company_doc'])->name('show_company_doc');
 
 
 //Branches

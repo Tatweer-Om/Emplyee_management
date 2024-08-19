@@ -19,7 +19,7 @@
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="{{ url('company') }}">Company Profile</a></li>
-                                    <li class="breadcrumb-item active">Companies</li>
+                                    <li class="breadcrumb-item active"><a href="{{ url('company') }}">Companies</a></li>
                                 </ol>
                             </div>
 
@@ -68,6 +68,8 @@
                                         <div class="flex-shrink-0">
                                             <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs"
                                                 role="tablist">
+
+
                                                 <li class="nav-item">
                                                     <a class="nav-link active" data-bs-toggle="tab" href="#home2"
                                                         role="tab">
@@ -82,6 +84,7 @@
                                                         <span class="d-none d-sm-block">Company Documents</span>
                                                     </a>
                                                 </li>
+
                                             </ul>
                                         </div>
                                     </div><!-- end card header -->
@@ -95,7 +98,7 @@
                                                 <div class="mt-5">
 
                                                     <h5 class="mb-3">Employees Documents to be Renewed</h5>
-                                                    <div class="row">
+                                                    {{-- <div class="row">
                                                         <div class="col-lg-4">
                                                             <div
                                                                 class="list-group list-group-flush border border-primary rounded">
@@ -122,59 +125,9 @@
                                                                 </a>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-4">
-                                                            <div
-                                                                class="list-group list-group-flush border border-primary rounded">
-                                                                <a href="javascript: void(0);"
-                                                                    class="list-group-item text-muted pb-3 pt-0 px-2">
-                                                                    <div class="d-flex align-items-center">
+                                                    </div> --}}
+                                                    <div class="row" id="employee_docs_list">
 
-                                                                        <div class="flex-grow-1 overflow-hidden">
-                                                                            <h5 class="font-size-13 text-truncate">Umair
-                                                                                Shahnawaz</h5>
-                                                                            <p class="mb-0 text-truncate">Passport-Expiry
-                                                                                <span
-                                                                                    class="badge bg-danger-subtle text-primary rounded-pill ms-1 float-end font-size-13">3
-                                                                                    months left</span>
-                                                                            </p>
-                                                                            <p class="mb-0 text-truncate">ID Card-expiry
-                                                                                <span
-                                                                                    class="badge bg-danger-subtle text-primary rounded-pill ms-1 float-end font-size-13">3
-                                                                                    months left</span>
-                                                                            </p>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-lg-4">
-                                                            <div
-                                                                class="list-group list-group-flush border border-primary rounded">
-                                                                <a href="javascript: void(0);"
-                                                                    class="list-group-item text-muted pb-3 pt-0 px-2">
-                                                                    <div class="d-flex align-items-center">
-
-                                                                        <div class="flex-grow-1 overflow-hidden">
-                                                                            <h5 class="font-size-13 text-truncate">Umair
-                                                                                Shahnawaz</h5>
-                                                                            <p class="mb-0 text-truncate">Passport-Expiry
-                                                                                <span
-                                                                                    class="badge bg-danger-subtle text-primary rounded-pill ms-1 float-end font-size-13">3
-                                                                                    months left</span>
-                                                                            </p>
-                                                                            <p class="mb-0 text-truncate">ID Card-expiry
-                                                                                <span
-                                                                                    class="badge bg-danger-subtle text-primary rounded-pill ms-1 float-end font-size-13">3
-                                                                                    months left</span>
-                                                                            </p>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </a>
-                                                            </div>
-                                                        </div>
                                                     </div>
 
                                                 </div>
@@ -182,7 +135,7 @@
                                             <div class="tab-pane" id="profile2" role="tabpanel">
 
                                                 <div class="table-responsive">
-                                                    <table class="table align-middle  dt-responsive table-check nowrap"
+                                                    <table class="table align-middle dt-responsive table-check nowrap"
                                                         style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_profile_docs">
                                                         <thead>
                                                             <tr class="bg-transparent">
@@ -269,81 +222,34 @@
                                 <div class="mt-5">
                                     <h5 class="mb-3">Company's Detail</h5>
                                     <ul class="list-unstyled fw-medium px-2">
-                                        <li><a href="javascript: void(0);"
-                                                class="text-body pb-3 d-block border-bottom">Company's Employees<span
-                                                    class="badge bg-primary-subtle text-primary rounded-pill ms-1 float-end font-size-12">64</span></a>
+                                        <li>
+                                            <a href="javascript: void(0);" class="text-body pb-3 d-block border-bottom">
+                                                Company's Employees
+                                                <span id="employees-count" class="badge bg-primary-subtle text-primary rounded-pill ms-1 float-end font-size-12"></span>
+                                            </a>
                                         </li>
-                                        <li><a href="javascript: void(0);"
-                                                class="text-body py-3 d-block border-bottom">Company's Documents <span
-                                                    class="badge bg-primary-subtle text-primary rounded-pill float-end ms-1 font-size-12">07</span></a>
+                                        <li>
+                                            <a href="javascript: void(0);" class="text-body py-3 d-block border-bottom">
+                                                Company's Documents
+                                                <span id="company-docs-count" class="badge bg-primary-subtle text-primary rounded-pill float-end ms-1 font-size-12"></span>
+                                            </a>
                                         </li>
-                                        <li><a href="javascript: void(0);"
-                                                class="text-body py-3 d-block border-bottom">Employees Documents<span
-                                                    class="badge bg-primary-subtle text-primary rounded-pill ms-1 float-end font-size-12">120</span></a>
+                                        <li>
+                                            <a href="javascript: void(0);" class="text-body py-3 d-block border-bottom">
+                                                Employees Documents
+                                                <span id="employee-docs-count" class="badge bg-primary-subtle text-primary rounded-pill ms-1 float-end font-size-12"></span>
+                                            </a>
                                         </li>
-
                                     </ul>
                                 </div>
+
                                 <div class="mt-5">
                                     <h5 class="mb-3">Employees Documents to be Renewed</h5>
-                                    <div class="list-group list-group-flush">
-                                        <a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
-                                            <div class="d-flex align-items-center">
-
-                                                <div class="flex-grow-1 overflow-hidden">
-                                                    <h5 class="font-size-13 text-truncate">Abdul Haseeb</h5>
-                                                    <p class="mb-0 text-truncate">Passport <span class="">/3 months
-                                                            Left</span></p>
-                                                </div>
-                                                <div class="fs-1">
-                                                    <i class="mdi mdi-calendar"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-
-                                        <a href="javascript: void(0);" class="list-group-item text-muted py-3 px-2">
-                                            <div class="d-flex align-items-center">
-
-                                                <div class="flex-grow-1 overflow-hidden">
-                                                    <h5 class="font-size-13 text-truncate">Abdul Haseeb</h5>
-                                                    <p class="mb-0 text-truncate">Passport <span class="">/3 months
-                                                            Left</span></p>
-                                                </div>
-                                                <div class="fs-1">
-                                                    <i class="mdi mdi-calendar"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-
-                                        <a href="javascript: void(0);" class="list-group-item text-muted py-3 px-2">
-                                            <div class="d-flex align-items-center">
-
-                                                <div class="flex-grow-1 overflow-hidden">
-                                                    <h5 class="font-size-13 text-truncate">Abdul Haseeb</h5>
-                                                    <p class="mb-0 text-truncate">Passport <span class="">/3 months
-                                                            Left</span></p>
-                                                </div>
-                                                <div class="fs-1">
-                                                    <i class="mdi mdi-calendar"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-
-                                        <a href="javascript: void(0);" class="list-group-item text-muted py-3 px-2">
-                                            <div class="d-flex align-items-center">
-
-                                                <div class="flex-grow-1 overflow-hidden">
-                                                    <h5 class="font-size-13 text-truncate">Abdul Haseeb</h5>
-                                                    <p class="mb-0 text-truncate">Passport <span class="">/3 months
-                                                            Left</span></p>
-                                                </div>
-                                                <div class="fs-1">
-                                                    <i class="mdi mdi-calendar"></i>
-                                                </div>
-                                            </div>
-                                        </a>
+                                    <div id="renewal-docs-list" class="list-group list-group-flush">
+                                        <!-- List items will be added here dynamically -->
                                     </div>
                                 </div>
+
 
 
 
