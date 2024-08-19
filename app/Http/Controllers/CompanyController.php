@@ -267,6 +267,24 @@ class CompanyController extends Controller
 }
 
 
+public function del_company_doc(Request $request){
+    $company_id = $request->input('id');
+
+    $company = CompanyDocs::where('id', $company_id)->first();
+    if (!$company) {
+        return response()->json([
+            'status' => 2,
+
+        ], 404);
+    }
+
+    $company->delete();
+
+    return response()->json([
+        'status' => 1,
+
+    ]);
+}
 
 
 

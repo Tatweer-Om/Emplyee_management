@@ -43,6 +43,7 @@
                                         </div>
                                         <div class="flex-shrink-0">
                                             <div class="mb-4">
+
                                                 <h4 class="float-end font-size-16">Company ID-{{ $company->id ?? '' }}</h4>
                                             </div>
                                         </div>
@@ -133,7 +134,7 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane" id="profile2" role="tabpanel">
-
+                                                <a href="{{ url('document_addition').'/'.$company->id }}" class="btn btn-success">Add Documents</a>
                                                 <div class="table-responsive">
                                                     <table class="table align-middle dt-responsive table-check nowrap"
                                                         style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_profile_docs">
