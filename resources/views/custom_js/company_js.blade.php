@@ -254,56 +254,6 @@
     //company_profile_js
 
 
-
-
-
-    // function loadCompanyDocs(companyId) {
-    //     console.log('Selected Company ID:', companyId);
-
-    //     $.ajax({
-    //         url: "{{ url('show_company_doc') }}", // The route that will handle the request
-    //         type: "POST", // Use "POST" to send data securely
-    //         data: {
-    //             company_id: companyId, // Pass the companyId
-    //             _token: '{{ csrf_token() }}' // Include the CSRF token for security
-    //         },
-    //         success: function(response) {
-
-
-    //             // Clear and destroy the existing DataTable instance
-    //             var table = $('#all_profile_docs').DataTable();
-    //             table.clear().destroy();
-
-    //             // Initialize DataTable with the new data
-    //             $('#all_profile_docs').DataTable({
-    //                 "data": response.aaData,
-
-    //                 "bFilter": true,
-    //                 "sDom": 'fBtlpi',
-    //                 'pagingType': 'numbers',
-    //                 "ordering": true,
-    //                 "language": {
-    //                     search: ' ',
-    //                     sLengthMenu: '_MENU_',
-    //                     searchPlaceholder: 'search',
-    //                     info: "_START_ - _END_ of _TOTAL_ items",
-    //                 },
-    //                 "initComplete": function(settings, json) {
-    //                     $('.dataTables_filter').appendTo('#tableSearch');
-    //                     $('.dataTables_filter').appendTo('.search-input');
-    //                 }
-    //             });
-
-    //             // Redirect to the company profile page
-    //             window.location.href = 'company_profile/' + companyId;
-    //         },
-    //         error: function(xhr, status, error) {
-    //             // Handle errors here
-    //             console.log('Error:', error);
-    //         }
-    //     });
-    // }
-
     $(document).ready(function() {
         // Extract the company ID from the URL
         var urlParts = window.location.pathname.split('/');
@@ -319,7 +269,7 @@
                 // Clear previous data
                 $('#employees-count').text(response.employee_docs.length); // Count of employees
                 $('#company-docs-count').text(response.company_docs
-                .length); // Count of company documents
+                    .length); // Count of company documents
 
                 // Calculate total number of employee documents
                 let totalEmployeeDocs = response.employee_docs.reduce((total, employee_data) =>
@@ -331,19 +281,20 @@
 
                 const today = new Date();
 
-            // Define the three months period (90 days)
-            const threeMonthsInMs = 3 * 30 * 24 * 60 * 60 * 1000;
+                // Define the three months period (90 days)
+                const threeMonthsInMs = 3 * 30 * 24 * 60 * 60 * 1000;
 
-            response.employee_docs.forEach(function(employee_data) {
-                employee_data.documents.forEach(function(doc) {
-                    const expiryDate = new Date(doc.expiry_date);
-                    const timeLeft = expiryDate - today;
+                response.employee_docs.forEach(function(employee_data) {
+                    employee_data.documents.forEach(function(doc) {
+                        const expiryDate = new Date(doc.expiry_date);
+                        const timeLeft = expiryDate - today;
 
-                    // Check if the document is expiring within three months
-                    if (timeLeft <= threeMonthsInMs) {
-                        const remainingMonths = Math.ceil(timeLeft / (30 * 24 * 60 * 60 * 1000));
+                        // Check if the document is expiring within three months
+                        if (timeLeft <= threeMonthsInMs) {
+                            const remainingMonths = Math.ceil(timeLeft / (30 * 24 *
+                                60 * 60 * 1000));
 
-                        const itemHtml = `<a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
+                            const itemHtml = `<a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>
@@ -355,34 +306,42 @@
                                                 </div>
                                             </a>`;
 
-                        $('#renewal-docs-list').append(itemHtml);
-                    }
+                            $('#renewal-docs-list').append(itemHtml);
+                        }
+                    });
                 });
-            });
 
                 // Populate employee documents
                 response.employee_docs.forEach(function(employee_data, index) {
+                    let baseUrl = "<?php echo url('employee_document_addition'); ?>";
+
                     let employee_html =
                         `<div class="col-lg-4">
-                                                <div class="list-group list-group-flush border border-primary rounded">
-                                                    <a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="flex-grow-1 overflow-hidden">
-                                                                <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>`;
+                            <div class="list-group list-group-flush border border-primary rounded">
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <a href="${baseUrl}/${employee_data.employee.id}" id="addButton" class="btn btn-sm btn-info m-2">+</a>
+                                            <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>`;
+
                     employee_data.documents.forEach(function(doc) {
-                        employee_html += `<p class="mb-0 text-truncate">${doc.employeedoc_name}-تاريخ الانتهاء
-                                                <span class="badge bg-danger-subtle text-primary rounded-pill ms-1 float-end font-size-13">${doc.expiry_date}</span>
-                                              </p>`;
+                        employee_html += `<p class="m-2 text-truncate">${doc.employeedoc_name}-تاريخ الانتهاء
+                                            <span class="badge bg-danger-subtle text-primary rounded-pill ms-1 float-end font-size-13">${doc.expiry_date}</span>
+                                        </p>`;
                     });
-                    employee_html += `</div></div></a></div></div>`;
+
+                    employee_html += `</div></div>/div></div>`;
+
                     $('#employee_docs_list').append(employee_html);
                 });
+
+
 
                 // Populate company documents
                 response.company_docs.forEach(function(doc, index) {
                     let createdAtDate = new Date(doc.created_at);
                     let formattedDate = createdAtDate.toLocaleDateString(
-                    'en-GB'); // You can adjust the locale as needed
+                        'en-GB'); // You can adjust the locale as needed
 
                     let doc_html = `<tr>
                                         <td style="text-align:center;">${index + 1}</td>
@@ -398,9 +357,8 @@
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_company_doc(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printdocument(' . $value->document_id . ')">Print</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc(' . $value->id . ')">Delete</a></li>
+
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc(${doc.id})">Delete</a></li>
                         </ul>
                     </div>
                                         </td>
@@ -408,9 +366,9 @@
                     $('#all_profile_docs tbody').append(doc_html);
                 });
                 $('.badge-primary-subtle').eq(0).text(response.employee_docs
-                .length); // Update with the actual count
+                    .length); // Update with the actual count
                 $('.badge-primary-subtle').eq(1).text(response.company_docs
-                .length); // Update with the actual count
+                    .length); // Update with the actual count
                 $('.badge-primary-subtle').eq(2).text(response.employee_docs.reduce((total, data) =>
                     total + data.documents.length, 0)); // Total employee docs
             },
