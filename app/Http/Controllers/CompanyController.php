@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Employee;
+use App\Models\CompanyDocs;
+use App\Models\EmployeeDoc;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -30,7 +33,7 @@ class CompanyController extends Controller
 
                 $office_user = $value->added_by;
 
-                $company_name='<a style="width:20px;" href="' . url('company_profile/' . $value->id) . '">'.$value->company_name.'</a>';
+                $company_name = '<a style="width:20px;" href="company_profile/' . $value->id . '" target="_blank" class="company-link">' . $value->company_name . '</a>';
                 $office_user='<p tyle="width:20px;" href="javascript:void(0);">'.$office_user.'</p>';
                 $company_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->company_email . ' <br> ' . $value->company_phone . '</p>';
 
@@ -211,4 +214,61 @@ class CompanyController extends Controller
 
         return view('main_pages.company_profile', compact('company'));
     }
+
+
+
+
+    public function show_company_doc(Request $request)
+{
+    $company_id = $request->input('company_id');
+
+    $company_docs = CompanyDocs::where('company_id', $company_id)->get();
+    $employees = Employee::where('employee_company', $company_id)->get();
+
+    $employee_docs = [];
+    foreach ($employees as $employee) {
+        $documents = EmployeeDoc::where('employee_id', $employee->id)->get();
+        $employee_docs[] = [
+            'employee' => $employee,
+            'documents' => $documents
+        ];
+    }
+
+    // Calculate renewal periods for company documents
+    foreach ($company_docs as $doc) {
+        $expiryDate = Carbon::parse($doc->expiry_date);
+        $today = Carbon::now();
+
+        $diffInYears = (int) $today->diffInYears($expiryDate);
+        $diffInMonths = (int) $today->copy()->addYears($diffInYears)->diffInMonths($expiryDate);
+        $diffInDays = (int) $today->copy()->addYears($diffInYears)->addMonths($diffInMonths)->diffInDays($expiryDate);
+        $totalDaysRemaining = (int) $today->diffInDays($expiryDate);
+
+        if ($totalDaysRemaining < 1) {
+            $doc->renewal_period = '<p style="text-align:center; color: red;">منتهي الصلاحية</p>';
+        } else {
+            $yearsText = $diffInYears > 1 ? 'سنوات' : 'سنة';
+            $monthsText = $diffInMonths > 1 ? 'أشهر' : 'شهر';
+            $daysText = $diffInDays > 1 ? 'أيام' : 'يوم';
+
+            $timeLeft = "$diffInYears $yearsText, $diffInMonths $monthsText, $diffInDays $daysText";
+            $badgeClass = $totalDaysRemaining < 60 ? 'badge badge-soft-danger font-size-15' : 'badge badge-soft-success font-size-15';
+
+            $doc->renewal_period = '<p style="text-align:center;">' . $timeLeft . '</p>'
+                . '<br>'
+                . '<span class="' . $badgeClass . '">' . $totalDaysRemaining . ' يوم متبقي</span>';
+        }
+    }
+
+    return response()->json([
+        'company_docs' => $company_docs,
+        'employee_docs' => $employee_docs
+    ]);
+}
+
+
+
+
+
+
 }
