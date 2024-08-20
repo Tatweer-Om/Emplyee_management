@@ -9,6 +9,7 @@ use App\Models\Document;
 use App\Models\Employee;
 use App\Models\EmployeeDoc;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeDocController extends Controller
 {
@@ -22,7 +23,15 @@ class EmployeeDocController extends Controller
         $company_name= $company->company_name;
 
         $documents= Document::where('document_type', 2)->get();
-        return view ('main_pages.add_employee_doc', compact('documents', 'employee', 'company_name'));
+
+        if (Auth::check() ) {
+            // If the conditions are met, show the dashboard
+            return view ('main_pages.add_employee_doc', compact('documents', 'employee', 'company_name'));
+        } else {
+            // If the conditions are not met, redirect to the login page with an Arabic error message
+            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
+        }
+
     }
 
     public function show_employeedoc(Request $request)
@@ -120,6 +129,10 @@ class EmployeeDocController extends Controller
 
     public function add_employeedoc(Request $request)
     {
+
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
         if (empty($request->employeedoc_id)) {
             // Add new employee
 
@@ -131,8 +144,8 @@ class EmployeeDocController extends Controller
             $employeedoc->employee_id = $request->employee_id;
             $employeedoc->employee_name = $request->employee_name;
             $employeedoc->office_user = $request->office_user;
-            $employeedoc->user_id = 1;
-            $employeedoc->added_by = 'admin';
+            $employeedoc->user_id = $user_id;
+            $employeedoc->added_by = $user;
 
             $employeedoc->save();
 
@@ -149,7 +162,7 @@ class EmployeeDocController extends Controller
             $employeedoc->employeedoc_name = $request->employeedoc_name;
             $employeedoc->employee_id = $request->employee_id;
             $employeedoc->employee_name = $request->employee_name;
-            $employeedoc->updated_by = 'admin';
+            $employeedoc->updated_by = $user;
             $status = 2;
             $employeedoc->save();
         }
@@ -203,111 +216,4 @@ class EmployeeDocController extends Controller
 
 
 
-//     public function delete_doc(Request $request){
-//         $doc_id = $request->input('id');
-//         $employee_doc = employeeDocs::where('id', $doc_id)->first();
-//         if (!$employee_doc) {
-//             return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.employee_not_found', [], session('locale'))], 404);
-//         }
-//         $employee_doc->delete();
-//         return response()->json([
-//             trans('messages.success_lang', [], session('locale')) => trans('messages.employee_deleted_lang', [], session('locale'))
-//         ]);
-//     }
-
-
-
-
-
-
-//     public function get_employees(Request $request)
-//     {
-//         $employeedoc_id = $request->input('employeedoc_id');
-
-//         // Check if the employeedoc_id is provided
-//         if (!$employeedoc_id) {
-//             return response()->json(['error' => 'No employee ID provided'], 400);
-//         }
-
-//         // Fetch the employee based on the ID
-//         $employeedoc = employeeDocs::where('employeedoc_id', $employeedoc_id)->first();
-
-//         // Check if the employee was found
-//         if (!$companydoc) {
-//             return response()->json(['error' => 'employee not found'], 404);
-//         }
-
-//         // Return the employee data
-//         return response()->json(['employee' => $companydoc]);
-//     }
-
-
-
-
-
-//     public function getDocs(Request $request)
-//     {
-//         $companyId = $request->input('company_id'); // Get the company ID from the request
-
-//         // Retrieve employees for the specific company ID
-//         $docs = CompanyDocs::where('company_id', $companyId)->get();
-
-//         // Create an array to hold the employee data with remaining time
-//         $data = $docs->map(function($doc) {
-//             $expiryDate = Carbon::parse($doc->expiry_date);
-//             $currentDate = Carbon::now();
-//             $interval = $currentDate->diff($expiryDate);
-
-//             // Construct the remaining time string
-//             $remainingTime = [];
-//             if ($expiryDate->isFuture()) {
-//                 if ($interval->y > 0) {
-//                     $remainingTime[] = $interval->y . ' year' . ($interval->y > 1 ? 's' : '');
-//                 }
-//                 if ($interval->m > 0) {
-//                     $remainingTime[] = $interval->m . ' month' . ($interval->m > 1 ? 's' : '');
-//                 }
-//                 if ($interval->d > 0) {
-//                     $remainingTime[] = $interval->d . ' day' . ($interval->d > 1 ? 's' : '');
-//                 }
-//                 if (empty($remainingTime)) {
-//                     $remainingTime[] = 'Less than a day';
-//                 }
-//             } else {
-//                 $remainingTime[] = 'Expired';
-//             }
-
-//             // Join the array to form the final string
-//             $remainingTimeString = implode(' ', $remainingTime);
-
-//             $user = User::find($doc->office_user); // Use find() for simplicity
-//             $userName = $user ? $user->user_name : 'Unknown'; // Handle case where user might not be found
-
-//             return [
-//                 'id' => $doc->id,
-//                 'companydoc_name' => $doc->companydoc_name,
-//                 'expiry_date' => $doc->expiry_date,
-//                 'remaining_time' => $remainingTimeString,
-//                 'added_by' => $doc->added_by,
-//                 'office_user' => $userName,
-//             ];
-//         });
-
-//         return response()->json($data);
-//     }
-
-
-
-
-
-// public function deleteDoc($id)
-// {
-//     $doc = CompanyDocs::where('id', $id)->first();
-
-//     if ($doc) {
-//         $doc->delete();
-//         return response()->json(['message' => 'employee deleted successfully']);
-//     }
-//     return response()->json(['error' => 'employee not found'], 404);
-// }
 }

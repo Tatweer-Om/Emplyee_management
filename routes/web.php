@@ -11,9 +11,13 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CompanyDocController;
 use App\Http\Controllers\EmployeeDocController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+Route::match(['get', 'post'], 'login', [UserController::class, 'login'])->name('login');
+Route::match(['get', 'post'], 'login_user', [UserController::class, 'login_user'])->name('login_user');
+
+
+
 
 Route::get('home', [HomeController::class, 'home'])->name('home');
 Route::get('calender', [HomeController::class, 'calender'])->name('calender');
@@ -23,10 +27,6 @@ Route::get('company_detail', [HomeController::class, 'company_detail'])->name('c
 Route::get('timeline', [HomeController::class, 'timeline'])->name('timeline');
 
 // UserController
-
-
-Route::get('login_page', [UserController::class, 'login_page'])->name('login_page');
-
 
 //company routes
 
@@ -60,6 +60,7 @@ Route::get('show_user', [UserController::class, 'show_user'])->name('show_user')
 Route::post('edit_user', [UserController::class, 'edit_user'])->name('edit_user');
 Route::post('update_user', [UserController::class, 'update_user'])->name('update_user');
 Route::post('delete_user', [UserController::class, 'delete_user'])->name('delete_user');
+
 
 
 //Employee
@@ -105,6 +106,7 @@ Route::get('show_employeedoc', [EmployeeDocController::class, 'show_employeedoc'
 Route::post('edit_employeedoc', [EmployeeDocController::class, 'edit_employeedoc'])->name('edit_employeedoc');
 Route::post('update_employeedoc', [EmployeeDocController::class, 'update_employeedoc'])->name('update_employeedoc');
 Route::post('delete_employeedoc', [EmployeeDocController::class, 'delete_employeedoc'])->name('delete_employeedoc');
+
 
 
 

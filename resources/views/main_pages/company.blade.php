@@ -78,7 +78,7 @@
                                                 <th style="text-align: right;">Office User</th>
                                                 <th style="text-align: right;">Company Detail</th>
                                                 <th style="text-align: right;">Cr No.</th>
-                                                <th style="text-align: right; width: 20px;">Added By</th>
+                                                <th style="text-align: right; width: 20px;">Added On</th>
                                                 <th style="text-align: right; width: 20px;">Action</th>
 
                                             </tr>
@@ -118,21 +118,7 @@
                                     <label for="company_name" class="col-form-label ">Company Name</label>
                                     <input type="text" class="company_name form-control" name="company_name" id="company_name">
                                 </div>
-                                {{-- new --}}
-                                {{-- <div class="mb-3">
-                                    <label for="choices-single-groups" class="form-label font-size-13 text-muted">Option
-                                        groups</label>
-                                    <select class="office_user form-control" searchable  name="office_user"
-                                        id="choices-single-groups">
-                                        <option value="">Choose a User</option>
-                                        @foreach($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->user_name ?? ''}}</option>
-                                        @endforeach
 
-                                    </select>
-                                </div> --}}
-
-                                {{-- endnew  --}}
                                 <input type="text" class="company_id" name="company_id" id="company_id" hidden>
                                 <div class="mb-3">
                                     <label for="company_email" class="col-form-label company_email">Company Email</label>

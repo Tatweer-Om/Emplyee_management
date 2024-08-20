@@ -9,14 +9,21 @@ use App\Models\Employee;
 use App\Models\CompanyDocs;
 use App\Models\EmployeeDoc;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
     public function index (){
 
-
         $companies= Company::all();
-        return view ('main_pages.company', compact( 'companies' ));
+        if (Auth::check() && Auth::user()->user_type == 1) {
+            // If the conditions are met, show the dashboard
+            return view ('main_pages.company', compact( 'companies' ));
+        } else {
+            // If the conditions are not met, redirect to the login page with an Arabic error message
+            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
+        }
+
     }
 
     public function show_company()
@@ -64,7 +71,7 @@ class CompanyController extends Controller
                             $office_user,
                             $company_detail,
                             $cr_no,
-                            $value->added_by . '<br>' . $add_data,
+                            $add_data,
                             $modal
                         );
             }
@@ -86,9 +93,9 @@ class CompanyController extends Controller
 
     public function add_company(Request $request){
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
 
 
 
@@ -102,8 +109,8 @@ class CompanyController extends Controller
         $company->company_address = $request['company_address'];
         $company->company_detail = $request['company_detail'];
         $company->cr_no = $request['cr_no'];
-        $company->added_by = 'admin';
-        $company->user_id = 1;
+        $company->added_by = $user;
+        $company->user_id = $user_id;
         $company->save();
         return response()->json(['company_id' => $company->company_id]);
 
@@ -144,9 +151,9 @@ class CompanyController extends Controller
 
     public function update_company(Request $request){
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
 
         $company_id = $request->input('company_id');
         $company = Company::where('company_id', $company_id)->first();
@@ -161,7 +168,7 @@ class CompanyController extends Controller
         $company->company_address = $request->input('company_address');
         $company->company_detail = $request->input('company_detail');
         $company->cr_no = $request->input('cr_no');
-        $company->updated_by = 'Admin';
+        $company->updated_by =  $user;
         $company->save();
         return response()->json([
             trans('messages.success_lang', [], session('locale')) => trans('messages.company_update_lang', [], session('locale'))
@@ -186,9 +193,9 @@ class CompanyController extends Controller
 
     public function add_employee2(Request $request){
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->username;
 
 
 
@@ -200,8 +207,8 @@ class CompanyController extends Controller
         $employee->employee_phone = $request['employee_phone'];
         $employee->employee_company = $request['employee_company'];
         $employee->employee_detail = $request['employee_detail'];
-        $employee->added_by = 'admin';
-        $employee->user_id = 1;
+        $employee->added_by = $user;
+        $employee->user_id =  $user_id;
         $employee->save();
         return response()->json(['employee_id' => $employee->employee_id]);
 

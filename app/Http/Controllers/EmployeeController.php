@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
     public function index (){
 
         $companies= Company::all();
-        return view ('main_pages.employee', compact('companies'));
+
+        if (Auth::check() ) {
+            // If the conditions are met, show the dashboard
+            return view ('main_pages.employee', compact('companies'));
+        } else {
+            // If the conditions are not met, redirect to the login page with an Arabic error message
+            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
+        }
     }
 
     public function show_employee()
@@ -79,9 +88,9 @@ class EmployeeController extends Controller
 
     public function add_employee(Request $request){
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
 
 
 
@@ -93,8 +102,8 @@ class EmployeeController extends Controller
         $employee->employee_phone = $request['employee_phone'];
         $employee->employee_company = $request['employee_company'];
         $employee->employee_detail = $request['employee_detail'];
-        $employee->added_by = 'admin';
-        $employee->user_id = 1;
+        $employee->added_by =  $user;
+        $employee->user_id =  $user_id;
         $employee->save();
         return response()->json(['employee_id' => $employee->employee_id]);
 
@@ -134,9 +143,9 @@ class EmployeeController extends Controller
 
     public function update_employee(Request $request){
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
 
         $employee_id = $request->input('employee_id');
         $employee = Employee::where('employee_id', $employee_id)->first();
@@ -149,7 +158,7 @@ class EmployeeController extends Controller
         $employee->employee_phone = $request->input('employee_phone');
         $employee->employee_company = $request->input('employee_company');
         $employee->employee_detail = $request->input('employee_detail');
-        $employee->updated_by = 'Admin';
+        $employee->updated_by = $user;
         $employee->save();
         return response()->json([
             trans('messages.success_lang', [], session('locale')) => trans('messages.employee_update_lang', [], session('locale'))

@@ -2,18 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\About;
 use App\Models\Branch;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function index(){
 
        $branches = Branch::all();
-            return view('user.users', compact('branches'));
+
+
+            if (Auth::check() && Auth::user()->user_type == 1) {
+                // If the conditions are met, show the dashboard
+                return view('user.users', compact('branches'));
+            } else {
+                // If the conditions are not met, redirect to the login page with an Arabic error message
+                return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
+            }
 
 
     }
@@ -91,7 +100,9 @@ class UserController extends Controller
 
         $userAll = $request->has('user_all');
 
-
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
 
         $user = new User();
 
@@ -103,7 +114,7 @@ class UserController extends Controller
         $user->user_branch = $request['user_branch'];
         $user->user_all =  $userAll;
         $user->password = bcrypt($request['password']);
-        $user->added_by = 'user';
+        $user->added_by = $user;
 
         $user->save();
         return response()->json(['user_id' => $user->id]);
@@ -141,7 +152,9 @@ class UserController extends Controller
 
     public function update_user(Request $request){
 
-
+        $user_id2 = Auth::id();
+        $data= User::find( $user_id2)->first();
+        $user2= $data->user_name;
 
         $user_id = $request->input('user_id');
         $user = User::where('user_id', $user_id)->first();
@@ -156,7 +169,7 @@ class UserController extends Controller
         $user->user_all= $request->input('user_all');
         $user->user_branch= $request->input('user_branch');
         $user->password = bcrypt($request->input('password'));
-        $user->updated_by = 'user';
+        $user->updated_by = $user2;
         $user->save();
         return response()->json([
             'success'=> 'user Updated Successfully'
@@ -187,4 +200,45 @@ class UserController extends Controller
         }
 
 
+        public function login(){
+
+            return view ('login_page.login');
+        }
+
+
+        public function login_user(Request $request)
+        {
+            // Retrieve input credentials
+            $username = $request->input('username');
+            $password = $request->input('password');
+
+            // Attempt to find the user by username
+            $user = User::where('user_name', $username)->first();
+
+            if ($user && Hash::check($password, $user->password)) {
+
+                Auth::login($user);
+                // Authentication successful
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Login successful!',
+                    'redirect_url' => url('home')
+                    // You can add more data here if needed, like a redirect URL
+                ]);
+            } else {
+                // Authentication failed
+                return response()->json([
+                    'status' => 2,
+                    'message' => 'Invalid username or password.',
+                ]);
+            }
+        }
+
+
+
+
 }
+
+
+
+
