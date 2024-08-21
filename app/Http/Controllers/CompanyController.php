@@ -269,7 +269,8 @@ class CompanyController extends Controller
 
     return response()->json([
         'company_docs' => $company_docs,
-        'employee_docs' => $employee_docs
+        'employee_docs' => $employee_docs,
+
     ]);
 }
 
@@ -293,6 +294,30 @@ public function del_company_doc(Request $request){
     ]);
 }
 
+
+
+// public function add_employee3(Request $request){
+
+//     $user_id = Auth::id();
+//     $data= User::find( $user_id)->first();
+//     $user= $data->username;
+
+
+
+//     $employee = new Employee();
+
+//     $employee->employee_id = genUuid() . time();
+//     $employee->employee_name = $request['employee_name'];
+//     $employee->employee_email = $request['employee_email'];
+//     $employee->employee_phone = $request['employee_phone'];
+//     $employee->employee_company = $request['employee_company'];
+//     $employee->employee_detail = $request['employee_detail'];
+//     $employee->added_by = $user;
+//     $employee->user_id =  $user_id;
+//     $employee->save();
+//     return response()->json(['employee_id' => $employee->employee_id]);
+
+// }
 
 
 

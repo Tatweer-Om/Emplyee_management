@@ -361,6 +361,11 @@
                                         <span data-key="t-chat">Office Branches</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ url('about') }}">
+                                        <span data-key="t-chat">About Office</span>
+                                    </a>
+                                </li>
 
                                 {{-- <li>
                                     <a href="javascript: void(0);" class="has-arrow">
@@ -429,6 +434,7 @@
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="{{ url('company') }}" data-key="t-starter-page">Companies</a></li>
                                 <li><a href="{{ url('employee') }}" data-key="t-maintenance">Employees</a></li>
+                                <li><a href="{{ url('document') }}" data-key="t-maintenance">Add Document</a></li>
 
                             </ul>
                         </li>
