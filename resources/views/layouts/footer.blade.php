@@ -233,6 +233,8 @@
 
         @if ($route == 'company')
         @include('custom_js.company_js')
+        @elseif ($route == 'company_profile')
+        @include('custom_js.company_js')
         @elseif ($route == 'branch')
         @include('custom_js.branch_js')
         @elseif ($route == 'user')
