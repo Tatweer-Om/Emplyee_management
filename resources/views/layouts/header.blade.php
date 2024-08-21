@@ -429,6 +429,7 @@
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="{{ url('company') }}" data-key="t-starter-page">Companies</a></li>
                                 <li><a href="{{ url('employee') }}" data-key="t-maintenance">Employees</a></li>
+                                <li><a href="{{ url('document') }}" data-key="t-maintenance">Add Document</a></li>
 
                             </ul>
                         </li>

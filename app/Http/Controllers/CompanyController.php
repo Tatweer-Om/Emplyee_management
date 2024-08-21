@@ -269,7 +269,8 @@ class CompanyController extends Controller
 
     return response()->json([
         'company_docs' => $company_docs,
-        'employee_docs' => $employee_docs
+        'employee_docs' => $employee_docs,
+
     ]);
 }
 
