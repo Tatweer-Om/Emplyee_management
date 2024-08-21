@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\EmployeeDoc;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CompanyDocController;
+use App\Http\Controllers\EmployeeDocController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +36,8 @@ Route::get('show_company', [CompanyController::class, 'show_company'])->name('sh
 Route::post('edit_company', [CompanyController::class, 'edit_company'])->name('edit_company');
 Route::post('update_company', [CompanyController::class, 'update_company'])->name('update_company');
 Route::post('delete_company', [CompanyController::class, 'delete_company'])->name('delete_company');
+Route::post('add_employee2', [CompanyController::class, 'add_employee2'])->name('add_employee2');
+Route::get('company_profile/{id}', [CompanyController::class, 'company_profile'])->name('company_profile');
 
 
 //Branches
@@ -85,15 +89,20 @@ Route::post('delete_doc', [CompanyDocController::class, 'delete_doc'])->name('de
 // web.php
 Route::get('get_documents', [CompanyDocController::class, 'get_documents'])->name('get_documents');
 Route::get('get_all', [CompanyDocController::class, 'get_all'])->name('get_all');
-
 Route::get('/get-docs', [CompanyDocController::class, 'getDocs'])->name('get_docs');
-
-
-
-// Route to delete a document by ID
 Route::delete('/delete-doc/{id}', [CompanyDocController::class, 'deleteDoc'])->name('delete_doc');
-
-
 Route::get('get-doc/{id}', [DocumentController::class, 'getDoc'])->name('get_doc');
 Route::get('get-docs/{id}', [DocumentController::class, 'getDoc'])->name('get_doc');
+
+
+//employeedoc
+
+Route::match(['get', 'post'], 'employee_document_addition/{id}', [EmployeeDocController::class, 'employee_document_addition'])->name('employee_document_addition');
+Route::post('add_employeedoc', [EmployeeDocController::class, 'add_employeedoc'])->name('add_employeedoc');
+Route::get('show_employeedoc', [EmployeeDocController::class, 'show_employeedoc'])->name('show_employeedoc');
+Route::post('edit_employeedoc', [EmployeeDocController::class, 'edit_employeedoc'])->name('edit_employeedoc');
+Route::post('update_employeedoc', [EmployeeDocController::class, 'update_employeedoc'])->name('update_employeedoc');
+Route::post('delete_employeedoc', [EmployeeDocController::class, 'delete_employeedoc'])->name('delete_employeedoc');
+
+
 

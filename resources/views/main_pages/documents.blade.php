@@ -115,6 +115,8 @@
                                     <label for="document_name" class="col-form-label ">document Name</label>
                                     <input type="text" class="document_name form-control" name="document_name" id="document_name">
                                 </div>
+
+
                                 <div class="mb-3">
 
                                         <label for="choices-single-groups" class="form-label font-size-13"> Document Type</label>
@@ -127,7 +129,7 @@
 
                                 </div>
 
-                                <input type="text" class="document_id" name="document_id" id="document_id" hidden>
+                                <input type="text" class="document_id" name="document_id" hidden>
 
                                 <div class="mb-3">
                                     <label for="message-text" class="col-form-label">document Detail</label>

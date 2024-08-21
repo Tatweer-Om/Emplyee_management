@@ -243,6 +243,8 @@
         @include('custom_js.document_js')
         @elseif ($route == 'document_addition')
         @include('custom_js.document_add_js')
+        @elseif ($route == 'employee_document_addition')
+        @include('custom_js.add_employee_doc_js')
         @endif
 
 

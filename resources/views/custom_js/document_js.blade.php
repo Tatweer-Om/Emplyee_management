@@ -29,9 +29,14 @@
         $('.add_document').off().on('submit', function(e){
             e.preventDefault();
             var formdatas = new FormData($('.add_document')[0]);
+
+            var id=$('.document_id').val();
+
+
             var title=$('.document_name').val();
             var type=$('.document_type').val();
-            var id=$('.document_id').val();
+
+
 
             if(id!='')
             {
@@ -54,7 +59,7 @@
                     success: function(data) {
                         // $('#global-loader').hide();
                         // after_submit();
-                        show_notification('success','<?php echo trans('messages.data_update_success_lang',[],session('locale')); ?>');
+                        show_notification('success','data updated');
                         $('#document_modal').modal('hide');
                         $('#all_document').DataTable().ajax.reload();
                         return false;
@@ -120,7 +125,6 @@
 
     function edit(id){
 
-        console.log(id);
 
 
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -135,12 +139,12 @@
                 if(fetch!=""){
                     // Define a variable for the image path
 
-
                     $(".document_name").val(fetch.document_name);
                     $(".document_detail").val(fetch.document_detail);
+                    $(".document_id").val(fetch.document_id);
                     $(".document_type").val(fetch.document_type).trigger();
 
-                    $(".document_id").val(fetch.document_id);
+
                     $(".modal-title").html('<?php echo trans('messages.update_lang',[],session('locale')); ?>');
                 }
             },
@@ -148,7 +152,7 @@
             {
                 // $('#global-loader').hide();
                 // after_submit();
-                show_notification('error','<?php echo trans('messages.edit_failed_lang',[],session('locale')); ?>');
+                show_notification('error','data edit failed');
                 console.log(html);
                 return false;
             }
@@ -163,7 +167,7 @@
             showCancelButton: !0,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText:  '<?php echo trans('messages.delete_it_lang',[],session('locale')); ?>',
+            confirmButtonText:  'data deleted',
             confirmButtonClass: "btn btn-primary",
             cancelButtonClass: "btn btn-danger ml-1",
             buttonsStyling: !1
@@ -195,6 +199,7 @@
 
 
 
+ 
 
  
 
@@ -559,5 +564,6 @@
 
 
 
+ 
  
     </script>

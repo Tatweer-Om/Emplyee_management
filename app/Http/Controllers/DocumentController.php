@@ -102,6 +102,7 @@ class DocumentController extends Controller
 
         // $document = new document();
         $document_id = $request->input('id');
+
         // Use the Eloquent where method to retrieve the document by column name
         $document_data = Document::where('id', $document_id)->first();
 
@@ -131,6 +132,8 @@ class DocumentController extends Controller
         // $user= $data->username;
 
         $document_id = $request->input('document_id');
+
+
         $document = Document::where('document_id', $document_id)->first();
         if (!$document) {
             return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.document_not_found', [], session('locale'))], 404);

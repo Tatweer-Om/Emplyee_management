@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title>{{ $company->company_name ?? '' }} </title>
+        <title>{{ $employee->employee_name ?? '' }} </title>
     @endpush
 
     <div class="main-content">
@@ -48,13 +48,13 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">{{ $company->company_name ?? '' }}</h4>
-                                <p class="card-title-desc">From This Page Documents For A Company will be Added</p>
+                                <h4 class="card-title">{{ $employee->employee_name ?? '' }}</h4>
+                                <p class="card-title-desc">{{ $company_name ?? '' }}</p>
                             </div>
                             <div class="card-body">
                                 <!-- Dynamic Rows Container -->
-                                <div class="company-doc-form" id="row-container">
-                                    <form class="add_company_doc" id="add_company_doc" method="POST" action="#">
+                                <div class="employee-doc-form" id="row-container">
+                                    <form class="add_employee_doc" id="add_employee_doc" method="POST" action="#">
                                     @csrf
                                     <!-- Initial Row (Example) -->
                                         <div class="row form-row">
@@ -72,13 +72,13 @@
                                             <div class="col-md-6 col-lg-3">
                                                 <div class="mb-2">
                                                     <label class="form-label">Document</label>
-                                                    <input type="text" class="form-control companydoc_name" name="companydoc_name">
+                                                    <input type="text" class="form-control employeedoc_name" name="employeedoc_name">
                                                 </div>
                                             </div>
-                                            <input type="text" name="companydoc_id" class="company_doc_id" hidden>
-                                            <input type="text" name="office_user" value="{{ $company->office_user ?? '' }}" class="office_user" hidden>
-                                            <input type="text" name="company_id" value="{{ $company->id ?? '' }}" class="company_id" hidden>
-                                            <input type="text" name="company_name" value="{{ $company->company_name ?? '' }}" class="company_name" hidden>
+                                            <input type="text" name="employeedoc_id" class="employee_doc_id" hidden>
+                                            <input type="text" name="office_user" value="{{ $employee->added_by ?? '' }}" class="office_user" hidden>
+                                            <input type="text" name="employee_id" value="{{ $employee->id ?? '' }}" class="employee_id" hidden>
+                                            <input type="text" name="employee_name" value="{{ $employee->employee_name ?? '' }}" class="employee_name" hidden>
                                             <div class="col-lg-3">
                                                 <div class="mb-2">
                                                     <label class="form-label">Expiry Date</label>
@@ -108,14 +108,14 @@
         </div>
         <!-- End Page-content -->
         <div class="table-responsive">
-            <table id="all_company_doc" class="table align-middle   dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+            <table id="all_employee_doc" class="table align-middle   dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                 <thead>
                     <tr class="bg-transparent">
 
                         <th style="width: 120px; text-align:center;">Sr.No </th>
                         <th  style=" text-align:center;">Document Name</th>
                         <th  style=" text-align:center;">Expiry Date</th>
-                        <th  style=" text-align:center;">Renewel Period</th>
+                        <th  style=" text-align:center;">Renewl Period</th>
                         <th  style=" text-align:center;">Added On</th>
                         <th  style=" text-align:center;">Office User</th>
                         <th  style=" text-align:center;">Action</th>

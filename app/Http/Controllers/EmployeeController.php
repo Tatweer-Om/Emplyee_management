@@ -42,8 +42,8 @@ class EmployeeController extends Controller
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
+                         <li><a class="dropdown-item" href="' . url('employee_document_addition/' . $value->id) . '">Add Document</a></li>
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#employee_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printemployee(' . $value->employee_id . ')">Print</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
                         </ul>
                     </div>';
@@ -85,7 +85,7 @@ class EmployeeController extends Controller
 
 
 
-        $employee = new employee();
+        $employee = new Employee();
 
         $employee->employee_id = genUuid() . time();
         $employee->employee_name = $request['employee_name'];

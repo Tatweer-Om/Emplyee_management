@@ -2,11 +2,11 @@
     document.addEventListener('DOMContentLoaded', function() {
     const rowContainer = document.getElementById('row-container');
     const tableBody = document.querySelector('table tbody');
-    const companyId = '{{ $company->id ?? '' }}'; // Assume company ID is available in the template
+    const employeeId = '{{ $employee->id ?? '' }}'; // Assume employee ID is available in the template
 
     // Function to update the document name input based on the selected document
     function updateDocumentName(selectElement) {
-        const documentNameInput = selectElement.closest('.form-row').querySelector('.companydoc_name');
+        const documentNameInput = selectElement.closest('.form-row').querySelector('.employeedoc_name');
         if (documentNameInput) {
             const selectedText = selectElement.options[selectElement.selectedIndex]?.text || '';
             documentNameInput.value = selectedText;
@@ -23,21 +23,23 @@
     });
 
 
-    $('.company_doc_modal').on('hidden.bs.modal', function() {
-            $(".add_company_doc")[0].reset();
-            $('.company_doc_id').val('');
+
+    // add document employee
+
+    $('.employee_doc_modal').on('hidden.bs.modal', function() {
+            $(".add_employee_doc")[0].reset();
+            $('.employee_doc_id').val('');
             // var imagePath = '{{ asset('images/dummy_image/no_image.png') }}';
             // $('#img_tag').attr('src',imagePath);
         });
 
-        $('#all_company_doc').DataTable().clear().destroy();
-
-        $('#all_company_doc').DataTable({
-    "ajax": {
-        "url": "{{ url('show_doc') }}",
+        $('#all_employee_doc').DataTable().clear().destroy();
+        $('#all_employee_doc').DataTable({
+         "ajax": {
+        "url": "{{ url('show_employeedoc') }}",
         "type": "GET",
         "data": function (d) {
-            d.company_id = $('.company_id').val();  // Add company_doc_id as a parameter
+            d.employee_id = $('.employee_id').val();  // Add employee_doc_id as a parameter
         }
     },
     "bFilter": true,
@@ -56,59 +58,60 @@
     },
 });
 
-        $('.add_company_doc').off().on('submit', function(e) {
+ $('.add_employee_doc').off().on('submit', function(e) {
     e.preventDefault();
-    var formdatas = new FormData($('.add_company_doc')[0]);
-    var title = $('.companydoc_name').val();
-    var id = $('.company_doc_id').val();
+    var formdatas = new FormData($('.add_employee_doc')[0]);
+    var title = $('.employeedoc_name').val();
+    var id = $('.employee_doc_id').val();
 
     if (id != '') {
         if (title == "") {
-            show_notification('error', '<?php echo trans('messages.data_add_company_doc_name_lang',[],session('locale')); ?>');
+            show_notification('error', '<?php echo trans('messages.data_add_employee_doc_name_lang',[],session('locale')); ?>');
             return false;
         }
-        var str = $(".add_company_doc").serialize();
+        var str = $(".add_employee_doc").serialize();
         $.ajax({
             type: "POST",
-            url: "{{ url('add_doc') }}",
+            url: "{{ url('add_employeedoc') }}",
             data: formdatas,
             contentType: false,
             processData: false,
             success: function(data) {
                 show_notification('success', '<?php echo trans('messages.data_update_success_lang',[],session('locale')); ?>');
-                $('#company_doc_modal').modal('hide');
-                $('#all_company_doc').DataTable().ajax.reload();
+                $('#employee_doc_modal').modal('hide');
+                $('#all_employee_doc').DataTable().ajax.reload();
+                $(".add_employee_doc")[0].reset();
                 return false;
             },
             error: function(data) {
                 show_notification('error', '<?php echo trans('messages.data_update_failed_lang',[],session('locale')); ?>');
-                $('#all_company_doc').DataTable().ajax.reload();
+                $('#all_employee_doc').DataTable().ajax.reload();
                 console.log(data);
                 return false;
             }
         });
     } else if (id == '') {
         if (title == "") {
-            show_notification('error', '<?php echo trans('messages.data_add_company_doc_name_lang',[],session('locale')); ?>');
+            show_notification('error', '<?php echo trans('messages.data_add_employee_doc_name_lang',[],session('locale')); ?>');
             return false;
         }
-        var str = $(".add_company_doc").serialize();
+        var str = $(".add_employee_doc").serialize();
         $.ajax({
             type: "POST",
-            url: "{{ url('add_doc') }}",
+            url: "{{ url('add_employeedoc') }}",
             data: formdatas,
             contentType: false,
             processData: false,
             success: function(data) {
-                $('#all_company_doc').DataTable().ajax.reload();
+                $('#all_employee_doc').DataTable().ajax.reload();
                 show_notification('success', '<?php echo trans('messages.data_add_success_lang',[],session('locale')); ?>');
-                $('.company_doc_modal').modal('hide');
-                $(".add_company_doc")[0].reset();
+                $('.employee_doc_modal').modal('hide');
+                $(".add_employee_doc")[0].reset();
                 return false;
             },
             error: function(data) {
                 show_notification('error', '<?php echo trans('messages.data_add_failed_lang',[],session('locale')); ?>');
-                $('#all_company_doc').DataTable().ajax.reload();
+                $('#all_employee_doc').DataTable().ajax.reload();
                 console.log(data);
                 return false;
             }
@@ -120,15 +123,15 @@
 
 
 
-    function edit_company_doc(id){
+    function edit_employeedoc(id){
 
-        console.log(id);
+
 
 
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
         $.ajax ({
             dataType:'JSON',
-            url : "{{ url('edit_doc') }}",
+            url : "{{ url('edit_employeedoc') }}",
             method : "POST",
             data :   {id:id,_token: csrfToken},
             success: function(fetch) {
@@ -139,9 +142,9 @@
 
 
                     $(".all_document").val(fetch.all_document);
-                    $(".companydoc_name").val(fetch.companydoc_name);
+                    $(".employeedoc_name").val(fetch.employeedoc_name);
                     $(".expiry_date").val(fetch.expiry_date);
-                    $(".company_doc_id").val(fetch.id);
+                    $(".employee_doc_id").val(fetch.id);
                     $(".modal-title").html('<?php echo trans('messages.update_lang',[],session('locale')); ?>');
                 }
             },
@@ -156,7 +159,7 @@
         });
     }
 
-    function del_company_doc(id) {
+    function del_employee_doc(id) {
         Swal.fire({
             title:  'Are You sure to Delete',
             text:  'Delete',
@@ -185,7 +188,7 @@
                     success: function (data) {
                         // $('#global-loader').hide();
                         // after_submit();
-                        $('#all_company_doc').DataTable().ajax.reload();
+                        $('#all_employee_doc').DataTable().ajax.reload();
                         show_notification('success', '<?php echo trans('messages.delete_success_lang',[],session('locale')); ?>');
                     }
                 });

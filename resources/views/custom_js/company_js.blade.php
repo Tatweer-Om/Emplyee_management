@@ -199,4 +199,54 @@
         });
     }
 
+
+
+    //employee
+    function add_employee(id) {
+    // Set the value of the select box
+    $('.employee_company').val(id).trigger('change');
+
+    // Trigger the form submission
+
+}
+
+
+$('.add_employee').off().on('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+
+    var formdatas = new FormData(this); // Create FormData object from the form
+    var title = $('.employee_name').val(); // Get employee name
+    var id = $('.employee_id').val(); // Get employee ID
+
+    // Validate form input
+    if (title === "") {
+        show_notification('error', '<?php echo trans('messages.data_add_employee_name_lang', [], session('locale')); ?>');
+        return false; // Exit if validation fails
+    }
+
+    // Send AJAX request
+    $.ajax({
+        type: "POST",
+        url: "{{ url('add_employee2') }}", // Set your API endpoint
+        data: formdatas,
+        contentType: false,
+        processData: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Include CSRF token
+        },
+        success: function(data) {
+            $('#all_employee').DataTable().ajax.reload(); // Reload DataTable
+            show_notification('success', '<?php echo trans('messages.data_add_success_lang', [], session('locale')); ?>'); // Show success notification
+            $('.employee_modal').modal('hide'); // Hide the modal
+            $(".add_employee")[0].reset(); // Reset the form
+        },
+        error: function(data) {
+            show_notification('error', '<?php echo trans('messages.data_add_failed_lang', [], session('locale')); ?>'); // Show error notification
+            $('#all_employee').DataTable().ajax.reload(); // Reload DataTable
+            console.log(data); // Log error for debugging
+        }
+    });
+});
+
+
     </script>
