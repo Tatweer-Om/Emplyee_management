@@ -9,6 +9,7 @@ use App\Models\Document;
 use Nette\Utils\DateTime;
 use App\Models\CompanyDocs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyDocController extends Controller
 {
@@ -20,9 +21,16 @@ class CompanyDocController extends Controller
         $company= Company::where('id', $id)->first();
 
         $documents= Document::where('document_type', 1)->get();
+        if (Auth::check() ) {
+            // If the conditions are met, show the dashboard
+            return view ('main_pages.add_document', compact('documents', 'company'));
+        } else {
+            // If the conditions are not met, redirect to the login page with an Arabic error message
+            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
+        }
 
 
-        return view ('main_pages.add_document', compact('documents', 'company'));
+
     }
 
     public function show_doc(Request $request)
@@ -90,7 +98,7 @@ class CompanyDocController extends Controller
                         </ul>
                     </div>';
                 $add_data=get_date_only($value->created_at);
-                $added_by='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $value->added_by . '<br>' . $add_data.'</p>';
+                $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
 
                 $sno++;
                 $json[]= array(
@@ -98,7 +106,7 @@ class CompanyDocController extends Controller
                             $document_name,
                             $expiry_date,
                             '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
-                            $added_by,
+                            $add_date,
                             $sanad_employee,
                             $modal
                         );
@@ -120,7 +128,14 @@ class CompanyDocController extends Controller
     }
 
     public function add_doc(Request $request)
+
     {
+
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
+
+
         if (empty($request->companydoc_id)) {
             // Add new document
 
@@ -132,9 +147,9 @@ class CompanyDocController extends Controller
             $companydoc->companydoc_name = $request->companydoc_name;
             $companydoc->company_id = $request->company_id;
             $companydoc->company_name = $request->company_name;
-            $companydoc->office_user = $request->office_user;
-            $companydoc->user_id = 1;
-            $companydoc->added_by = 'admin'; // Set added_by for new records
+            $companydoc->office_user = $user;
+            $companydoc->user_id = $user_id;
+            $companydoc->added_by = $user; // Set added_by for new records
             // Save the document
             $companydoc->save();
 
@@ -147,12 +162,11 @@ class CompanyDocController extends Controller
                 return response()->json(['error' => 'Document not found'], 404);
             }
             $companydoc->expiry_date = $request->expiry_date;
-            // $companydoc->all_document = $request->all_document;
-            $companydoc->all_document = 2;
+            $companydoc->all_document = $request->all_document;
             $companydoc->companydoc_name = $request->companydoc_name;
             $companydoc->company_id = $request->company_id;
             $companydoc->company_name = $request->company_name;
-            $companydoc->updated_by = 'admin'; // Set updated_by for existing records
+            $companydoc->updated_by = $user; // Set updated_by for existing records
             $status = 2; // Status 2 for updating existing record
             $companydoc->save();
         }
@@ -236,77 +250,6 @@ class CompanyDocController extends Controller
         // Return the document data
         return response()->json(['document' => $companydoc]);
     }
-
-
-
-
-
-    // public function getDocs(Request $request)
-    // {
-    //     $companyId = $request->input('company_id'); // Get the company ID from the request
-
-    //     // Retrieve documents for the specific company ID
-    //     $docs = CompanyDocs::where('company_id', $companyId)->get();
-
-    //     // Create an array to hold the document data with remaining time
-    //     $data = $docs->map(function($doc) {
-    //         $expiryDate = Carbon::parse($doc->expiry_date);
-    //         $currentDate = Carbon::now();
-    //         $interval = $currentDate->diff($expiryDate);
-
-    //         // Construct the remaining time string
-    //         $remainingTime = [];
-    //         if ($expiryDate->isFuture()) {
-    //             if ($interval->y > 0) {
-    //                 $remainingTime[] = $interval->y . ' year' . ($interval->y > 1 ? 's' : '');
-    //             }
-    //             if ($interval->m > 0) {
-    //                 $remainingTime[] = $interval->m . ' month' . ($interval->m > 1 ? 's' : '');
-    //             }
-    //             if ($interval->d > 0) {
-    //                 $remainingTime[] = $interval->d . ' day' . ($interval->d > 1 ? 's' : '');
-    //             }
-    //             if (empty($remainingTime)) {
-    //                 $remainingTime[] = 'Less than a day';
-    //             }
-    //         } else {
-    //             $remainingTime[] = 'Expired';
-    //         }
-
-    //         // Join the array to form the final string
-    //         $remainingTimeString = implode(' ', $remainingTime);
-
-    //         $user = User::find($doc->office_user); // Use find() for simplicity
-    //         $userName = $user ? $user->user_name : 'Unknown'; // Handle case where user might not be found
-
-    //         return [
-    //             'id' => $doc->id,
-    //             'companydoc_name' => $doc->companydoc_name,
-    //             'expiry_date' => $doc->expiry_date,
-    //             'remaining_time' => $remainingTimeString,
-    //             'added_by' => $doc->added_by,
-    //             'office_user' => $userName,
-    //         ];
-    //     });
-
-    //     return response()->json($data);
-    // }
-
-
-
-
-
-// public function deleteDoc($id)
-// {
-//     $doc = CompanyDocs::where('id', $id)->first();
-
-//     if ($doc) {
-//         $doc->delete();
-//         return response()->json(['message' => 'Document deleted successfully']);
-//     }
-//     return response()->json(['error' => 'Document not found'], 404);
-// }
-
 
 
 

@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class branchController extends Controller
 {
     public function index (){
 
-        return view ('user.branch');
+        if (Auth::check() && Auth::user()->user_type == 1) {
+            // If the conditions are met, show the dashboard
+            return view('user.branch');
+        } else {
+            // If the conditions are not met, redirect to the login page with an Arabic error message
+            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
+        }
     }
 
     public function show_branch()
@@ -73,9 +81,20 @@ class branchController extends Controller
 
     public function add_branch(Request $request){
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        $user = Auth::user();
+
+        if ($user) {
+
+            $username = $user->user_name;
+
+            $user_id = $user->id;
+
+        } else {
+            $username = null;
+            $user_id = null;
+        }
+
+
 
 
 
@@ -88,8 +107,8 @@ class branchController extends Controller
         $branch->branch_address = $request['branch_address'];
         $branch->branch_detail = $request['branch_detail'];
 
-        $branch->added_by = 'admin';
-        $branch->user_id = 1;
+        $branch->added_by =  $username;
+        $branch->user_id =  $user_id;
         $branch->save();
         return response()->json(['branch_id' => $branch->branch_id]);
 
@@ -125,10 +144,18 @@ class branchController extends Controller
     }
 
     public function update_branch(Request $request){
+        $user = Auth::user();
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        if ($user) {
+
+            $username = $user->user_name;
+
+            $user_id = $user->id;
+
+        } else {
+            $username = null;
+            $user_id = null;
+        }
 
         $branch_id = $request->input('branch_id');
         $branch = Branch::where('branch_id', $branch_id)->first();
@@ -142,7 +169,7 @@ class branchController extends Controller
         $branch->branch_address = $request->input('branch_address');
         $branch->branch_detail = $request->input('branch_detail');
 
-        $branch->updated_by = 'Admin';
+        $branch->updated_by =  $username;
         $branch->save();
         return response()->json([
             trans('messages.success_lang', [], session('locale')) => trans('messages.branch_update_lang', [], session('locale'))

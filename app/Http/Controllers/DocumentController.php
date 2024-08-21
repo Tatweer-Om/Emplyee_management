@@ -2,15 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Company;
 use App\Models\Document;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentController extends Controller
 {
     public function index (){
 
-        return view ('main_pages.documents');
+        if (Auth::check() && Auth::user()->user_type == 1) {
+            // If the conditions are met, show the dashboard
+            return view ('main_pages.documents');
+        } else {
+            // If the conditions are not met, redirect to the login page with an Arabic error message
+            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
+        }
+
+
     }
 
 
@@ -79,9 +89,9 @@ class DocumentController extends Controller
 
     public function add_document(Request $request){
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
 
 
 
@@ -91,8 +101,8 @@ class DocumentController extends Controller
         $document->document_name = $request['document_name'];
         $document->document_detail = $request['document_detail'];
         $document->document_type = $request['document_type'];
-        $document->added_by = 'admin';
-        $document->user_id = 1;
+        $document->added_by = $user;
+        $document->user_id = $user_id;
         $document->save();
         return response()->json(['document_id' => $document->document_id]);
 
@@ -127,9 +137,9 @@ class DocumentController extends Controller
 
     public function update_document(Request $request){
 
-        // $user_id = Auth::id();
-        // $data= User::find( $user_id)->first();
-        // $user= $data->username;
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
 
         $document_id = $request->input('document_id');
 
@@ -142,8 +152,7 @@ class DocumentController extends Controller
         $document->document_name = $request->input('document_name');
         $document->document_detail = $request->input('document_detail');
         $document->document_type = $request->input('document_type');
-
-        $document->updated_by = 'Admin';
+        $document->updated_by = $user;
         $document->save();
         return response()->json([
             trans('messages.success_lang', [], session('locale')) => trans('messages.document_update_lang', [], session('locale'))
@@ -166,8 +175,6 @@ class DocumentController extends Controller
         ]);
     }
 
-
-    //document_Addition
 
 
 
