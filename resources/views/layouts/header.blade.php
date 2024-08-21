@@ -361,6 +361,11 @@
                                         <span data-key="t-chat">Office Branches</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ url('about') }}">
+                                        <span data-key="t-chat">About Office</span>
+                                    </a>
+                                </li>
 
                                 {{-- <li>
                                     <a href="javascript: void(0);" class="has-arrow">

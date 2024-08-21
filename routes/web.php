@@ -4,6 +4,7 @@ use App\Models\EmployeeDoc;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DocumentController;
@@ -38,6 +39,7 @@ Route::post('update_company', [CompanyController::class, 'update_company'])->nam
 Route::post('delete_company', [CompanyController::class, 'delete_company'])->name('delete_company');
 Route::post('del_company_doc', [CompanyController::class, 'del_company_doc'])->name('del_company_doc');
 Route::post('add_employee2', [CompanyController::class, 'add_employee2'])->name('add_employee2');
+Route::post('add_employee3', [CompanyController::class, 'add_employee3'])->name('add_employee3');
 Route::get('company_profile/{id}', [CompanyController::class, 'company_profile'])->name('company_profile');
 Route::match(['get', 'post'], 'show_company_doc', [CompanyController::class, 'show_company_doc'])->name('show_company_doc');
 
@@ -52,7 +54,16 @@ Route::post('update_branch', [BranchController::class, 'update_branch'])->name('
 Route::post('delete_branch', [BranchController::class, 'delete_branch'])->name('delete_branch');
 
 
-//users
+//About
+
+Route::match(['get', 'post'], 'about', [AboutController::class, 'index'])->name('about');
+Route::post('add_about', [AboutController::class, 'add_about'])->name('add_about');
+Route::get('show_about', [AboutController::class, 'show_about'])->name('show_about');
+Route::post('edit_about', [AboutController::class, 'edit_about'])->name('edit_about');
+Route::post('update_about', [AboutController::class, 'update_about'])->name('update_about');
+Route::post('delete_about', [AboutController::class, 'delete_about'])->name('delete_about');
+
+//uSER
 
 Route::match(['get', 'post'], 'user', [UserController::class, 'index'])->name('user');
 Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
