@@ -178,7 +178,7 @@
                 // before_submit();
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
-                    url: "{{ url('delete_doc') }}",
+                    url: "{{ url('delete_employeedoc') }}",
                     type: 'POST',
                     data: {
                         id: id,

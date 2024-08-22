@@ -26,8 +26,11 @@ class EmployeeController extends Controller
 
 
                 $company = Company::where('id', $value->employee_company)->first();
-                $company_name = $company->company_name;
-
+                $company_name="";
+                if(!empty($company))
+                {
+                    $company_name = $company->company_name;
+                }    
                 $employee_name='<a style="width:20px;" href="javascript:void(0);">'.$value->employee_name.'</a>';
                 $employee_company='<p tyle="width:20px;" href="javascript:void(0);">'. $company_name.'</p>';
                 $employee_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->employee_email . ' <br> ' . $value->employee_phone . '</p>';

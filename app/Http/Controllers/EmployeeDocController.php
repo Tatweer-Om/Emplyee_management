@@ -201,7 +201,17 @@ class EmployeeDocController extends Controller
         return response()->json($data);
     }
 
-
+    public function delete_employeedoc(Request $request){
+        $doc_id = $request->input('id');
+        $employee_doc = EmployeeDoc::where('id', $doc_id)->first();
+        if (!$employee_doc) {
+            return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.employee_not_found', [], session('locale'))], 404);
+        }
+        $employee_doc->delete();
+        return response()->json([
+            trans('messages.success_lang', [], session('locale')) => trans('messages.employee_deleted_lang', [], session('locale'))
+        ]);
+    }
 
 //     public function delete_doc(Request $request){
 //         $doc_id = $request->input('id');
