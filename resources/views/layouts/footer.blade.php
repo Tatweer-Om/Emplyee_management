@@ -247,6 +247,8 @@
         @include('custom_js.document_add_js')
         @elseif ($route == 'employee_document_addition')
         @include('custom_js.add_employee_doc_js')
+        @elseif ($route == 'about')
+        @include('custom_js.about_js')
         @endif
 
 
