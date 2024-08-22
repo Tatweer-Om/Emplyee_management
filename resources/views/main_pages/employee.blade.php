@@ -119,7 +119,7 @@
                                 <div class="mb-3">
                                     <label for="choices-single-groups" class="form-label font-size-13">Companies
                                         </label>
-                                    <select class="employee_company form-control" searchable  name="employee_company"
+                                    <select class="employee_company searchable_select select2"  searchable  name="employee_company"
                                         id="choices-single-groups">
                                         <option value="">Choose Company</option>
                                         @foreach($companies as $company)

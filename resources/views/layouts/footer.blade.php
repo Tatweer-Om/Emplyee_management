@@ -156,7 +156,8 @@
 
 <script src="{{ asset('js/app.js') }}"></script>
 
-
+<script src="{{  asset('plugins/select2/js/custom-select.js')}}"></script>
+<script src="{{  asset('select2_js/select2.min.js')}}"></script>
 
 <script src="{{ asset('libs/@fullcalendar/core/main.min.js') }}"></script>
 <script src="{{ asset('libs/@fullcalendar/bootstrap/main.min.js') }}"></script>
@@ -250,7 +251,7 @@
         @elseif ($route == 'about')
         @include('custom_js.about_js')
         @endif
-
+        <script>var base_url= "<?php echo url('/'); ?>";</script>
 
 </body>
 

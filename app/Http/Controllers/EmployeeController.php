@@ -35,8 +35,11 @@ class EmployeeController extends Controller
 
 
                 $company = Company::where('id', $value->employee_company)->first();
-                $company_name = $company->company_name;
-
+                $company_name="";
+                if(!empty($company))
+                {
+                    $company_name = $company->company_name;
+                }    
                 $employee_name='<a style="width:20px;" href="javascript:void(0);">'.$value->employee_name.'</a>';
                 $employee_company='<p tyle="width:20px;" href="javascript:void(0);">'. $company_name.'</p>';
                 $employee_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->employee_email . ' <br> ' . $value->employee_phone . '</p>';
@@ -105,7 +108,8 @@ class EmployeeController extends Controller
         $employee->added_by =  $user;
         $employee->user_id =  $user_id;
         $employee->save();
-        return response()->json(['employee_id' => $employee->employee_id]);
+        $lastInsertedId = $employee->id;
+        return response()->json(['employee_id' => $employee->employee_id,'last_id'=>$lastInsertedId]);
 
     }
 
@@ -162,7 +166,7 @@ class EmployeeController extends Controller
         $employee->save();
         return response()->json([
             trans('messages.success_lang', [], session('locale')) => trans('messages.employee_update_lang', [], session('locale'))
-        ]);
+            ,'last_id'=>$employee->id]);
     }
 
     public function delete_employee(Request $request){

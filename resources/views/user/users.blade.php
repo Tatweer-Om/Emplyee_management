@@ -158,6 +158,11 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <label for="user_email" class="col-form-label user_email">user email</label>
+                                    <input type="email" class="user_email form-control" name="user_email" id="user_email">
+                                </div>
+
+                                <div class="mb-3">
                                     <label for="message-text" class="col-form-label">user Detail</label>
                                     <textarea class="user_detail form-control" class="user_detail" name="user_detail" id="user_detail"></textarea>
                                 </div>

@@ -2,6 +2,7 @@
 <script>
 
 $(document).ready(function() {
+    
     $('#datepicker-basic').datepicker({
         format: 'mm/dd/yyyy', // or any format you prefer
         autoclose: true,

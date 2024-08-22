@@ -57,9 +57,12 @@
                     success: function(data) {
                         // $('#global-loader').hide();
                         // after_submit();
+                        var id = data.last_id;
+                        var url = base_url+'/document_addition/'+id;
                         show_notification('success', '<?php echo trans('messages.data_update_success_lang', [], session('locale')); ?>');
                         $('#company_modal').modal('hide');
                         $('#all_company').DataTable().ajax.reload();
+                        window.open(url, '_blank');
                         return false;
                     },
                     error: function(data) {
@@ -92,10 +95,13 @@
                     success: function(data) {
                         // $('#global-loader').hide();
                         // after_submit();
+                        var id = data.last_id;
+                        var url = base_url+'/document_addition/'+id;
                         $('#all_company').DataTable().ajax.reload();
                         show_notification('success', '<?php echo trans('messages.data_add_success_lang', [], session('locale')); ?>');
                         $('.company_modal').modal('hide');
                         $(".add_company")[0].reset();
+                        window.open(url, '_blank');
                         return false;
                     },
                     error: function(data) {
@@ -205,7 +211,7 @@
     //employee
     function add_employee(id) {
         // Set the value of the select box
-        $('.employee_company').val(id).trigger('change');
+        $('.employee_company').val(id);
 
         // Trigger the form submission
 
@@ -236,10 +242,13 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Include CSRF token
             },
             success: function(data) {
-                $('#all_employee').DataTable().ajax.reload(); // Reload DataTable
-                show_notification('success', '<?php echo trans('messages.data_add_success_lang', [], session('locale')); ?>'); // Show success notification
-                $('.employee_modal').modal('hide'); // Hide the modal
-                $(".add_employee")[0].reset(); // Reset the form
+                var id = data.last_id;
+                var url = base_url+'/employee_document_addition/'+id;
+                 show_notification('success','<?php echo trans('messages.data_add_success_lang',[],session('locale')); ?>');
+                $('.employee_modal').modal('hide');
+                $(".add_employee")[0].reset();
+                window.open(url, '_blank');
+                return false;
             },
             error: function(data) {
                 show_notification('error', '<?php echo trans('messages.data_add_failed_lang', [], session('locale')); ?>'); // Show error notification

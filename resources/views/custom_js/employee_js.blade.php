@@ -1,7 +1,10 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
+        $(".employee_company").select2({
+            dropdownParent: $("#employee_modal")
+        }); 
+        
         $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -59,9 +62,12 @@
                     success: function(data) {
                         // $('#global-loader').hide();
                         // after_submit();
+                        var id = data.last_id;
+                        var url = base_url+'/employee_document_addition/'+id;
                         show_notification('success','<?php echo trans('messages.data_update_success_lang',[],session('locale')); ?>');
                         $('#employee_modal').modal('hide');
                         $('#all_employee').DataTable().ajax.reload();
+                        window.open(url, '_blank');
                         return false;
                     },
                     error: function(data)
@@ -96,10 +102,13 @@
                     success: function(data) {
                         // $('#global-loader').hide();
                         // after_submit();
+                        var id = data.last_id;
+                        var url = base_url+'/employee_document_addition/'+id;
                         $('#all_employee').DataTable().ajax.reload();
                         show_notification('success','<?php echo trans('messages.data_add_success_lang',[],session('locale')); ?>');
                         $('.employee_modal').modal('hide');
                         $(".add_employee")[0].reset();
+                        window.open(url, '_blank');
                         return false;
                         },
                     error: function(data)
