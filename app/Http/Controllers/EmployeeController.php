@@ -108,7 +108,8 @@ class EmployeeController extends Controller
         $employee->added_by =  $user;
         $employee->user_id =  $user_id;
         $employee->save();
-        return response()->json(['employee_id' => $employee->employee_id]);
+        $lastInsertedId = $employee->id;
+        return response()->json(['employee_id' => $employee->employee_id,'last_id'=>$lastInsertedId]);
 
     }
 
@@ -165,7 +166,7 @@ class EmployeeController extends Controller
         $employee->save();
         return response()->json([
             trans('messages.success_lang', [], session('locale')) => trans('messages.employee_update_lang', [], session('locale'))
-        ]);
+            ,'last_id'=>$employee->id]);
     }
 
     public function delete_employee(Request $request){

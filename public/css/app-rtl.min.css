@@ -2031,6 +2031,12 @@ body[data-layout=horizontal][data-layout-size=boxed] .container-fluid, body[data
   font-size: 0.875rem;
   vertical-align: middle;
 }
+.select2-container--default .select2-selection--single
+{
+  padding: 0.47rem 0.75rem!important;
+  height: 37px!important;
+}
+ 
 
 .form-switch-lg {
   font-size: 26px;
@@ -2058,10 +2064,12 @@ body[data-layout=horizontal][data-layout-size=boxed] .container-fluid, body[data
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23ced4da'/%3e%3c/svg%3e");
 }
 
-[dir=rtl] input {
+/* [dir=rtl] input {
   text-align: end;
+} */
+[type="tel"], [type="url"], [type="email"], [type="number"] {
+  direction: rtl!important;
 }
-
 .widget-box-1-icon {
   position: absolute;
   left: -15px;

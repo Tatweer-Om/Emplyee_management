@@ -213,11 +213,35 @@
                             </div>
                         </div>
                     </div>
+                    <?php
+                        // Get today's date
+                        $today = date('Y-m-d');
 
+                        // Get the date 30 days from now
+                        $dateIn30Days = date('Y-m-d', strtotime('+30 days'));
+
+                        // Example user ID to filter by
+                        $userId = Auth::id(); // Replace with the actual user ID
+
+                        // For employee_docs table
+                        $employeeDocs = DB::table('employee_docs')
+                            ->whereBetween('expiry_date', [$today, $dateIn30Days])
+                            ->where('user_id', $userId);
+
+                        // For company_docs table
+                        $companyDocs = DB::table('company_docs')
+                            ->whereBetween('expiry_date', [$today, $dateIn30Days])
+                            ->where('user_id', $userId);
+
+                        $total_noti = $companyDocs->count() + $employeeDocs->count();
+
+                        $emp_docs = $employeeDocs->get();
+                        $comp_docs = $companyDocs->get();
+                    ?>    
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i data-feather="bell" class="icon-lg"></i>
-                            <span class="badge bg-danger rounded-pill">5</span>
+                            <span class="badge bg-danger rounded-pill"><?php echo $total_noti;  ?></span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
                             <div class="p-3">
@@ -231,67 +255,116 @@
                                 </div>
                             </div>
                             <div data-simplebar style="max-height: 230px;">
-                                <a href="#!" class="text-reset notification-item">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 me-3">
-                                            <img src="{{  asset('images/users/avatar-3.jpg')}}" class="rounded-circle avatar-sm" alt="user-pic">
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-1">James Lemire</h6>
-                                            <div class="font-size-13 text-muted">
-                                                <p class="mb-1">It will seem like simplified English.</p>
-                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hour ago</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#!" class="text-reset notification-item">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 avatar-sm me-3">
-                                            <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                                <i class="bx bx-cart"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-1">Your order is placed</h6>
-                                            <div class="font-size-13 text-muted">
-                                                <p class="mb-1">If several languages coalesce the grammar</p>
-                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#!" class="text-reset notification-item">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 avatar-sm me-3">
-                                            <span class="avatar-title bg-success rounded-circle font-size-16">
-                                                <i class="bx bx-badge-check"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-1">Your item is shipped</h6>
-                                            <div class="font-size-13 text-muted">
-                                                <p class="mb-1">If several languages coalesce the grammar</p>
-                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
+                                <?php foreach ($comp_docs as $key => $cd) {
+                                    // Parse the expiry date
+                                    $expiryDate = new DateTime($cd->expiry_date);
 
-                                <a href="#!" class="text-reset notification-item">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 me-3">
-                                            <img src="{{  asset('images/users/avatar-6.jpg')}}" class="rounded-circle avatar-sm" alt="user-pic">
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-1">Salena Layfield</h6>
-                                            <div class="font-size-13 text-muted">
-                                                <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
-                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hour ago</span></p>
+                                    // Get the current date
+                                    $today = new DateTime();
+
+                                    // Calculate the difference as a DateInterval object
+                                    $interval = $today->diff($expiryDate);
+
+                                    // Extract the difference in years, months, and days
+                                    $diffInYears = (int)$interval->y;
+                                    $diffInMonths = (int)$interval->m;
+                                    $diffInDays = (int)$interval->d;
+
+                                    // Calculate the total days remaining
+                                    $totalDaysRemaining = (int)$today->diff($expiryDate)->days;
+
+                                    // Determine if expired
+                                    if ($totalDaysRemaining < 1) {
+                                    $renewl_period2 = '<p style="text-align:center; color: red;">منتهي الصلاحية</p>';
+                                    } else {
+                                    // Format the difference in Arabic
+                                    $yearsText = $diffInYears > 1 ? 'سنوات' : 'سنة';
+                                    $monthsText = $diffInMonths > 1 ? 'أشهر' : 'شهر';
+                                    $daysText = $diffInDays > 1 ? 'أيام' : 'يوم';
+
+                                    $timeLeft = "$diffInYears $yearsText, $diffInMonths $monthsText, $diffInDays $daysText";
+
+                                    // Determine badge color based on total days remaining
+                                    $badgeClass = $totalDaysRemaining < 60 ? 'badge badge-soft-danger font-size-15' : 'badge badge-soft-success font-size-15';
+
+                                    // Output the time left and total days remaining
+                                    $renewl_period2 = '<span class="' . $badgeClass . '" >' . $totalDaysRemaining . ' يوم متبقي</span>';
+                                    }
+
+                                    ?>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="fas fa-building"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">{{ $cd->companydoc_name }} of {{ $cd->company_name }} </h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1"><?php echo $renewl_period2; ?> - {{ $cd->expiry_date }}</p>
+                                                    {{-- <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p> --}}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                <?php } ?>
+                                <?php foreach ($emp_docs as $key => $ed) {
+                                    // Parse the expiry date
+                                    $expiryDate = new DateTime($ed->expiry_date);
+
+                                    // Get the current date
+                                    $today = new DateTime();
+
+                                    // Calculate the difference as a DateInterval object
+                                    $interval = $today->diff($expiryDate);
+
+                                    // Extract the difference in years, months, and days
+                                    $diffInYears = (int)$interval->y;
+                                    $diffInMonths = (int)$interval->m;
+                                    $diffInDays = (int)$interval->d;
+
+                                    // Calculate the total days remaining
+                                    $totalDaysRemaining = (int)$today->diff($expiryDate)->days;
+
+                                    // Determine if expired
+                                    if ($totalDaysRemaining < 1) {
+                                    $renewl_period = '<p style="text-align:center; color: red;">منتهي الصلاحية</p>';
+                                    } else {
+                                    // Format the difference in Arabic
+                                    $yearsText = $diffInYears > 1 ? 'سنوات' : 'سنة';
+                                    $monthsText = $diffInMonths > 1 ? 'أشهر' : 'شهر';
+                                    $daysText = $diffInDays > 1 ? 'أيام' : 'يوم';
+
+                                    $timeLeft = "$diffInYears $yearsText, $diffInMonths $monthsText, $diffInDays $daysText";
+
+                                    // Determine badge color based on total days remaining
+                                    $badgeClass = $totalDaysRemaining < 60 ? 'badge badge-soft-danger font-size-15' : 'badge badge-soft-success font-size-15';
+
+                                    // Output the time left and total days remaining
+                                    $renewl_period = '<span class="' . $badgeClass . '" >' . $totalDaysRemaining . ' يوم متبقي</span>';
+                                    }
+
+                                    ?>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="fas fa-user"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">{{ $ed->employeedoc_name }} of {{ $ed->employee_name }} </h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1"><?php echo $renewl_period; ?> - {{ $ed->expiry_date }}</p>
+                                                    {{-- <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p> --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+
+                                
                             </div>
                             <div class="p-2 border-top d-grid">
                                 <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">

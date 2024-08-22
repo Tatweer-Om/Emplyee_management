@@ -167,6 +167,7 @@
                         <div class="modal-body">
                             <form class="add_employee" id="add_employee" method="POST" action="#">
                                 @csrf
+                                <input type="hidden" class="employee_company">
                                 <div class="mb-3">
                                     <label for="employee_name" class="col-form-label ">employee Name</label>
                                     <input type="text" class="employee_name form-control" name="employee_name" id="employee_name">

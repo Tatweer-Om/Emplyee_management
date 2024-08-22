@@ -112,7 +112,8 @@ class CompanyController extends Controller
         $company->added_by = $user;
         $company->user_id = $user_id;
         $company->save();
-        return response()->json(['company_id' => $company->company_id]);
+        $lastInsertedId = $company->id;
+        return response()->json(['company_id' => $company->company_id,'last_id'=>$lastInsertedId]);
 
     }
 
@@ -172,7 +173,7 @@ class CompanyController extends Controller
         $company->save();
         return response()->json([
             trans('messages.success_lang', [], session('locale')) => trans('messages.company_update_lang', [], session('locale'))
-        ]);
+            ,'last_id'=>$company->id]);
     }
 
     public function delete_company(Request $request){
@@ -203,6 +204,7 @@ class CompanyController extends Controller
 
         $employee->employee_id = genUuid() . time();
         $employee->employee_name = $request['employee_name'];
+        $employee->employee_company = $request['employee_company'];
         $employee->employee_email = $request['employee_email'];
         $employee->employee_phone = $request['employee_phone'];
         $employee->employee_company = $request['employee_company'];
@@ -210,7 +212,8 @@ class CompanyController extends Controller
         $employee->added_by = $user;
         $employee->user_id =  $user_id;
         $employee->save();
-        return response()->json(['employee_id' => $employee->employee_id]);
+        $lastInsertedId = $employee->id;
+        return response()->json(['employee_id' => $employee->employee_id,'last_id'=>$lastInsertedId]);
 
     }
 

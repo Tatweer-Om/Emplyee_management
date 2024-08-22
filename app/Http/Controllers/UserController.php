@@ -104,20 +104,21 @@ class UserController extends Controller
         $data= User::find( $user_id)->first();
         $user= $data->user_name;
 
-        $user = new User();
+        $users = new User();
 
-        $user->user_id = genUuid() . time();
-        $user->user_name = $request['user_name'];
-        $user->user_phone = $request['user_phone'];
-        $user->user_type = $request['user_type'];
-        $user->user_detail = $request['user_detail'];
-        $user->user_branch = $request['user_branch'];
-        $user->user_all =  $userAll;
-        $user->password = bcrypt($request['password']);
-        $user->added_by = $user;
+        $users->user_id = genUuid() . time();
+        $users->user_name = $request['user_name'];
+        $users->user_phone = $request['user_phone'];
+        $users->user_email = $request['user_email'];
+        $users->user_type = $request['user_type'];
+        $users->user_detail = $request['user_detail'];
+        $users->user_branch = $request['user_branch'];
+        $users->user_all =  $userAll;
+        $users->password = bcrypt($request['password']);
+        $users->added_by = $user;
 
-        $user->save();
-        return response()->json(['user_id' => $user->id]);
+        $users->save();
+        return response()->json(['user_id' => $users->id]);
 
     }
 
@@ -137,6 +138,7 @@ class UserController extends Controller
             'user_id' => $user_data->user_id,
             'user_name' => $user_data->user_name,
             'user_phone' => $user_data->user_phone,
+            'user_email' => $user_data->user_email,
             'user_type' => $user_data->user_type,
             'user_detail' => $user_data->user_detail,
             'user_all' => $user_data->user_all,
@@ -164,6 +166,7 @@ class UserController extends Controller
 
         $user->user_name = $request->input('user_name');
         $user->user_phone = $request->input('user_phone');
+        $user->user_email = $request->input('user_email');
         $user->user_type= $request->input('user_type');
         $user->user_detail= $request->input('user_detail');
         $user->user_all= $request->input('user_all');
