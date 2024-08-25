@@ -2,7 +2,24 @@
 <script>
 
 $(document).ready(function() {
-    
+    $('#all_expired_documents').DataTable({
+        "sAjaxSource": "{{ url('all_expired_docs') }}",
+        "bFilter": true,
+        "sDom": 'fBtlpi',
+        'pagingType': 'numbers',
+        "ordering": true,
+        "language": {
+            search: ' ',
+            sLengthMenu: '_MENU_',
+            searchPlaceholder: 'search',
+            info: "_START_ - _END_ of _TOTAL_ items",
+        },
+        initComplete: (settings, json) => {
+            $('.dataTables_filter').appendTo('#tableSearch');
+            $('.dataTables_filter').appendTo('.search-input');
+        },
+
+    });
     $('#datepicker-basic').datepicker({
         format: 'mm/dd/yyyy', // or any format you prefer
         autoclose: true,
