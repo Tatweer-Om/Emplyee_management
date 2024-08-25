@@ -237,7 +237,7 @@
 
                         $emp_docs = $employeeDocs->get();
                         $comp_docs = $companyDocs->get();
-                    ?>    
+                    ?>
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i data-feather="bell" class="icon-lg"></i>
@@ -364,7 +364,7 @@
                                     </a>
                                 <?php } ?>
 
-                                
+
                             </div>
                             <div class="p-2 border-top d-grid">
                                 <a class="btn btn-sm btn-link font-size-14 text-center" href="{{ url('show_expired_docs') }}">
