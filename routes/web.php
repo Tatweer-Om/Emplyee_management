@@ -119,5 +119,10 @@ Route::post('update_employeedoc', [EmployeeDocController::class, 'update_employe
 Route::post('delete_employeedoc', [EmployeeDocController::class, 'delete_employeedoc'])->name('delete_employeedoc');
 
 
+// notification
+Route::get('show_expired_docs', [HomeController::class, 'show_expired_docs'])->name('show_expired_docs');
+Route::get('all_expired_docs', [HomeController::class, 'all_expired_docs'])->name('all_expired_docs');
+
+
 
 
