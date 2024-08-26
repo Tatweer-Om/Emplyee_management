@@ -128,7 +128,7 @@ class HomeController extends Controller
 
                 $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
 
-                $modal='<a class="dropdown-item btn btn-success" href="javascript:void(0);" onclick=edit_company_doc("' . $value->id . '","company")>Renew</a></li>';
+                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=edit_company_doc("' . $value->id . '","company")>Renew</a></li>';
                 $add_data=get_date_only($value->created_at);
                 $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
 
@@ -198,7 +198,7 @@ class HomeController extends Controller
 
                 $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
 
-                $modal='<a class="dropdown-item btn btn-success" href="javascript:void(0);" onclick=edit_company_doc("' . $value->id . '","employee")>Renew</a></li>';
+                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=edit_company_doc("' . $value->id . '","employee")>Renew</a></li>';
                 $add_data=get_date_only($value->created_at);
                 $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
 
