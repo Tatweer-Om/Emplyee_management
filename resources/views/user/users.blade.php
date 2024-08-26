@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title> user </title>
+        <title> Office Employees </title>
     @endpush
 
 
@@ -75,9 +75,9 @@
                                                 <th style="text-align: right;">Sr.No</th>
                                                 <th style="text-align: right; width: 20px;">user Name</th>
                                                 <th style="text-align: right;">user Phone</th>
+                                                <th style="text-align: right;">user Email</th>
                                                 <th style="text-align: right;">user Detail</th>
                                                 <th style="text-align: right;">user Type</th>
-
                                                 <th style="text-align: right; width: 20px;">Added By</th>
                                                 <th style="text-align: right; width: 20px;">Action</th>
 

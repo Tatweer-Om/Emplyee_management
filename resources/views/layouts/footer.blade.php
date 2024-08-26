@@ -250,6 +250,8 @@
         @include('custom_js.add_employee_doc_js')
         @elseif ($route == 'about')
         @include('custom_js.about_js')
+        @elseif ($route == 'employee_task_page')
+        @include('custom_js.employee_task_js')
         @endif
         <script>var base_url= "<?php echo url('/'); ?>";</script>
 

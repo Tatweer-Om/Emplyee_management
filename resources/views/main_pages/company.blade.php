@@ -40,7 +40,7 @@
                                                 class="bx bx-plus me-1"></i> Add Company</button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-auto">
+                                    {{-- <div class="col-sm-auto">
                                         <div class="d-flex align-items-center gap-1 mb-4">
                                             <div class="input-group datepicker-range">
                                                 <input type="text" class="form-control flatpickr-input" data-input
@@ -62,7 +62,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <!-- end row -->
 

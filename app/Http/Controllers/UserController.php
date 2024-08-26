@@ -49,6 +49,7 @@ class UserController extends Controller
                 $user_name='<a style="width:20px;" href="javascript:void(0);">'.$value->user_name.'</a>';
 
                 $user_phone='<p style="width:20px;" href="javascript:void(0);">'.$value->user_phone.'</p>';
+                $user_email='<p style="width:20px;" href="javascript:void(0);">'.$value->user_email.'</p>';
 
                 $user_type = '<p style="width:20px;" href="javascript:void(0);">' . ($value->user_type == 1 ? 'Admin' : 'User') . '</p>';
                 $user_detail='<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">'.$value->user_detail.'</p>';
@@ -73,6 +74,7 @@ class UserController extends Controller
                             $sno,
                             $user_name,
                             $user_phone,
+                            $user_email,
                             $user_detail,
                             $user_type . '<br>' . $user_all,
                             $value->added_by . '<br>' . $add_data,
