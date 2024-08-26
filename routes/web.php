@@ -11,8 +11,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CompanyDocController;
 use App\Http\Controllers\EmployeeDocController;
-
-
+use App\Http\Controllers\TaskController;
 
 Route::match(['get', 'post'], 'login', [UserController::class, 'login'])->name('login');
 Route::match(['get', 'post'], 'login_user', [UserController::class, 'login_user'])->name('login_user');
@@ -124,5 +123,10 @@ Route::get('show_expired_docs', [HomeController::class, 'show_expired_docs'])->n
 Route::get('all_expired_docs', [HomeController::class, 'all_expired_docs'])->name('all_expired_docs');
 
 
+
+//task
+Route::get('employee_task_page', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
+Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');
+Route::post('update_employee_doc', [TaskController::class, 'update_employee_doc'])->name('update_employee_doc');
 
 
