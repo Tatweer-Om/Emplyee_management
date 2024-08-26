@@ -145,7 +145,7 @@
                     $(".document_type").val(fetch.document_type).trigger();
 
 
-                    $(".modal-title").html('<?php echo trans('messages.update_lang',[],session('locale')); ?>');
+                    $(".modal-title").html('Update');
                 }
             },
             error: function(html)
@@ -199,9 +199,9 @@
 
 
 
- 
 
- 
+
+
 
 
     </script>

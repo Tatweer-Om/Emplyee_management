@@ -93,7 +93,7 @@ class CompanyDocController extends Controller
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_company_doc(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printdocument(' . $value->document_id . ')">Print</a></li>
+
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc(' . $value->id . ')">Delete</a></li>
                         </ul>
                     </div>';

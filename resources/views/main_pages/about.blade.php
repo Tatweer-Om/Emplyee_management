@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title> about </title>
+        <title> Office Details</title>
     @endpush
 
 
@@ -14,12 +14,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Brnach List</h4>
+                            <h4 class="mb-sm-0 font-size-18">Office Details</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Brnachs</a></li>
-                                    <li class="breadcrumb-item active">Brnach List</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Office Details</a></li>
+                                    <li class="breadcrumb-item active">All details</li>
                                 </ol>
                             </div>
 
@@ -37,10 +37,10 @@
                                         <div class="mb-4">
                                             <button type="button" class="btn btn-primary waves-effect waves-light"
                                                 data-bs-toggle="modal" data-bs-target="#about_modal"><i
-                                                class="bx bx-plus me-1"></i> Add/Update Brnach</button>
+                                                class="bx bx-plus me-1"></i> Add Office Details</button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-auto">
+                                    {{-- <div class="col-sm-auto">
                                         <div class="d-flex align-items-center gap-1 mb-4">
                                             <div class="input-group datepicker-range">
                                                 <input type="text" class="form-control flatpickr-input" data-input
@@ -62,7 +62,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <!-- end row -->
 
@@ -73,10 +73,10 @@
                                             <tr class="bg-transparent">
 
                                                 <th style="text-align:right;">Sr.No</th>
-                                                <th  style="text-align:center;">about Name</th>
-                                                <th  style="text-align:center;">about Address</th>
-                                                <th style="text-align:center;">about Phone</th>
-                                                <th style="text-align:center;">about Detail</th>
+                                                <th  style="text-align:center;">Office Name</th>
+                                                <th  style="text-align:center;">Office Address</th>
+                                                <th style="text-align:center;">Office Phone</th>
+                                                <th style="text-align:center;">Office Detail</th>
 
                                                 <th  style="text-align:center;">Added By</th>
                                                 <th  style="text-align:center;">Action</th>
@@ -107,21 +107,21 @@
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalScrollableTitle">about Modal</h5>
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">Office Modal</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form class="add_about" id="add_about" method="POST" action="#">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="about_name" class="col-form-label ">about Name</label>
+                                    <label for="about_name" class="col-form-label ">Office Name</label>
                                     <input type="text" class="about_name form-control" name="about_name" id="about_name">
                                 </div>
 
                                 <input type="text" class="about_id" name="about_id" id="about_id" hidden>
 
                                 <div class="mb-3">
-                                    <label for="about_phone" class="col-form-label about_phone">about Phone</label>
+                                    <label for="about_phone" class="col-form-label about_phone">Office Phone</label>
                                     <input type="text" class="about_phone form-control" name="about_phone" id="about_phone">
                                 </div>
                                 <div class="mb-3">
@@ -132,7 +132,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">about Detail</label>
+                                    <label for="message-text" class="col-form-label">Office Detail</label>
                                     <textarea class="about_detail form-control" class="about_detail" name="about_detail" id="about_detail"></textarea>
                                 </div>
                                 <div class="modal-footer">

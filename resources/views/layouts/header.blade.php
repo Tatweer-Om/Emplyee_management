@@ -1,12 +1,10 @@
 <!doctype html>
 <html lang="en" dir="rtl">
 
-
-<!-- Mirrored from themesbrand.com/minia/layouts/index-rtl.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Aug 2024 05:36:16 GMT -->
 <head>
 
     <meta charset="utf-8" />
-    <title>Dashboard | Minia - Minimal Admin & Dashboard Template</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -61,6 +59,13 @@
 
 <body>
 
+    @php
+        $about = DB::table('abouts')->first();
+        $company_name = $about->about_name ?? '';
+
+        $user = Auth::user();
+        $user_name = $user->user_name ?? ''
+    @endphp
 
 
     <!-- Begin page -->
@@ -77,7 +82,7 @@
                                 <img src="{{  asset('images/logo-sm.svg')}}" alt="" height="24">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{  asset('images/logo-sm.svg')}}" alt="" height="24"> <span class="logo-txt">Minia</span>
+                                <img src="{{  asset('images/logo-sm.svg')}}" alt="" height="24"> <span class="logo-txt">{{  $company_name ?? '' }}</span>
                             </span>
                         </a>
 
@@ -95,13 +100,13 @@
                         <i class="fa fa-fw fa-bars"></i>
                     </button>
 
-                    <!-- App Search-->
+                    {{-- <!-- App Search-->
                     <form class="app-search d-none d-lg-block">
                         <div class="position-relative">
                             <input type="text" class="form-control" placeholder="Search...">
                             <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
 
                 <div class="d-flex">
@@ -124,7 +129,7 @@
                         </div>
                     </div>
 
-                    <div class="dropdown d-none d-sm-inline-block">
+                    {{-- <div class="dropdown d-none d-sm-inline-block">
                         <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img id="header-lang-img" src="{{  asset('images/flags/us.jpg')}}" alt="Header Language" height="16">
                         </button>
@@ -154,15 +159,15 @@
                                 <img src="{{  asset('images/flags/russia.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
                             </a>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="dropdown d-none d-sm-inline-block">
+                    {{-- <div class="dropdown d-none d-sm-inline-block">
                         <button type="button" class="btn header-item" id="mode-setting-btn">
                             <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
                             <i data-feather="sun" class="icon-lg layout-mode-light"></i>
                         </button>
-                    </div>
-
+                    </div> --}}
+{{--
                     <div class="dropdown d-none d-lg-inline-block ms-1">
                         <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i data-feather="grid" class="icon-lg"></i>
@@ -212,7 +217,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <?php
                         // Get today's date
                         $today = date('Y-m-d');
@@ -222,6 +227,7 @@
 
                         // Example user ID to filter by
                         $userId = Auth::id(); // Replace with the actual user ID
+
 
                         // For employee_docs table
                         $employeeDocs = DB::table('employee_docs')
@@ -249,9 +255,9 @@
                                     <div class="col">
                                         <h6 class="m-0"> Notifications </h6>
                                     </div>
-                                    <div class="col-auto">
+                                    {{-- <div class="col-auto">
                                         <a href="#!" class="small text-reset text-decoration-underline"> Unread (3)</a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div data-simplebar style="max-height: 230px;">
@@ -367,29 +373,29 @@
 
                             </div>
                             <div class="p-2 border-top d-grid">
-                                <a class="btn btn-sm btn-link font-size-14 text-center" href="{{ url('show_expired_docs') }}">
+                                <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
                                     <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span>
                                 </a>
                             </div>
                         </div>
                     </div>
-
+{{--
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item right-bar-toggle me-2">
                             <i data-feather="settings" class="icon-lg"></i>
                         </button>
-                    </div>
+                    </div> --}}
 
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="rounded-circle header-profile-user" src="{{  asset('images/users/avatar-1.jpg')}}" alt="Header Avatar">
-                            <span class="d-none d-xl-inline-block ms-1 fw-medium">Shawn L.</span>
+                            <img class="rounded-circle header-profile-user" src="{{  asset('images/users/user.png')}}" alt="Header Avatar">
+                            <span class="d-none d-xl-inline-block ms-1 fw-medium">{{  $user_name ?? '' }}</span>
                             <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
                             <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
-                            <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a>
+                            {{-- <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a> --}}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                         </div>
@@ -512,142 +518,7 @@
                             </ul>
                         </li>
 
-                        {{-- <li>
-                            <a href="layouts-horizontal.html">
-                                <i data-feather="layout"></i>
-                                <span data-key="t-horizontal">Horizontal</span>
-                            </a>
-                        </li>
 
-                        <li class="menu-title mt-2" data-key="t-components">Elements</li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="briefcase"></i>
-                                <span data-key="t-components">Components</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="ui-alerts.html" data-key="t-alerts">Alerts</a></li>
-                                <li><a href="ui-buttons.html" data-key="t-buttons">Buttons</a></li>
-                                <li><a href="ui-cards.html" data-key="t-cards">Cards</a></li>
-                                <li><a href="ui-carousel.html" data-key="t-carousel">Carousel</a></li>
-                                <li><a href="ui-dropdowns.html" data-key="t-dropdowns">Dropdowns</a></li>
-                                <li><a href="ui-grid.html" data-key="t-grid">Grid</a></li>
-                                <li><a href="ui-images.html" data-key="t-images">Images</a></li>
-                                <li><a href="ui-modals.html" data-key="t-modals">Modals</a></li>
-                                <li><a href="ui-offcanvas.html" data-key="t-offcanvas">Offcanvas</a></li>
-                                <li><a href="ui-progressbars.html" data-key="t-progress-bars">Progress Bars</a></li>
-                                <li><a href="ui-placeholders.html" data-key="t-progress-bars">Placeholders</a></li>
-                                <li><a href="ui-tabs-accordions.html" data-key="t-tabs-accordions">Tabs & Accordions</a></li>
-                                <li><a href="ui-typography.html" data-key="t-typography">Typography</a></li>
-                                <li><a href="ui-toasts.html" data-key="t-typography">Toasts</a></li>
-                                <li><a href="ui-video.html" data-key="t-video">Video</a></li>
-                                <li><a href="ui-general.html" data-key="t-general">General</a></li>
-                                <li><a href="ui-colors.html" data-key="t-colors">Colors</a></li>
-                                <li><a href="ui-utilities.html" data-key="t-colors">Utilities</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="gift"></i>
-                                <span data-key="t-ui-elements">Extended</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="extended-lightbox.html" data-key="t-lightbox">Lightbox</a></li>
-                                <li><a href="extended-rangeslider.html" data-key="t-range-slider">Range Slider</a></li>
-                                <li><a href="extended-sweet-alert.html" data-key="t-sweet-alert">SweetAlert 2</a></li>
-                                <li><a href="extended-session-timeout.html" data-key="t-session-timeout">Session Timeout</a></li>
-                                <li><a href="extended-rating.html" data-key="t-rating">Rating</a></li>
-                                <li><a href="extended-notifications.html" data-key="t-notifications">Notifications</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);">
-                                <i data-feather="box"></i>
-                                <span class="badge rounded-pill badge-soft-danger  text-danger float-end">7</span>
-                                <span data-key="t-forms">Forms</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="form-elements.html" data-key="t-form-elements">Basic Elements</a></li>
-                                <li><a href="form-validation.html" data-key="t-form-validation">Validation</a></li>
-                                <li><a href="form-advanced.html" data-key="t-form-advanced">Advanced Plugins</a></li>
-                                <li><a href="form-editors.html" data-key="t-form-editors">Editors</a></li>
-                                <li><a href="form-uploads.html" data-key="t-form-upload">File Upload</a></li>
-                                <li><a href="form-wizard.html" data-key="t-form-wizard">Wizard</a></li>
-                                <li><a href="form-mask.html" data-key="t-form-mask">Mask</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="sliders"></i>
-                                <span data-key="t-tables">Tables</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="tables-basic.html" data-key="t-basic-tables">Bootstrap Basic</a></li>
-                                <li><a href="tables-datatable.html" data-key="t-data-tables">DataTables</a></li>
-                                <li><a href="tables-responsive.html" data-key="t-responsive-table">Responsive</a></li>
-                                <li><a href="tables-editable.html" data-key="t-editable-table">Editable</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="pie-chart"></i>
-                                <span data-key="t-charts">Charts</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="charts-apex.html" data-key="t-apex-charts">Apexcharts</a></li>
-                                <li><a href="charts-echart.html" data-key="t-e-charts">Echarts</a></li>
-                                <li><a href="charts-chartjs.html" data-key="t-chartjs-charts">Chartjs</a></li>
-                                <li><a href="charts-knob.html" data-key="t-knob-charts">Jquery Knob</a></li>
-                                <li><a href="charts-sparkline.html" data-key="t-sparkline-charts">Sparkline</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="cpu"></i>
-                                <span data-key="t-icons">Icons</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="icons-boxicons.html" data-key="t-boxicons">Boxicons</a></li>
-                                <li><a href="icons-materialdesign.html" data-key="t-material-design">Material Design</a></li>
-                                <li><a href="icons-dripicons.html" data-key="t-dripicons">Dripicons</a></li>
-                                <li><a href="icons-fontawesome.html" data-key="t-font-awesome">Font Awesome 5</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="map"></i>
-                                <span data-key="t-maps">Maps</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="maps-google.html" data-key="t-g-maps">Google</a></li>
-                                <li><a href="maps-vector.html" data-key="t-v-maps">Vector</a></li>
-                                <li><a href="maps-leaflet.html" data-key="t-l-maps">Leaflet</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="share-2"></i>
-                                <span data-key="t-multi-level">Multi Level</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="javascript: void(0);" data-key="t-level-1-1">Level 1.1</a></li>
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow" data-key="t-level-1-2">Level 1.2</a>
-                                    <ul class="sub-menu" aria-expanded="true">
-                                        <li><a href="javascript: void(0);" data-key="t-level-2-1">Level 2.1</a></li>
-                                        <li><a href="javascript: void(0);" data-key="t-level-2-2">Level 2.2</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li> --}}
 
                     </ul>
 
