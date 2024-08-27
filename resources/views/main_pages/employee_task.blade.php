@@ -157,10 +157,12 @@
                                                         </div>
                                                         <h4 class="mt-3 lh-base fw-normal text-white"><b>Recently</b> Added
                                                         </h4>
-                                                        <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
-                                                            amid the global sell-off in equities. Negative news
-                                                            over the Bitcoin past week has dampened Bitcoin basics
-                                                            sentiment for bitcoin. </p>
+                                                        <p class="text-white-50 font-size-13">document name
+                                                        </p>
+                                                        <p class="text-white-50 font-size-13">created at
+                                                        </p>
+                                                        <p class="text-white-50 font-size-13">expiry date
+                                                        </p>
                                                         <button type="button" class="btn btn-light btn-sm">View details <i
                                                                 class="mdi mdi-arrow-right ms-1"></i></button>
                                                     </div>
@@ -177,10 +179,12 @@
                                                         </div>
                                                         <h4 class="mt-3 lh-base fw-normal text-white"><b>About</b> to Expire
                                                         </h4>
-                                                        <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
-                                                            amid the global sell-off in equities. Negative news
-                                                            over the Bitcoin past week has dampened Bitcoin basics
-                                                            sentiment for bitcoin. </p>
+                                                        <p class="text-white-50 font-size-13">document name
+                                                        </p>
+                                                        <p class="text-white-50 font-size-13">created at
+                                                        </p>
+                                                        <p class="text-white-50 font-size-13">expiry date
+                                                        </p>
                                                         <button type="button" class="btn btn-light btn-sm">View details <i
                                                                 class="mdi mdi-arrow-right ms-1"></i></button>
                                                     </div>
@@ -197,10 +201,12 @@
                                                         </div>
                                                         <h4 class="mt-3 lh-base fw-normal text-white"><b>Under</b> Renewl
                                                             Process</h4>
-                                                        <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
-                                                            amid the global sell-off in equities. Negative news
-                                                            over the Bitcoin past week has dampened Bitcoin basics
-                                                            sentiment for bitcoin. </p>
+                                                            <p class="text-white-50 font-size-13">document name
+                                                            </p>
+                                                            <p class="text-white-50 font-size-13">employee or company name
+                                                            </p>
+                                                            <p class="text-white-50 font-size-13">doc status
+                                                            </p>
                                                         <button type="button" class="btn btn-light btn-sm">View details <i
                                                                 class="mdi mdi-arrow-right ms-1"></i></button>
                                                     </div>
@@ -375,6 +381,9 @@
                         </div>
                         <!-- end card -->
                     </div>
+
+
+
                     <!-- end col -->
                 </div><!-- end row -->
             </div>
@@ -392,13 +401,14 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalScrollableTitle">employee Modal</h5>
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Modal</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form class="add_employee_status" id="add_employee_status" method="POST" action="#">
                             @csrf
                             <input type="hidden" class="employee_company">
+                            <input type="hidden" id="update_source" name="source">
                             <div class="mb-3">
                                 <label for="expiry_date" class="col-form-label ">Old Expiry Date</label>
                                 <input type="text" class="expiry_date form-control" name="expiry_date" id="expiry_date" readonly>

@@ -128,5 +128,7 @@ Route::get('all_expired_docs', [HomeController::class, 'all_expired_docs'])->nam
 Route::get('employee_task_page', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
 Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');
 Route::post('update_employee_doc', [TaskController::class, 'update_employee_doc'])->name('update_employee_doc');
+Route::get('/fetch-carousel-data', [TaskController::class, 'fetchCarouselData'])->name('fetch.carousel.data');
+
 
 
