@@ -12,6 +12,10 @@
             success: function(response) {
                 populateCompanyTable(response);
                 populateEmployeeTable(response);
+                renderRenewalDocuments(response.company_docs, 'Company');
+                renderRenewalDocuments(response.employee_docs, 'Employee');
+                console.log(response.employee_docs, 'Employee');
+                console.log(response.company_docs, 'Company');
             },
             error: function(xhr, status, error) {
                 console.log('AJAX Error: ' + status + error);
@@ -183,7 +187,49 @@
                 }
             });
         }
+        function renderRenewalDocuments(docs, type) {
+            const docsList = $('#renewl_list'); // Select the list element
+            docsList.empty();
 
+            // Check if there are no documents
+            if (!docs || docs.length === 0) {
+                const noDocsItem = $('<li class="activity-list activity-border"></li>');
+                noDocsItem.html(`<div class="text-center">No documents under renewal.</div>`);
+                docsList.append(noDocsItem);
+                return;
+            }
+
+            // Loop through each document and append it to the list
+            docs.forEach(doc => {
+
+                const listItem = $('<li class="activity-list activity-border"></li>');
+
+                listItem.html(`
+                    <div class="activity-icon avatar-md">
+                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle">
+                            <i class="mdi mdi-file-document-outline font-size-24"></i>
+                        </span>
+                    </div>
+                    <div class="timeline-list-item">
+                        <div class="d-flex">
+                            <div class="flex-grow-1 overflow-hidden me-4">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar" aria-valuenow="50" aria-valuemin="0"
+                                        aria-valuemax="100" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 text-end me-3">
+                                <h6 class="mb-1">${ doc.companydoc_name || doc.employeedoc_name }</h6>
+                                <div class="font-size-13">${doc.doc_status}</div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                docsList.append(listItem);
+            });
+        }
 
         // Event listener for the "Update Status" dropdown item
         $('#company_table, #employee_table').on('click', '.update-status', function(e) {
