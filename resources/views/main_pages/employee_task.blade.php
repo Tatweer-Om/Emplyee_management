@@ -333,7 +333,7 @@
                     </div>
                     <!-- end col -->
 
-                    <div class="col-xl-6">
+                    {{-- <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">Under Renewl Process</h4>
@@ -380,7 +380,25 @@
                             <!-- end card body -->
                         </div>
                         <!-- end card -->
+                    </div> --}}
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">Under Renewal Process</h4>
+                            </div><!-- end card header -->
+
+                            <div class="card-body px-0">
+                                <div class="px-3" data-simplebar style="max-height: 352px;">
+                                    <ul id="renewl_list" class="list-unstyled activity-wid mb-0 renewl_list">
+                                        <!-- Dynamic content will be inserted here by JavaScript -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
                     </div>
+
 
 
 

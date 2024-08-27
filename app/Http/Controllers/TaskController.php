@@ -41,6 +41,7 @@ class TaskController extends Controller
         $user = Auth::user();
         $user_id = $user->id;
 
+
         // Get all companies and employees associated with the authenticated user
         $companies = Company::where('user_id', $user_id)->get();
         $employees = Employee::where('user_id', $user_id)->get();
@@ -48,7 +49,7 @@ class TaskController extends Controller
         ->where('doc_status', 1)
         ->get();
 
-        $company_docs = CompanyDocs::where('company_id', $user_id) // Adjust the condition as needed
+        $company_docs = CompanyDocs::where('user_id', $user_id) // Adjust the condition as needed
             ->where('doc_status', 1)
             ->get();
 
