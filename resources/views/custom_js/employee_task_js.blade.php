@@ -13,9 +13,29 @@
                 populateCompanyTable(response);
                 populateEmployeeTable(response);
                 renderRenewalDocuments(response.company_docs, 'Company');
+                // get_employee(response.employees, 'employees');
+                // get_company(response.companies, 'companies');
+                const employees = response.employees || [];
                 renderRenewalDocuments(response.employee_docs, 'Employee');
                 console.log(response.employee_docs, 'Employee');
                 console.log(response.company_docs, 'Company');
+
+                const totalEmployees = response.employees.length;
+                const totalEmployeeDocs = response.employee_docs_total
+                .length; // Assuming response.employee_docs is an array
+                const totalCompanies = response.companies
+                .length; // Assuming response.companies is an array
+                const totalCompanyDocs = response.company_docs_total
+                .length; // Assuming response.company_docs is an array
+
+                // Update the HTML elements
+                $('#total-employees').text(totalEmployees);
+                $('#employee-docs').html(
+                    `${totalEmployeeDocs} <i class="mdi mdi-arrow-up ms-1 text-success"></i> Employee Documents`
+                    );
+                $('#total-companies').text(totalCompanies);
+                $('#company-docs').text(totalCompanyDocs);
+
             },
             error: function(xhr, status, error) {
                 console.log('AJAX Error: ' + status + error);
@@ -75,15 +95,11 @@
                             <li>
                                 <a class="dropdown-item update-status"
                                    href="#"
-                                   data-id="${document.id}"
-                                   data-document_name="${document.companydoc_name}"
-                                   data-expiry_date="${document.expiry_date}"
-                                   data-employee_id="${company.id}" // Pass the company ID as employee ID
-                                   data-source="company"> <!-- Added source data attribute -->
-                                   Update Status
+
+                                   History
                                 </a>
                             </li>
-                            <li><a class="dropdown-item" href="#">Delete Document</a></li>
+
                         </ul>
                     </div>`
                         ];
@@ -134,10 +150,17 @@
             }
 
             $.each(employees, function(index, employee) {
+
                 let documents = employeeDocuments[employee.id];
-                let company = companies.find(c => c.id === employee
-                .employee_company); // Find the company by ID
-                let companyName = company ? company.company_name : 'Unknown Company';
+
+                let companyObj = {};
+                companies.forEach(company => {
+                    companyObj[company.id] = company.company_name;
+                });
+
+                // Get the company name for the employee, defaulting to 'Unknown Company'
+                let companyName = companyObj[employee.employee_company] || 'Unknown Company';
+
 
                 if (documents.length > 0) {
                     $.each(documents, function(docIndex, document) {
@@ -161,15 +184,10 @@
                             <li>
                                 <a class="dropdown-item update-status"
                                    href="#"
-                                   data-id="${document.id}"
-                                   data-document_name="${document.employeedoc_name}"
-                                   data-expiry_date="${document.expiry_date}"
-                                   data-employee_id="${employee.id}" // Pass the actual employee ID
-                                   data-source="employee"> <!-- Added source data attribute -->
-                                   Update Status
+                                   History
                                 </a>
                             </li>
-                            <li><a class="dropdown-item" href="#">Delete Document</a></li>
+
                         </ul>
                     </div>`
                         ];
@@ -187,24 +205,44 @@
                 }
             });
         }
-        function renderRenewalDocuments(docs, type) {
-            const docsList = $('#renewl_list'); // Select the list element
-            docsList.empty();
 
-            // Check if there are no documents
+        function renderRenewalDocuments(docs, type) {
+            const docsList = $('#renewl_list');
+
+
             if (!docs || docs.length === 0) {
                 const noDocsItem = $('<li class="activity-list activity-border"></li>');
-                noDocsItem.html(`<div class="text-center">No documents under renewal.</div>`);
+                noDocsItem.html(`<div class="text-center">No ${type} documents under renewal.</div>`);
                 docsList.append(noDocsItem);
                 return;
-            }
+            } else {
 
-            // Loop through each document and append it to the list
-            docs.forEach(doc => {
+                docs.forEach(doc => {
 
-                const listItem = $('<li class="activity-list activity-border"></li>');
 
-                listItem.html(`
+                    const documentName = doc.companydoc_name || doc.employeedoc_name ||
+                        'Unnamed Document';
+                    const holderName = doc.company_name || doc.employee_name || 'Unnamed Name';
+
+                    let company_name = '';
+                    if (type === 'Employee') {
+                        company_name = doc.employee_company || 'Unnamed Company';
+                    }
+
+
+                    const statusMap = {
+                        1: 'Under Process',
+                        2: 'Received',
+                        3: 'Some Issue'
+                    };
+
+                    let status = statusMap[doc.doc_status] || 'Unknown Status';
+
+                    console.log(`Document: ${documentName}, Status: ${status}`);
+
+                    const listItem = $('<li class="activity-list activity-border"></li>');
+
+                    listItem.html(`
                     <div class="activity-icon avatar-md">
                         <span class="avatar-title bg-primary-subtle text-primary rounded-circle">
                             <i class="mdi mdi-file-document-outline font-size-24"></i>
@@ -220,15 +258,23 @@
                                 </div>
                             </div>
                             <div class="flex-shrink-0 text-end me-3">
-                                <h6 class="mb-1">${ doc.companydoc_name || doc.employeedoc_name }</h6>
-                                <div class="font-size-13">${doc.doc_status}</div>
+                                <h6 class="mb-1">${holderName}</h6>
+                                <h6 class="mb-1">${documentName}</h6>
+                                ${company_name ? `<h6 class="mb-1">${company_name}</h6>` : ''}
+                                <div class="font-size-13">${status}</div>
                             </div>
                         </div>
                     </div>
                 `);
+                    docsList.append(listItem);
 
-                docsList.append(listItem);
-            });
+                });
+
+            }
+
+            // Loop through each document and append it to the list
+
+
         }
 
         // Event listener for the "Update Status" dropdown item
@@ -265,7 +311,7 @@
                 data: $(this).serialize(), // Serialize form data
                 success: function(response) {
                     show_notification('success',
-                    'Data updated successfully'); // Display success message
+                        'Data updated successfully'); // Display success message
                     $('#employee_modal2').modal('hide'); // Hide the modal
                     // Optionally, you may want to refresh the tables or update the UI
                     companyTable.ajax.reload(); // Reload the company table
@@ -276,17 +322,7 @@
                 }
             });
         });
+
+
     });
-
-
-
-
-
-
-
 </script>
-
-
-
-
-

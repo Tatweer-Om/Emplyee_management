@@ -60,12 +60,14 @@
 <body>
 
     @php
-        $about = DB::table('abouts')->first();
-        $company_name = $about->about_name ?? '';
+    $about = DB::table('abouts')->first();
+    $company_name = $about->about_name ?? '';
 
-        $user = Auth::user();
-        $user_name = $user->user_name ?? ''
-    @endphp
+    $user = Auth::user();
+    $user_name = $user->user_name ?? '';
+    $user_id = $user->id;
+@endphp
+
 
 
     <!-- Begin page -->
@@ -514,6 +516,16 @@
                                 <li><a href="{{ url('company') }}" data-key="t-starter-page">Companies</a></li>
                                 <li><a href="{{ url('employee') }}" data-key="t-maintenance">Employees</a></li>
                                 <li><a href="{{ url('document') }}" data-key="t-maintenance">Add Document</a></li>
+
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow">
+                                <i data-feather="file-text"></i>
+                                <span data-key="t-pages">Employee Task</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="{{ url('employee_task_page/' . $user_id) }}" data-key="t-starter-page">Employee Task Page</a></li>
 
                             </ul>
                         </li>

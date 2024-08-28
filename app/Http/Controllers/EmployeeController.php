@@ -39,8 +39,8 @@ class EmployeeController extends Controller
                 if(!empty($company))
                 {
                     $company_name = $company->company_name;
-                }    
-                $employee_name='<a style="width:20px;" href="javascript:void(0);">'.$value->employee_name.'</a>';
+                }
+                $employee_name='<a style="width:20px;" href="' . url('employee_document_addition/' . $value->id) . '">'.$value->employee_name.'</a>';
                 $employee_company='<p tyle="width:20px;" href="javascript:void(0);">'. $company_name.'</p>';
                 $employee_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->employee_email . ' <br> ' . $value->employee_phone . '</p>';
 

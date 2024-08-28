@@ -262,6 +262,173 @@
 
     //company_profile_js
 
+//     $(document).ready(function() {
+//     // Extract the company ID from the URL
+//     var urlParts = window.location.pathname.split('/');
+//     var companyId = urlParts[urlParts.length - 1];
+
+//     $.ajax({
+//         url: "{{ url('show_company_doc') }}",
+//         method: 'GET',
+//         data: {
+//             company_id: companyId
+//         },
+//         success: function(response) {
+//             // Clear previous data
+//             $('#employees-count').text(response.employee_docs.length); // Count of employees
+//             $('#company-docs-count').text(response.company_docs.length); // Count of company documents
+
+//             // Calculate total number of employee documents
+//             let totalEmployeeDocs = response.employee_docs.reduce((total, employee_data) =>
+//                 total + employee_data.documents.length, 0);
+//             $('#employee-docs-count').text(totalEmployeeDocs);
+//             $('#employee_docs_list').empty();
+//             $('#all_profile_docs tbody').empty();
+//             $('#renewal-docs-list').empty();
+//             $('#all_company_employee tbody').empty(); // Clear the employee table
+
+//             const today = new Date();
+//             const threeMonthsInMs = 3 * 30 * 24 * 60 * 60 * 1000; // Three months in milliseconds
+
+//             response.employee_docs.forEach(function(employee_data, index) {
+//                 let baseUrl = "<?php echo url('employee_document_addition'); ?>";
+
+//                 // Generate employee document list
+//                 let employee_html = `<div class="col-lg-4">
+//                                         <div class="list-group list-group-flush border border-primary rounded">
+//                                             <div class="d-flex align-items-center">
+//                                                 <div class="flex-grow-1 overflow-hidden">
+//                                                     <a href="${baseUrl}/${employee_data.employee.id}" id="addButton" class="btn btn-sm btn-info m-2">+</a>
+//                                                     <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>`;
+
+//                 employee_data.documents.forEach(function(doc) {
+//                     employee_html += `<p class="m-2 text-truncate">${doc.employeedoc_name} - تاريخ الانتهاء
+//                                         <span class="badge bg-danger-subtle text-primary rounded-pill ms-1 float-end font-size-13">${doc.expiry_date}</span>
+//                                     </p>`;
+//                 });
+
+//                 employee_html += `</div></div></div></div>`;
+//                 $('#employee_docs_list').append(employee_html);
+
+//                 // Format the created_at date to only display the date part
+//                 let created_at_date = new Date(employee_data.employee.created_at).toLocaleDateString('en-GB');
+
+//                 // Generate DataTable row
+//                 let doc_names = "";
+//                 employee_data.documents.forEach(function(doc) {
+//                     let expiryDate = new Date(doc.expiry_date);
+
+//                     // Calculate the difference in time
+//                     let timeDiff = expiryDate.getTime() - today.getTime();
+
+//                     // Convert time difference to days
+//                     let daysRemaining = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+//                     // Calculate years, months, and days remaining
+//                     let years = Math.floor(daysRemaining / 365);
+//                     let months = Math.floor((daysRemaining % 365) / 30);
+//                     let days = daysRemaining % 30;
+
+//                     // Format the remaining time with "الفترة المتبقية"
+//                     let remainingTime = `الفترة المتبقية: ${years} سنة، ${months} شهر، ${days} يوم`;
+
+//                     // Format the expiry date in dd-mm-yyyy format
+//                     let formattedExpiryDate = expiryDate.getDate() + '-' + (expiryDate.getMonth() + 1) + '-' + expiryDate.getFullYear();
+
+//                     // Append document name with formatted expiry date and remaining time in Arabic
+//                     doc_names += `${doc.employeedoc_name} (تاريخ الانتهاء: ${formattedExpiryDate})<br> ${remainingTime}<br>`;
+//                 });
+
+//                 let row_html = `<tr>
+//                                     <td style="text-align:center;">${index + 1}</td>
+//                                     <td style="text-align:center;">${employee_data.employee.employee_name}</td>
+//                                     <td style="text-align:center;">${doc_names}</td>
+//                                     <td style="text-align:center;">${created_at_date}</td>
+//                                     <td style="text-align:center;">${employee_data.employee.added_by}</td>
+//                                     <td style="text-align:center;">
+//                                         <div class="dropdown">
+//                                             <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+//                                                 type="button" data-bs-toggle="dropdown" aria-expanded="false">
+//                                                 <i class="bx bx-dots-horizontal-rounded"></i>
+//                                             </button>
+//                                             <ul class="dropdown-menu dropdown-menu-end">
+//                                                 <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc(${employee_data.employee.id})">Delete</a></li>
+//                                             </ul>
+//                                         </div>
+//                                     </td>
+//                                 </tr>`;
+//                 $('#all_company_employee tbody').append(row_html);
+
+//                 // Check for documents expiring within three months
+//                 employee_data.documents.forEach(function(doc) {
+//                     const expiryDate = new Date(doc.expiry_date);
+//                     const timeLeft = expiryDate - today;
+
+//                     if (timeLeft <= threeMonthsInMs) {
+//                         const remainingMonths = Math.ceil(timeLeft / (30 * 24 * 60 * 60 * 1000));
+
+//                         const itemHtml = `<a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
+//                                             <div class="d-flex align-items-center">
+//                                                 <div class="flex-grow-1 overflow-hidden">
+//                                                     <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>
+//                                                     <p class="mb-0 text-truncate">${doc.employeedoc_name} <span class="">/${remainingMonths} months Left</span></p>
+//                                                 </div>
+//                                                 <div class="fs-1">
+//                                                     <i class="mdi mdi-calendar"></i>
+//                                                 </div>
+//                                             </div>
+//                                         </a>`;
+
+//                         $('#renewal-docs-list').append(itemHtml);
+//                     }
+//                 });
+//             });
+
+//             // Populate company documents
+//             response.company_docs.forEach(function(doc, index) {
+//                 let createdAtDate = new Date(doc.created_at);
+//                 let formattedDate = createdAtDate.toLocaleDateString('en-GB'); // Adjust the locale if needed
+
+//                 let doc_html = `<tr>
+//                                     <td style="text-align:center;">${index + 1}</td>
+//                                     <td style="text-align:center;">${doc.companydoc_name}</td>
+//                                     <td style="text-align:center;">${doc.expiry_date}</td>
+//                                     <td style="text-align:center;">${doc.renewal_period}</td>
+//                                     <td style="text-align:center;">${formattedDate}</td>
+//                                     <td style="text-align:center;">${doc.added_by}</td>
+//                                     <td style="text-align:center;">
+//                                         <div class="dropdown">
+//                                             <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+//                                                 type="button" data-bs-toggle="dropdown" aria-expanded="false">
+//                                                 <i class="bx bx-dots-horizontal-rounded"></i>
+//                                             </button>
+//                                             <ul class="dropdown-menu dropdown-menu-end">
+//                                                 <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc(${doc.id})">Delete</a></li>
+//                                             </ul>
+//                                         </div>
+//                                     </td>
+//                                 </tr>`;
+//                 $('#all_profile_docs tbody').append(doc_html);
+//             });
+
+//             // Initialize DataTable
+//             $('#all_company_employee').DataTable({
+//                 responsive: true,
+//                 autoWidth: false,
+//                 paging: true,
+//                 searching: true,
+//                 ordering: true,
+//                 order: [[0, 'asc']], // Example: Order by first column ascending
+//                 language: {
+//                     url: "//cdn.datatables.net/plug-ins/1.11.3/i18n/Arabic.json" // Example for Arabic language support
+//                 }
+//             });
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error loading documents:', error);
+//         }
+//     });
+// });
 $(document).ready(function() {
     // Extract the company ID from the URL
     var urlParts = window.location.pathname.split('/');
@@ -290,16 +457,19 @@ $(document).ready(function() {
             const today = new Date();
             const threeMonthsInMs = 3 * 30 * 24 * 60 * 60 * 1000; // Three months in milliseconds
 
+            let expiringSoonCount = 0;
+            let expiredCount = 0;
+
             response.employee_docs.forEach(function(employee_data, index) {
                 let baseUrl = "<?php echo url('employee_document_addition'); ?>";
 
-                let employee_html =
-                    `<div class="col-lg-4">
-                        <div class="list-group list-group-flush border border-primary rounded">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <a href="${baseUrl}/${employee_data.employee.id}" id="addButton" class="btn btn-sm btn-info m-2">+</a>
-                                    <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>`;
+                // Generate employee document list
+                let employee_html = `<div class="col-lg-4">
+                                        <div class="list-group list-group-flush border border-primary rounded">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <a href="${baseUrl}/${employee_data.employee.id}" id="addButton" class="btn btn-sm btn-info m-2">+</a>
+                                                    <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>`;
 
                 employee_data.documents.forEach(function(doc) {
                     employee_html += `<p class="m-2 text-truncate">${doc.employeedoc_name} - تاريخ الانتهاء
@@ -311,34 +481,83 @@ $(document).ready(function() {
                 $('#employee_docs_list').append(employee_html);
 
                 // Format the created_at date to only display the date part
-                let created_at_date = new Date(employee_data.employee.created_at).toLocaleDateString('en-GB'); // Adjust the locale as needed
+                let created_at_date = new Date(employee_data.employee.created_at).toLocaleDateString('en-GB');
 
-                // For the DataTable row
+                // Generate DataTable row
                 let doc_names = "";
 employee_data.documents.forEach(function(doc) {
-    let today = new Date();
     let expiryDate = new Date(doc.expiry_date);
 
     // Calculate the difference in time
-    let timeDiff = expiryDate.getTime() - today.getTime();
+    let timeLeft = expiryDate.getTime() - today.getTime();
 
-    // Convert time difference to days
-    let daysRemaining = Math.floor(timeDiff / (1000 * 3600 * 24));
-
-    // Calculate years, months, and days remaining
+    // Calculate days remaining
+    let daysRemaining = Math.floor(timeLeft / (1000 * 3600 * 24));
     let years = Math.floor(daysRemaining / 365);
     let months = Math.floor((daysRemaining % 365) / 30);
     let days = daysRemaining % 30;
 
-    // Format the remaining time with "الفترة المتبقية"
-    let remainingTime = `الفترة المتبقية: ${years} سنة، ${months} شهر، ${days} يوم`;
-
-    // Format the expiry date in dd-mm-yyyy format
     let formattedExpiryDate = expiryDate.getDate() + '-' + (expiryDate.getMonth() + 1) + '-' + expiryDate.getFullYear();
 
-    // Append document name with formatted expiry date and remaining time in Arabic
-    doc_names += `${doc.employeedoc_name} (تاريخ الانتهاء: ${formattedExpiryDate})<br> ${remainingTime}<br>`;
+    doc_names += `${doc.employeedoc_name} (تاريخ الانتهاء: ${formattedExpiryDate})<br>`;
+
+    let itemHtml = "";
+
+    if (timeLeft <= 0) {
+        // Document has expired
+        expiredCount++;
+
+        // Set the display text to "Expired" and don't show months left
+        itemHtml = `<a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>
+                                <p class="mb-0 text-truncate">${doc.employeedoc_name} <span class="text-danger">Expired</span></p>
+                            </div>
+                            <div class="fs-1">
+                                <i class="mdi mdi-calendar"></i>
+                            </div>
+                        </div>
+                    </a>`;
+    } else if (daysRemaining < 30) {
+        // Document is expiring within less than a month
+        expiringSoonCount++;
+
+        itemHtml = `<a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>
+                                <p class="mb-0 text-truncate">${doc.employeedoc_name} <span class="">/${daysRemaining} days Left</span></p>
+                            </div>
+                            <div class="fs-1">
+                                <i class="mdi mdi-calendar"></i>
+                            </div>
+                        </div>
+                    </a>`;
+    } else if (timeLeft <= threeMonthsInMs) {
+        // Document is expiring within the next three months but more than 30 days
+        expiringSoonCount++;
+
+        let remainingTime = `الفترة المتبقية: ${months} شهر، ${days} يوم`;
+
+        itemHtml = `<a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>
+                                <p class="mb-0 text-truncate">${doc.employeedoc_name} <span class="">/${months} months, ${days} days Left</span></p>
+                            </div>
+                            <div class="fs-1">
+                                <i class="mdi mdi-calendar"></i>
+                            </div>
+                        </div>
+                    </a>`;
+    }
+
+    if (itemHtml) {
+        $('#renewal-docs-list').append(itemHtml);
+    }
 });
+
 
 
 
@@ -389,9 +608,13 @@ employee_data.documents.forEach(function(doc) {
                                 </tr>`;
                 $('#all_profile_docs tbody').append(doc_html);
             });
-                // Initialize DataTable
-                $('#all_company_employee').DataTable({
-                // Add any DataTable options here
+
+            // Display the counts of expiring and expired documents
+            $('#expired-count').text(expiredCount); // Assuming you have an element with ID 'expired-count'
+            $('#expiring-soon-count').text(expiringSoonCount); // Assuming you have an element with ID 'expiring-soon-count'
+
+            // Initialize DataTable
+            $('#all_company_employee').DataTable({
                 responsive: true,
                 autoWidth: false,
                 paging: true,
@@ -408,6 +631,7 @@ employee_data.documents.forEach(function(doc) {
         }
     });
 });
+
 
 
 
