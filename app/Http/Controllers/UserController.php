@@ -216,10 +216,9 @@ class UserController extends Controller
             // Retrieve input credentials
             $username = $request->input('username');
             $password = $request->input('password');
-
+             
             // Attempt to find the user by username
-            $user = User::where('user_name', $username)->first();
-
+            $user = User::where('user_name', $username)->first(); 
             if ($user && Hash::check($password, $user->password)) {
 
                 Auth::login($user);

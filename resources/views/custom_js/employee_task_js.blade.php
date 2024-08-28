@@ -31,7 +31,7 @@
                 // Update the HTML elements
                 $('#total-employees').text(totalEmployees);
                 $('#employee-docs').html(
-                    `${totalEmployeeDocs} <i class="mdi mdi-arrow-up ms-1 text-success"></i> Employee Documents`
+                    ${totalEmployeeDocs} <i class="mdi mdi-arrow-up ms-1 text-success"></i> Employee Documents
                     );
                 $('#total-companies').text(totalCompanies);
                 $('#company-docs').text(totalCompanyDocs);
@@ -78,8 +78,8 @@
                 if (documents.length > 0) {
                     $.each(documents, function(docIndex, document) {
                         let statusDisplay = document.status ?
-                            `<div class="badge badge-soft-success font-size-12">${document.status}</div>` :
-                            `<div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
+                            <div class="badge badge-soft-success font-size-12">${document.status}</div> :
+                            <div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>;
 
                         let row = [
                             docIndex === 0 ? index + 1 : '',
@@ -165,13 +165,13 @@
                 if (documents.length > 0) {
                     $.each(documents, function(docIndex, document) {
                         let statusDisplay = document.status ?
-                            `<div class="badge badge-soft-success font-size-12">${document.status}</div>` :
-                            `<div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
+                            <div class="badge badge-soft-success font-size-12">${document.status}</div> :
+                            <div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>;
 
                         let row = [
                             docIndex === 0 ? index + 1 : '',
                             docIndex === 0 ?
-                            `${employee.employee_name}<br><small>${companyName}</small>` :
+                            ${employee.employee_name}<br><small>${companyName}</small> :
                             '',
                             document.employeedoc_name,
                             statusDisplay,
@@ -196,7 +196,7 @@
                 } else {
                     let row = [
                         index + 1,
-                        `${employee.employee_name}<br><small>${companyName}</small>`,
+                        ${employee.employee_name}<br><small>${companyName}</small>,
                         'No documents found',
                         '',
                         ''
@@ -212,7 +212,7 @@
 
             if (!docs || docs.length === 0) {
                 const noDocsItem = $('<li class="activity-list activity-border"></li>');
-                noDocsItem.html(`<div class="text-center">No ${type} documents under renewal.</div>`);
+                noDocsItem.html(<div class="text-center">No ${type} documents under renewal.</div>);
                 docsList.append(noDocsItem);
                 return;
             } else {
@@ -238,7 +238,7 @@
 
                     let status = statusMap[doc.doc_status] || 'Unknown Status';
 
-                    console.log(`Document: ${documentName}, Status: ${status}`);
+                    console.log(Document: ${documentName}, Status: ${status});
 
                     const listItem = $('<li class="activity-list activity-border"></li>');
 
@@ -260,7 +260,7 @@
                             <div class="flex-shrink-0 text-end me-3">
                                 <h6 class="mb-1">${holderName}</h6>
                                 <h6 class="mb-1">${documentName}</h6>
-                                ${company_name ? `<h6 class="mb-1">${company_name}</h6>` : ''}
+                                ${company_name ? <h6 class="mb-1">${company_name}</h6> : ''}
                                 <div class="font-size-13">${status}</div>
                             </div>
                         </div>

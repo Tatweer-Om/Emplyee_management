@@ -121,14 +121,17 @@ Route::post('delete_employeedoc', [EmployeeDocController::class, 'delete_employe
 // notification
 Route::get('show_expired_docs', [HomeController::class, 'show_expired_docs'])->name('show_expired_docs');
 Route::get('all_expired_docs', [HomeController::class, 'all_expired_docs'])->name('all_expired_docs');
+Route::post('renew_docs_request', [HomeController::class, 'renew_docs_request'])->name('renew_docs_request');
+Route::post('update_employee_doc', [HomeController::class, 'update_employee_doc'])->name('update_employee_doc');
 
 
 
 //task
 Route::get('employee_task_page/{id}', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
 Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');
+ 
 Route::post('update_employee_doc', [TaskController::class, 'update_employee_doc'])->name('update_employee_doc');
 Route::get('/fetch-carousel-data', [TaskController::class, 'fetchCarouselData'])->name('fetch.carousel.data');
 
-
+ 
 
