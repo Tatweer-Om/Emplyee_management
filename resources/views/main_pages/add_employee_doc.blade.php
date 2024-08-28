@@ -76,6 +76,7 @@
                                                 </div>
                                             </div>
                                             <input type="text" name="employeedoc_id" class="employee_doc_id" hidden>
+                                            <input type="text" name="employee_company" value="{{ $employee->employee_company ?? '' }}" class="employee_company" hidden>
                                             <input type="text" name="office_user" value="{{ $employee->added_by ?? '' }}" class="office_user" hidden>
                                             <input type="text" name="employee_id" value="{{ $employee->id ?? '' }}" class="employee_id" hidden>
                                             <input type="text" name="employee_name" value="{{ $employee->employee_name ?? '' }}" class="employee_name" hidden>

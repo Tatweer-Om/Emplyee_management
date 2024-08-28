@@ -127,7 +127,11 @@ Route::post('update_employee_doc', [HomeController::class, 'update_employee_doc'
 
 
 //task
-Route::get('employee_task_page', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
+Route::get('employee_task_page/{id}', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
 Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');
+ 
+Route::post('update_employee_doc', [TaskController::class, 'update_employee_doc'])->name('update_employee_doc');
+Route::get('/fetch-carousel-data', [TaskController::class, 'fetchCarouselData'])->name('fetch.carousel.data');
 
+ 
 

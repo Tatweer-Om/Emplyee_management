@@ -103,42 +103,35 @@
                                             <div class="col-sm align-self-center">
                                                 <div class="mt-4 mt-sm-0">
                                                     <p class="mb-1">Total Employees</p>
-                                                    <h4>$ 6134.39</h4>
+                                                    <h4 id="total-employees"> </h4>
 
-                                                    <p class="text-muted mb-4"> 7565 <i
-                                                            class="mdi mdi-arrow-up ms-1 text-success"></i> Employee
-                                                        Documents</p>
+                                                    <p class="text-muted mb-4" id="employee-docs"> Employee Documents</p>
 
                                                     <div class="row g-0">
                                                         <div class="col-6">
                                                             <div>
-                                                                <p class="mb-2 text-muted text-uppercase font-size-11">Total
-                                                                    Companies</p>
-                                                                <h5 class="fw-medium">$ 2632.46</h5>
+                                                                <p class="mb-2 text-muted text-uppercase font-size-11">Total Companies</p>
+                                                                <h5 class="fw-medium" id="total-companies"> </h5>
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <div>
-                                                                <p class="mb-2 text-muted text-uppercase font-size-11">
-                                                                    Company documents</p>
-                                                                <h5 class="fw-medium">-$ 924.38</h5>
+                                                                <p class="mb-2 text-muted text-uppercase font-size-11">Company Documents</p>
+                                                                <h5 class="fw-medium" id="company-docs"> </h5>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="mt-2">
-                                                        <a href="#" class="btn btn-primary btn-sm">View more <i
-                                                                class="mdi mdi-arrow-right ms-1"></i></a>
-                                                    </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- end col -->
 
-                            <div class="col-xl-4">
+                            {{-- <div class="col-xl-4">
                                 <!-- card -->
                                 <div class="card bg-primary text-white shadow-primary card-h-100">
                                     <!-- card body -->
@@ -157,67 +150,24 @@
                                                         </div>
                                                         <h4 class="mt-3 lh-base fw-normal text-white"><b>Recently</b> Added
                                                         </h4>
-                                                        <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
-                                                            amid the global sell-off in equities. Negative news
-                                                            over the Bitcoin past week has dampened Bitcoin basics
-                                                            sentiment for bitcoin. </p>
-                                                        <button type="button" class="btn btn-light btn-sm">View details <i
-                                                                class="mdi mdi-arrow-right ms-1"></i></button>
+                                                        <p class="text-white-50 font-size-13">document name
+                                                        </p>
+                                                        <p class="text-white-50 font-size-13">created at
+                                                        </p>
+                                                        <p class="text-white-50 font-size-13">expiry date
+                                                        </p>
+
                                                     </div>
                                                 </div>
                                                 <!-- end carousel-item -->
-                                                <div class="carousel-item">
-                                                    <div class="text-center p-4">
-                                                        <i class="mdi mdi-ethereum widget-box-1-icon"></i>
-                                                        <div class="avatar-md m-auto">
-                                                            <span
-                                                                class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
-                                                                <i class="mdi mdi-ethereum"></i>
-                                                            </span>
-                                                        </div>
-                                                        <h4 class="mt-3 lh-base fw-normal text-white"><b>About</b> to Expire
-                                                        </h4>
-                                                        <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
-                                                            amid the global sell-off in equities. Negative news
-                                                            over the Bitcoin past week has dampened Bitcoin basics
-                                                            sentiment for bitcoin. </p>
-                                                        <button type="button" class="btn btn-light btn-sm">View details <i
-                                                                class="mdi mdi-arrow-right ms-1"></i></button>
-                                                    </div>
-                                                </div>
+
                                                 <!-- end carousel-item -->
-                                                <div class="carousel-item">
-                                                    <div class="text-center p-4">
-                                                        <i class="mdi mdi-litecoin widget-box-1-icon"></i>
-                                                        <div class="avatar-md m-auto">
-                                                            <span
-                                                                class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
-                                                                <i class="mdi mdi-litecoin"></i>
-                                                            </span>
-                                                        </div>
-                                                        <h4 class="mt-3 lh-base fw-normal text-white"><b>Under</b> Renewl
-                                                            Process</h4>
-                                                        <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
-                                                            amid the global sell-off in equities. Negative news
-                                                            over the Bitcoin past week has dampened Bitcoin basics
-                                                            sentiment for bitcoin. </p>
-                                                        <button type="button" class="btn btn-light btn-sm">View details <i
-                                                                class="mdi mdi-arrow-right ms-1"></i></button>
-                                                    </div>
-                                                </div>
+
                                                 <!-- end carousel-item -->
                                             </div>
                                             <!-- end carousel-inner -->
 
-                                            <div class="carousel-indicators carousel-indicators-rounded">
-                                                <button type="button" data-bs-target="#carouselExampleCaptions"
-                                                    data-bs-slide-to="0" class="active" aria-current="true"
-                                                    aria-label="Slide 1"></button>
-                                                <button type="button" data-bs-target="#carouselExampleCaptions"
-                                                    data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                                <button type="button" data-bs-target="#carouselExampleCaptions"
-                                                    data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                            </div>
+
                                             <!-- end carousel-indicators -->
                                         </div>
                                         <!-- end carousel -->
@@ -225,7 +175,9 @@
                                     <!-- end card body -->
                                 </div>
                                 <!-- end card -->
-                            </div>
+                            </div> --}}
+
+
                             <!-- end col -->
                         </div>
                         <!-- end row -->
@@ -277,12 +229,13 @@
                                                 id="company_table">
                                                 <thead>
                                                     <tr class="bg-transparent">
-                                                        <th style="width: 120px; text-align:center;">Sr.No</th>
-                                                        <th style="text-align:center;">Company Name</th>
-                                                        <th style="text-align:center;">Company Document</th>
-                                                        <th style="text-align:center;">Document Status</th>
-                                                        <th style="text-align:center;">Action</th>
+                                                        <th style="width: 120px; text-align:center;">الرقم التسلسلي</th>
+                                                        <th style="text-align:center;">اسم الشركة</th>
+                                                        <th style="text-align:center;">وثيقة الشركة</th>
+                                                        <th style="text-align:center;">حالة الوثيقة</th>
+                                                        <th style="text-align:center;">الإجراء</th>
                                                     </tr>
+
                                                 </thead>
                                                 <tbody>
                                                     <!-- Rows will be populated here via JavaScript -->
@@ -300,12 +253,13 @@
                                                 id="employee_table">
                                                 <thead>
                                                     <tr class="bg-transparent">
-                                                        <th style="width: 120px; text-align:center;">Sr.No</th>
-                                                        <th style="text-align:center;">Employee Name</th>
-                                                        <th style="text-align:center;">Employee Documents</th>
-                                                        <th style="text-align:center;">Document Status</th>
-                                                        <th style="text-align:center;">Action</th>
+                                                        <th style="width: 120px; text-align:center;">الرقم التسلسلي</th>
+                                                        <th style="text-align:center;">اسم الموظف</th>
+                                                        <th style="text-align:center;">وثائق الموظف</th>
+                                                        <th style="text-align:center;">حالة الوثيقة</th>
+                                                        <th style="text-align:center;">الإجراء</th>
                                                     </tr>
+
                                                 </thead>
 
                                                 <tbody>
@@ -327,7 +281,7 @@
                     </div>
                     <!-- end col -->
 
-                    <div class="col-xl-6">
+                    {{-- <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">Under Renewl Process</h4>
@@ -374,7 +328,28 @@
                             <!-- end card body -->
                         </div>
                         <!-- end card -->
+                    </div> --}}
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">Under Renewal Process</h4>
+                            </div><!-- end card header -->
+
+                            <div class="card-body px-0">
+                                <div class="px-3" data-simplebar style="max-height: 352px;">
+                                    <ul id="renewl_list" class="list-unstyled activity-wid mb-0 renewl_list">
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
                     </div>
+
+
+
+
                     <!-- end col -->
                 </div><!-- end row -->
             </div>
@@ -392,13 +367,14 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalScrollableTitle">employee Modal</h5>
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Modal</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form class="add_employee_status" id="add_employee_status" method="POST" action="#">
                             @csrf
                             <input type="hidden" class="employee_company">
+                            <input type="hidden" id="update_source" name="source">
                             <div class="mb-3">
                                 <label for="expiry_date" class="col-form-label ">Old Expiry Date</label>
                                 <input type="text" class="expiry_date form-control" name="expiry_date" id="expiry_date" readonly>
