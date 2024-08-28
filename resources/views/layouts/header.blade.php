@@ -224,25 +224,39 @@
 
                         // Get the date 30 days from now
                         $dateIn30Days = date('Y-m-d', strtotime('+30 days'));
-
-                        // Example user ID to filter by
-                        $userId = Auth::id(); // Replace with the actual user ID
-
+                        $today = date('Y-m-d');
+                        $userId = Auth::id(); 
+                        $user_type = Auth::user()->user_type; // Assuming user_type is a column in the users table
 
                         // For employee_docs table
                         $employeeDocs = DB::table('employee_docs')
-                            ->whereBetween('expiry_date', [$today, $dateIn30Days])
-                            ->where('user_id', $userId);
+                            ->whereBetween('expiry_date', [$today, $dateIn30Days]);
+
+                        if ($user_type != 1) {
+                            $employeeDocs->where('user_id', $userId);
+                        }
+
+                        // Fetch employee_docs records
+                        $employeeDocs = $employeeDocs->get();
 
                         // For company_docs table
                         $companyDocs = DB::table('company_docs')
-                            ->whereBetween('expiry_date', [$today, $dateIn30Days])
-                            ->where('user_id', $userId);
+                            ->whereBetween('expiry_date', [$today, $dateIn30Days]);
 
+                        if ($user_type != 1) {
+                            $companyDocs->where('user_id', $userId);
+                        }
+
+                        // Fetch company_docs records
+                        $companyDocs = $companyDocs->get();
+
+                        // Calculate total notifications
                         $total_noti = $companyDocs->count() + $employeeDocs->count();
 
-                        $emp_docs = $employeeDocs->get();
-                        $comp_docs = $companyDocs->get();
+                        // Now $employeeDocs and $companyDocs are collections
+                        $emp_docs = $employeeDocs;
+                        $comp_docs = $companyDocs;
+
                     ?>
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -373,7 +387,7 @@
 
                             </div>
                             <div class="p-2 border-top d-grid">
-                                <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                                <a class="btn btn-sm btn-link font-size-14 text-center" href="{{ url('show_expired_docs') }}">
                                     <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span>
                                 </a>
                             </div>

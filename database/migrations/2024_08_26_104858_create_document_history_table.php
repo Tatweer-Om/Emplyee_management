@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // Primary key with auto-increment
         
             // Other columns using normal integer data type
-            $table->integer('document_id')->unique();
+            $table->integer('document_id')->nullable();
             $table->integer('employee_id')->nullable();
             $table->integer('company_id')->nullable();
             $table->integer('doc_type')->nullable()->comment('1 = Employee Docs, 2 = Company Docs');

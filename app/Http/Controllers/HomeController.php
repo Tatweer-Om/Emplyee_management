@@ -10,6 +10,8 @@ use App\Models\Document;
 use App\Models\Employee;
 use App\Models\EmployeeDoc;
 use App\Models\CompanyDocs;
+use App\Models\DocumentHistory;
+use App\Models\User;
 class HomeController extends Controller
 {
 
@@ -64,22 +66,36 @@ class HomeController extends Controller
         $dateIn30Days = date('Y-m-d', strtotime('+30 days'));
 
         // Example user ID to filter by
-        $userId = Auth::id(); // Replace with the actual user ID
+        $userId = Auth::id(); // Get the current user ID
+        $user_type = Auth::user()->user_type; // Get the user type
 
         // For employee_docs table
-        $employeeDocs = EmployeeDoc::
-            whereBetween('expiry_date', [$today, $dateIn30Days])
-            ->where('user_id', $userId);
+        $employeeDocsQuery = EmployeeDoc::whereBetween('expiry_date', [$today, $dateIn30Days]);
+
+        // If the user type is not 1, filter by user_id
+        if ($user_type != 1) {
+            $employeeDocsQuery->where('user_id', $userId);
+        }
+
+        // Fetch the employee_docs records
+        $employeeDocs = $employeeDocsQuery->get();
 
         // For company_docs table
-        $companyDocs = CompanyDocs::
-            whereBetween('expiry_date', [$today, $dateIn30Days])
-            ->where('user_id', $userId);
+        $companyDocsQuery = CompanyDocs::whereBetween('expiry_date', [$today, $dateIn30Days]);
 
+        // If the user type is not 1, filter by user_id
+        if ($user_type != 1) {
+            $companyDocsQuery->where('user_id', $userId);
+        }
+
+        // Fetch the company_docs records
+        $companyDocs = $companyDocsQuery->get();
+
+        // Calculate total notifications
         $total_noti = $companyDocs->count() + $employeeDocs->count();
-
-        $emp_docs = $employeeDocs->get();
-        $comp_docs = $companyDocs->get();
+        $emp_docs = $employeeDocs;
+        $comp_docs = $companyDocs;
+        
         if(count($comp_docs)>0)
         {
             foreach($comp_docs as $value)
@@ -127,8 +143,11 @@ class HomeController extends Controller
                 $office_user = $value->added_by;
 
                 $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
-
-                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=edit_company_doc("' . $value->id . '","company")>Renew</a></li>';
+                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs("' . $value->id . '","1")>Renew</a></li>';
+                if($value->doc_status==2)
+                {
+                    $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","1")>Finish Renew</a></li>';
+                }
                 $add_data=get_date_only($value->created_at);
                 $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
 
@@ -142,7 +161,8 @@ class HomeController extends Controller
                             $expiry_date,
                             '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
                             $add_date, 
-                            $modal
+                            $modal,
+                            'DT_RowAttr' => array('data-status' => $value->doc_status)
                         );
             }
             // $response = array();
@@ -197,8 +217,11 @@ class HomeController extends Controller
                 $office_user = $value->added_by;
 
                 $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
-
-                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=edit_company_doc("' . $value->id . '","employee")>Renew</a></li>';
+                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs("' . $value->id . '","2")>Renew</a></li>';
+                if($value->doc_status==2)
+                {
+                    $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","2")>Finish Renew</a></li>';
+                }
                 $add_data=get_date_only($value->created_at);
                 $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
 
@@ -215,7 +238,8 @@ class HomeController extends Controller
                             $expiry_date,
                             '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
                             $add_date, 
-                            $modal
+                            $modal,
+                            'DT_RowAttr' => array('data-status' => $value->doc_status)
                         );
             }
             // $response = array();
@@ -240,5 +264,101 @@ class HomeController extends Controller
             $response['aaData'] = [];
             echo json_encode($response);
         }
+        // 
+        
+    }
+    public function renew_docs_request(Request $request){
+        $doc_id = $request->input('id');
+        $type = $request->input('type');
+        if($type==1)
+        {
+            $company_doc = CompanyDocs::where('id', $doc_id)->first();
+            if (!empty($company_doc)) { 
+                $company_doc->doc_status = 2;
+                $company_doc->save();
+            }
+        }
+        else{
+            $employee_doc = EmployeeDoc::where('id', $doc_id)->first();
+            if (!empty($employee_doc)) { 
+                $employee_doc->doc_status = 2;
+                $employee_doc->save();
+            }
+        }
+       
+    }
+
+    public function update_employee_doc(Request $request){
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
+
+        $docs_id = $request->input('docs_id');
+        $docs_type = $request->input('docs_type');
+        $new_expiry = $request->input('new_expiry');
+        $doc_name = $request->input('doc_name');  
+        $renewl_note = $request->input('renewl_note');  
+
+
+
+        // Update the EmployeeDoc table
+        if($docs_type==1)
+        {
+            $companyDoc = companyDocs::where('id', $docs_id)->first();
+            if (!empty($companyDoc)) {
+                $old_expiry= $companyDoc->expiry_date;
+                $companyDoc->expiry_date = $new_expiry; // Assuming there's a field for the new expiry date
+                $companyDoc->doc_status = "";
+                $companyDoc->companydoc_name = $doc_name;
+                $companyDoc->save();
+
+                // history
+                $document = new DocumentHistory();
+
+                $document->document_id = $docs_id;
+                $document->company_id = $companyDoc->company_id;
+                $document->doc_type = $docs_type;
+                $document->status = 2;
+                $document->old_expiry = $old_expiry;
+                $document->new_expiry = $request['new_expiry'];
+                $document->doc_name = $request['doc_name'];
+                $document->notes = $request['renewl_note'];
+                $document->added_by = $user;
+                $document->user_id = $user_id;
+                $document->save();
+            }
+
+        }
+        else
+        {
+            
+            $employeeDoc = EmployeeDoc::where('id', $docs_id)->first();
+            if (!empty($employeeDoc)) {
+                $old_expiry= $employeeDoc->expiry_date;
+                $employeeDoc->expiry_date = $new_expiry; // Assuming there's a field for the new expiry date
+                $employeeDoc->doc_status = "";
+                $employeeDoc->employeedoc_name = $doc_name;
+                $employeeDoc->save();
+
+                // history
+                $document = new DocumentHistory();
+
+                $document->document_id = $docs_id;
+                $document->employee_id = $employeeDoc->employee_id;
+                $document->doc_type = $docs_type;
+                $document->status = 2;
+                $document->old_expiry = $old_expiry;
+                $document->new_expiry = $request['new_expiry'];
+                $document->doc_name = $request['doc_name'];
+                $document->notes = $request['renewl_note'];
+                $document->added_by = $user;
+                $document->user_id = $user_id;
+                $document->save();
+            }
+        }
+        
+
+
+
     }
 }

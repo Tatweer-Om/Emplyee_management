@@ -72,7 +72,44 @@
             </div> <!-- container-fluid -->
         </div>
 
-        
+        <div class="modal  fade employee_modal" id="renew_modal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">employee Modal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="add_employee_status" id="add_employee_status" method="POST" action="#">
+                            @csrf
+                            <input type="hidden" class="docs_id" name="docs_id">
+                            <input type="hidden" class="docs_type" name="docs_type">
+                            <div class="mb-3">
+                                <label for="new_expiry" class="col-form-label ">New Expiry DATE</label>
+                                <input type="date" class="new_expiry form-control" name="new_expiry" id="new_expiry">
+                            </div>
+                            {{-- new --}}
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Document Name</label>
+                                <input class="form-control doc_name" name="doc_name" id="doc_name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Renewl Notes</label>
+                                <textarea class="renewl_note form-control" class="renewl_note" name="renewl_note" id="renewl_note"></textarea>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 
 
         

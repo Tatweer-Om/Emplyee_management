@@ -148,26 +148,7 @@
         $('#employee_modal2').modal('show');
     });
 
-    // Handle form submission
-    $('#add_employee_status').on('submit', function(e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: '{{ route("update_employee_doc") }}', // Route to handle form submission
-            type: 'POST',
-            data: $(this).serialize(), // Serialize form data
-            success: function(response) {
-                show_notification('success', 'Data updated successfully'); // Display success message
-                $('#employee_modal2').modal('hide'); // Hide the modal
-                // Optionally, you may want to refresh the tables or update the UI
-                companyTable.ajax.reload(); // Reload the company table
-                employeeTable.ajax.reload(); // Reload the employee table
-            },
-            error: function(xhr, status, error) {
-                console.log('AJAX Error: ' + status + error);
-            }
-        });
-    });
+    
 });
 
 </script>
