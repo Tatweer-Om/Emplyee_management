@@ -18,6 +18,8 @@ return new class extends Migration
             $table->date('expiry_date')->nullable(); // Expiry date of the document
             $table->string('all_document'); // Store all document details
             $table->string('employee_id'); // Foreign key for employee
+            $table->string('employee_company'); // Store all document details
+            $table->string('employee_company_id'); // Foreign key for employee
             $table->string('employee_name'); // Name of the employee
             $table->string('office_user')->nullable(); // Office user related to the document
             $table->string('added_by')->nullable();

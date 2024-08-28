@@ -136,10 +136,17 @@ class EmployeeDocController extends Controller
         if (empty($request->employeedoc_id)) {
             // Add new employee
 
+           $employee_company= $request->employee_company;
+           $company= Company::where('id', $employee_company)->first();
+           $company_name= $company->company_name;
+
             $employeedoc = new EmployeeDoc();
             $employeedoc->employeedoc_id = genUuid() . time(); // Generate a new unique ID
             $employeedoc->expiry_date = $request->expiry_date;
             $employeedoc->all_document = $request->all_document;
+            $employeedoc->employee_company =  $company_name;
+            $employeedoc->employee_company_id =  $employee_company;
+
             $employeedoc->employeedoc_name = $request->employeedoc_name;
             $employeedoc->employee_id = $request->employee_id;
             $employeedoc->employee_name = $request->employee_name;
@@ -157,9 +164,17 @@ class EmployeeDocController extends Controller
             if (!$employeedoc) {
                 return response()->json(['error' => 'employee not found'], 404);
             }
+
+
+           $employee_company= $request->employee_company;
+           $company= Company::where('id', $employee_company)->first();
+           $company_name= $company->company_name;
+
             $employeedoc->expiry_date = $request->expiry_date;
             $employeedoc->all_document = $request->all_document;
             $employeedoc->employeedoc_name = $request->employeedoc_name;
+            $employeedoc->employee_company =  $company_name;
+            $employeedoc->employee_company_id =  $employee_company;
             $employeedoc->employee_id = $request->employee_id;
             $employeedoc->employee_name = $request->employee_name;
             $employeedoc->updated_by = $user;

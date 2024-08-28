@@ -15,25 +15,36 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function employee_task_page(){
+    public function employee_task_page($id) {
+        // Get the authenticated user
+        $user = Auth::user();
 
-        $user= Auth::user();
+        // Determine user type
+        $user_type = $user->user_type == 1 ? 'Admin' : 'Employee';
 
-        $user_type = '';
-        if ($user->user_type == 1) {
-            $user_type = 'Admin';
+        // Fetch the user's branch (ensure the branch exists)
+        $branch = Branch::where('user_id', $user->id)->first();
+        $branch_name = $branch ? $branch->branch_name : 'No Branch';
+
+        // Fetch companies and employees related to the user
+        $companies = Company::where('user_id', $user->id)->get();
+        $employees = Employee::where('user_id', $user->id)->get();
+        $company_count = $companies->count();
+
+        // Check if the user exists and is either the intended user or an Admin
+        $user_check = User::where('id', $id)->where(function($query) {
+            $query->where('user_type', 1)->orWhere('id', Auth::id());
+        })->first();
+
+        // If the user is authorized, return the view with necessary data
+        if($user_check) {
+            return view('main_pages.employee_task', compact('user', 'branch_name', 'user_type', 'companies', 'employees', 'company_count'));
         } else {
-            $user_type = 'Employee';
+            // Redirect to login with an error message if unauthorized
+            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
         }
-        $branch= Branch::where('user_id', $user->id)->first();
-        $branch_name= $branch->branch_name;
-        $user_id= $user->id;
-        $companies = Company::where('user_id', $user_id )->get();
-        $employees = Employee::where('user_id', $user_id )->get();
-        $company_count= $companies->count();
-
-        return view ('main_pages.employee_task', compact('user', 'branch_name', 'user_type'));
     }
+
 
 
 
@@ -45,9 +56,12 @@ class TaskController extends Controller
         // Get all companies and employees associated with the authenticated user
         $companies = Company::where('user_id', $user_id)->get();
         $employees = Employee::where('user_id', $user_id)->get();
+
         $employee_docs = EmployeeDoc::where('user_id', $user_id)
         ->where('doc_status', 1)
         ->get();
+        $employee_docs_total = EmployeeDoc::where('user_id', $user_id)->get();
+        $company_docs_total = CompanyDocs::where('user_id', $user_id)->get();
 
         $company_docs = CompanyDocs::where('user_id', $user_id) // Adjust the condition as needed
             ->where('doc_status', 1)
@@ -110,6 +124,8 @@ class TaskController extends Controller
             'employee_documents' => $employee_documents,
             'employee_docs' => $employee_docs,
             'company_docs' => $company_docs,
+            'employee_docs_total'=>$employee_docs_total,
+            'company_docs_total'=>$company_docs_total,
         ]);
     }
 
@@ -241,8 +257,6 @@ class TaskController extends Controller
 
     //     return response()->json(['carousel_items' => $carouselItems]);
     // }
-
-
 
 
 
