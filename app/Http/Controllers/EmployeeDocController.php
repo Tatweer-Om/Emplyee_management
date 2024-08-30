@@ -92,7 +92,6 @@ class EmployeeDocController extends Controller
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_employeedoc(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printemployee(' . $value->employee_id . ')">Print</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_employee_doc(' . $value->id . ')">Delete</a></li>
                         </ul>
                     </div>';

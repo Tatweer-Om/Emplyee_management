@@ -17,8 +17,8 @@
             "language": {
                 search: ' ',
                 sLengthMenu: '_MENU_',
-                searchPlaceholder: 'search',
-                info: "_START_ - _END_ of _TOTAL_ items",
+                searchPlaceholder: 'بحث',
+                info: "_START_ - _END_ من _TOTAL_ عناصر",
                 },
             initComplete: (settings, json)=>{
                 $('.dataTables_filter').appendTo('#tableSearch');
@@ -37,7 +37,7 @@
             {
                 if(title=="" )
                 {
-                    show_notification('error','<?php echo trans('messages.data_add_about_name_lang',[],session('locale')); ?>'); return false;
+                    show_notification('error','يرجى إدخال اسم المكتب'); return false;
                 }
                 // $('#global-loader').show();
                 // before_submit();
@@ -51,7 +51,7 @@
                     success: function(data) {
                         // $('#global-loader').hide();
                         // after_submit();
-                        show_notification('success','<?php echo trans('messages.data_update_success_lang',[],session('locale')); ?>');
+                        show_notification('success','تم تحديث البيانات بنجاح');
                         $('#about_modal').modal('hide');
                         $('#all_about').DataTable().ajax.reload();
                         return false;
@@ -60,7 +60,7 @@
                     {
                         // $('#global-loader').hide();
                         // after_submit();
-                        show_notification('error','<?php echo trans('messages.data_update_failed_lang',[],session('locale')); ?>');
+                        show_notification('error','فشل في تحديث البيانات');
                         $('#all_about').DataTable().ajax.reload();
                         console.log(data);
                         return false;
@@ -72,7 +72,7 @@
 
                 if(title=="" )
                 {
-                    show_notification('error','<?php echo trans('messages.data_add_about_name_lang',[],session('locale')); ?>'); return false;
+                    show_notification('error','يرجى إدخال اسم المكتب'); return false;
 
                 }
 
@@ -89,7 +89,7 @@
                         // $('#global-loader').hide();
                         // after_submit();
                         $('#all_about').DataTable().ajax.reload();
-                        show_notification('success','<?php echo trans('messages.data_add_success_lang',[],session('locale')); ?>');
+                        show_notification('success','تم إضافة البيانات بنجاح');
                         $('.about_modal').modal('hide');
                         $(".add_about")[0].reset();
                         return false;
@@ -98,7 +98,7 @@
                     {
                         // $('#global-loader').hide();
                         // after_submit();
-                        show_notification('error','<?php echo trans('messages.data_add_failed_lang',[],session('locale')); ?>');
+                        show_notification('error','فشل في إضافة البيانات');
                         $('#all_about').DataTable().ajax.reload();
                         console.log(data);
                         return false;
@@ -138,14 +138,14 @@
 
 
                     $(".about_id").val(fetch.about_id);
-                    $(".modal-title").html('<?php echo trans('messages.update_lang',[],session('locale')); ?>');
+                    $(".modal-title").html('تحديث البيانات');
                 }
             },
             error: function(html)
             {
                 // $('#global-loader').hide();
                 // after_submit();
-                show_notification('error','<?php echo trans('messages.edit_failed_lang',[],session('locale')); ?>');
+                show_notification('error','فشل في تحرير البيانات');
                 console.log(html);
                 return false;
             }
@@ -154,13 +154,13 @@
 
     function del(id) {
         Swal.fire({
-            title:  '<?php echo trans('messages.sure_lang',[],session('locale')); ?>',
-            text:  '<?php echo trans('messages.delete_lang',[],session('locale')); ?>',
+            title:  'هل أنت متأكد؟',
+            text:  'لن تتمكن من التراجع عن هذا!',
             type: "warning",
             showCancelButton: !0,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText:  '<?php echo trans('messages.delete_it_lang',[],session('locale')); ?>',
+            confirmButtonText:  'نعم، احذفه!',
             confirmButtonClass: "btn btn-primary",
             cancelButtonClass: "btn btn-danger ml-1",
             buttonsStyling: !1
@@ -175,19 +175,19 @@
                     error: function () {
                         // $('#global-loader').hide();
                         // after_submit();
-                        show_notification('error', '<?php echo trans('messages.delete_failed_lang',[],session('locale')); ?>');
+                        show_notification('error', 'فشل في حذف البيانات');
                     },
                     success: function (data) {
                         // $('#global-loader').hide();
                         // after_submit();
                         $('#all_about').DataTable().ajax.reload();
-                        show_notification('success', '<?php echo trans('messages.delete_success_lang',[],session('locale')); ?>');
+                        show_notification('success', 'تم حذف البيانات بنجاح');
                     }
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                show_notification('success', '<?php echo trans('messages.safe_lang',[],session('locale')); ?>');
+                show_notification('success', 'بياناتك آمنة');
             }
         });
     }
 
-    </script>
+</script>

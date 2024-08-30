@@ -3,8 +3,8 @@
     $(document).ready(function() {
         $(".employee_company").select2({
             dropdownParent: $("#employee_modal")
-        }); 
-        
+        });
+
         $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -50,8 +50,7 @@
                 {
                     show_notification('error','<?php echo trans('messages.data_add_employee_name_lang',[],session('locale')); ?>'); return false;
                 }
-                // $('#global-loader').show();
-                // before_submit();
+
                 var str = $(".add_employee").serialize();
                 $.ajax({
                     type: "POST",
@@ -60,8 +59,7 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        // $('#global-loader').hide();
-                        // after_submit();
+
                         var id = data.last_id;
                         var url = base_url+'/employee_document_addition/'+id;
                         show_notification('success','<?php echo trans('messages.data_update_success_lang',[],session('locale')); ?>');
@@ -72,8 +70,7 @@
                     },
                     error: function(data)
                     {
-                        // $('#global-loader').hide();
-                        // after_submit();
+
                         show_notification('error','<?php echo trans('messages.data_update_failed_lang',[],session('locale')); ?>');
                         $('#all_employee').DataTable().ajax.reload();
                         console.log(data);
@@ -90,8 +87,7 @@
 
                 }
 
-                // $('#global-loader').show();
-                // before_submit();
+
                 var str = $(".add_employee").serialize();
                 $.ajax({
                     type: "POST",
@@ -100,8 +96,7 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        // $('#global-loader').hide();
-                        // after_submit();
+
                         var id = data.last_id;
                         var url = base_url+'/employee_document_addition/'+id;
                         $('#all_employee').DataTable().ajax.reload();
@@ -113,8 +108,7 @@
                         },
                     error: function(data)
                     {
-                        // $('#global-loader').hide();
-                        // after_submit();
+
                         show_notification('error','<?php echo trans('messages.data_add_failed_lang',[],session('locale')); ?>');
                         $('#all_employee').DataTable().ajax.reload();
                         console.log(data);
@@ -141,11 +135,8 @@
             method : "POST",
             data :   {id:id,_token: csrfToken},
             success: function(fetch) {
-                // $('#global-loader').hide();
-                // after_submit();
-                if(fetch!=""){
-                    // Define a variable for the image path
 
+                if(fetch!=""){
 
                     $(".employee_name").val(fetch.employee_name);
                     $(".employee_email").val(fetch.employee_email);
@@ -160,8 +151,7 @@
             },
             error: function(html)
             {
-                // $('#global-loader').hide();
-                // after_submit();
+
                 show_notification('error','<?php echo trans('messages.edit_failed_lang',[],session('locale')); ?>');
                 console.log(html);
                 return false;
@@ -183,21 +173,18 @@
             buttonsStyling: !1
         }).then(function (result) {
             if (result.value) {
-                // $('#global-loader').show();
-                // before_submit();
+
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
                     url: "{{ url('delete_employee') }}",
                     type: 'POST',
                     data: {id: id,_token: csrfToken},
                     error: function () {
-                        // $('#global-loader').hide();
-                        // after_submit();
+
                         show_notification('error', '<?php echo trans('messages.delete_failed_lang',[],session('locale')); ?>');
                     },
                     success: function (data) {
-                        // $('#global-loader').hide();
-                        // after_submit();
+
                         $('#all_employee').DataTable().ajax.reload();
                         show_notification('success', '<?php echo trans('messages.delete_success_lang',[],session('locale')); ?>');
                     }

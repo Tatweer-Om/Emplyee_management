@@ -1,9 +1,8 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title>Companies </title>
+        <title>الشركات</title>
     @endpush
-
 
     <div class="main-content">
 
@@ -14,12 +13,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Company List</h4>
+                            <h4 class="mb-sm-0 font-size-18">قائمة الشركات</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Companies</a></li>
-                                    <li class="breadcrumb-item active">Company List</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">الشركات</a></li>
+                                    <li class="breadcrumb-item active">قائمة الشركات</li>
                                 </ol>
                             </div>
 
@@ -37,7 +36,7 @@
                                         <div class="mb-4">
                                             <button type="button" class="btn btn-primary waves-effect waves-light"
                                                 data-bs-toggle="modal" data-bs-target="#company_modal"><i
-                                                class="bx bx-plus me-1"></i> Add Company</button>
+                                                class="bx bx-plus me-1"></i> إضافة شركة</button>
                                         </div>
                                     </div>
                                     {{-- <div class="col-sm-auto">
@@ -56,9 +55,9 @@
                                                 </a>
 
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                                    <li><a class="dropdown-item" href="#">إجراء</a></li>
+                                                    <li><a class="dropdown-item" href="#">إجراء آخر</a></li>
+                                                    <li><a class="dropdown-item" href="#">شيء آخر هنا</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -72,20 +71,18 @@
                                         <thead>
                                             <tr class="bg-transparent">
 
-                                                <th style="text-align: right;">Sr.No</th>
-                                                <th style="text-align: right; width: 20px;">Company Name</th>
-                                                <th style="text-align: right;">Company Contact</th>
-                                                <th style="text-align: right;">Office User</th>
-                                                <th style="text-align: right;">Company Detail</th>
-                                                <th style="text-align: right;">Cr No.</th>
-                                                <th style="text-align: right; width: 20px;">Added On</th>
-                                                <th style="text-align: right; width: 20px;">Action</th>
+                                                <th style="text-align: right;">رقم</th>
+                                                <th style="text-align: right; width: 20px;">اسم الشركة</th>
+                                                <th style="text-align: right;">تواصل الشركة</th>
+                                                <th style="text-align: right;">مستخدم المكتب</th>
+                                                <th style="text-align: right;">تفاصيل الشركة</th>
+                                                <th style="text-align: right;">رقم السجل التجاري</th>
+                                                <th style="text-align: right; width: 20px;">تاريخ الإضافة</th>
+                                                <th style="text-align: right; width: 20px;">إجراء</th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
-
-
 
                                         </tbody>
                                     </table>
@@ -108,43 +105,42 @@
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalScrollableTitle">Company Modal</h5>
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">نافذة الشركة</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form class="add_company" id="add_company" method="POST" action="#">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="company_name" class="col-form-label ">Company Name</label>
+                                    <label for="company_name" class="col-form-label ">اسم الشركة</label>
                                     <input type="text" class="company_name form-control" name="company_name" id="company_name">
                                 </div>
 
                                 <input type="text" class="company_id" name="company_id" id="company_id" hidden>
                                 <div class="mb-3">
-                                    <label for="company_email" class="col-form-label company_email">Company Email</label>
+                                    <label for="company_email" class="col-form-label company_email">بريد الشركة الإلكتروني</label>
                                     <input type="text" class="company_email form-control" name="company_email" id="company_email">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="company_phone" class="col-form-label company_phone">Company Phone</label>
+                                    <label for="company_phone" class="col-form-label company_phone">رقم هاتف الشركة</label>
                                     <input type="text" class="company_phone form-control" name="company_phone" id="company_phone">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="company_address" class="col-form-label company_address">Company
-                                        Address</label>
+                                    <label for="company_address" class="col-form-label company_address">عنوان الشركة</label>
                                     <input type="text" class="company_address form-control" name="company_address"
                                         id="company_address">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="cr_no" class="col-form-label cr_no">CR No.</label>
+                                    <label for="cr_no" class="col-form-label cr_no">رقم السجل التجاري</label>
                                     <input type="text" class="cr_no form-control" name="cr_no" id="cr_no">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">Company Detail</label>
-                                    <textarea class="company_detail form-control" class="company_detail" name="company_detail" id="company_detail"></textarea>
+                                    <label for="message-text" class="col-form-label">تفاصيل الشركة</label>
+                                    <textarea class="company_detail form-control" name="company_detail" id="company_detail"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">إغلاق</button>
+                                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
                                 </div>
                             </form>
                         </div>
@@ -161,7 +157,7 @@
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalScrollableTitle">employee Modal</h5>
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">نافذة الموظف</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -169,16 +165,15 @@
                                 @csrf
                                 <input type="hidden" class="employee_company">
                                 <div class="mb-3">
-                                    <label for="employee_name" class="col-form-label ">employee Name</label>
+                                    <label for="employee_name" class="col-form-label ">اسم الموظف</label>
                                     <input type="text" class="employee_name form-control" name="employee_name" id="employee_name">
                                 </div>
                                 {{-- new --}}
                                 <div class="mb-3">
-                                    <label for="choices-single-groups" class="form-label font-size-13" hidden>Companies
-                                        </label>
-                                    <select class="employee_company form-control" searchable  name="employee_company" hidden
+                                    <label for="choices-single-groups" class="form-label font-size-13" hidden>الشركات</label>
+                                    <select class="employee_company form-control" searchable name="employee_company" hidden
                                         id="choices-single-groups">
-                                        <option value="">Choose Company</option>
+                                        <option value="">اختر الشركة</option>
                                         @foreach($companies as $company)
                                         <option value="{{ $company->id }}">{{ $company->company_name ?? ''}}</option>
                                         @endforeach
@@ -186,24 +181,24 @@
                                     </select>
                                 </div>
 
-                                {{-- endnew  --}}
+                                {{-- endnew --}}
                                 <input type="text" class="employee_id" name="employee_id" id="employee_id" hidden>
                                 <div class="mb-3">
-                                    <label for="employee_email" class="col-form-label employee_email">employee Email</label>
+                                    <label for="employee_email" class="col-form-label employee_email">بريد الموظف الإلكتروني</label>
                                     <input type="text" class="employee_email form-control" name="employee_email" id="employee_email">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="employee_phone" class="col-form-label employee_phone">employee Phone</label>
+                                    <label for="employee_phone" class="col-form-label employee_phone">رقم هاتف الموظف</label>
                                     <input type="text" class="employee_phone form-control" name="employee_phone" id="employee_phone">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">employee Detail</label>
-                                    <textarea class="employee_detail form-control" class="employee_detail" name="employee_detail" id="employee_detail"></textarea>
+                                    <label for="message-text" class="col-form-label">تفاصيل الموظف</label>
+                                    <textarea class="employee_detail form-control" name="employee_detail" id="employee_detail"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">إغلاق</button>
+                                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
                                 </div>
                             </form>
                         </div>
@@ -212,7 +207,6 @@
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
         </div>
-
 
         @include('layouts.footer')
     @endsection

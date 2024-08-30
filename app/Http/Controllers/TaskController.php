@@ -10,6 +10,7 @@ use App\Models\CompanyDocs;
 use App\Models\EmployeeDoc;
 use Illuminate\Http\Request;
 use App\Models\Companydochistory;
+use App\Models\DocumentHistory;
 use App\Models\Employeedochistory;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,13 +59,13 @@ class TaskController extends Controller
         $employees = Employee::where('user_id', $user_id)->get();
 
         $employee_docs = EmployeeDoc::where('user_id', $user_id)
-        ->where('doc_status', 1)
+        ->where('doc_status', 2)
         ->get();
         $employee_docs_total = EmployeeDoc::where('user_id', $user_id)->get();
         $company_docs_total = CompanyDocs::where('user_id', $user_id)->get();
 
         $company_docs = CompanyDocs::where('user_id', $user_id) // Adjust the condition as needed
-            ->where('doc_status', 1)
+            ->where('doc_status', 2)
             ->get();
 
         $company_count = $companies->count();
@@ -77,11 +78,10 @@ class TaskController extends Controller
         function translateStatus($status) {
             switch ($status) {
                 case 1:
-                    return 'Under Process';
+                    return 'None';
                 case 2:
-                    return 'Received';
-                case 3:
-                    return 'Some Issue';
+                    return 'Under Process';
+
                 default:
                     return null; // Fallback for unexpected status values
             }
@@ -132,132 +132,28 @@ class TaskController extends Controller
 
 
 
-    public function update_employee_doc(Request $request)
+    public function document_history(Request $request)
     {
-        // Retrieve input data
-        $employeeId = $request->input('employee_id');
-        $renewl_note = $request->input('renewl_note');
-        $oldExpiry = $request->input('expiry_date');
-        $newExpiry = $request->input('new_expiry');
-        $documentStatus = $request->input('doc_status');
-        $docId = $request->input('document_id');
-        $source = $request->input('source'); // Get the source (company or employee)
+        $documentId = $request->input('id');  // Retrieve the document ID
+        $source = $request->input('source');  // Retrieve the source
 
-        $user_id = Auth::id();
-        $data= User::find( $user_id)->first();
-        $user= $data->user_name;
+        // Initialize the query with the document ID
+        $query = DocumentHistory::where('document_id', $documentId);
 
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        // Check the source and update the appropriate document
-        if ($source === 'employee') {
-            // Update the EmployeeDoc table
-            $employeeDoc = EmployeeDoc::find($docId);
-            if ($employeeDoc) {
-                $employee = Employee::find($employeeDoc->employee_id);
-                if (!$employee) {
-                    return response()->json(['message' => 'Employee not found'], 404);
-                }
-
-                $company = Company::find($employee->employee_company);
-                if (!$company) {
-                    return response()->json(['message' => 'Company not found'], 404);
-                }
-
-                $employeeDoc->expiry_date = $newExpiry;
-                $employeeDoc->doc_status = $documentStatus;
-                $employeeDoc->save();
-
-                // Create a new history record
-                $history = new Employeedochistory();
-                $history->employee_id = $employeeId;
-                $history->company_id = $company->id;
-                $history->employee_company = $company->company_name;
-                $history->old_expiry_date = $oldExpiry;
-                $history->new_expiry = $newExpiry;
-                $history->renewl_note = $renewl_note;
-                $history->doc_status = $documentStatus;
-                $history->document_id = $docId;
-                $history->added_by =  $user;
-                $history->user_id =  $user_id;
-                $history->save();
-            } else {
-                return response()->json(['message' => 'Employee document not found'], 404);
-            }
-        } elseif ($source === 'company') {
-            // Update the CompanyDoc table
-            $companyDoc = CompanyDocs::find($docId);
-            if ($companyDoc) {
-                $company = Company::find($companyDoc->company_id);
-                if (!$company) {
-                    return response()->json(['message' => 'Company not found'], 404);
-                }
-
-                $companyDoc->expiry_date = $newExpiry;
-                $companyDoc->doc_status = $documentStatus;
-                $companyDoc->save();
-
-                // Create a new history record
-                $history = new Companydochistory();
-                $history->old_expiry_date = $oldExpiry;
-                $history->new_expiry = $newExpiry;
-                $history->company_id = $company->id;
-                $history->employee_company = $company->company_name;
-                $history->document_id = $docId;
-                $history->renewl_note = $renewl_note;
-                $history->doc_status = $documentStatus;
-                $history->added_by =  $user;
-                $history->user_id =  $user_id;
-                $history->save();
-            } else {
-                return response()->json(['message' => 'Company document not found'], 404);
-            }
+        // Apply the filter based on the source
+        if ($source == 'employee') {
+            $query->where('employee_id', '!=', null);  // Filter by non-null employee_id
         } else {
-            return response()->json(['message' => 'Invalid document source'], 400);
+            $query->where('company_id', '!=', null);  // Filter by non-null company_id
         }
 
-        return response()->json(['message' => 'Document updated successfully']);
+        // Execute the query and get the results
+        $history = $query->get();
+
+        // Return the history data as a JSON response
+        return response()->json([
+            'success' => true,
+            'data' => $history
+        ]);
     }
-
-
-
-    // public function fetchCarouselData()
-    // {
-    //     // Fetch documents with their expiry date and other necessary details
-    //     $employeeDocs = Employeedoc::select('id', 'employeedoc_name', 'expiry_date', 'status', 'employee_id')
-    //         ->get()
-    //         ->map(function($doc) {
-    //             return [
-    //                 'id' => $doc->id,
-    //                 'name' => $doc->employeedoc_name,
-    //                 'expiry_date' => $doc->expiry_date,
-    //                 'status' => $doc->status,
-    //                 'type' => 'employee',
-    //                 'related_id' => $doc->employee_id
-    //             ];
-    //         });
-
-    //     $companyDocs = Companydocs::select('id', 'companydoc_name', 'expiry_date', 'status', 'company_id')
-    //         ->get()
-    //         ->map(function($doc) {
-    //             return [
-    //                 'id' => $doc->id,
-    //                 'name' => $doc->companydoc_name,
-    //                 'expiry_date' => $doc->expiry_date,
-    //                 'status' => $doc->status,
-    //                 'type' => 'company',
-    //                 'related_id' => $doc->company_id
-    //             ];
-    //         });
-
-    //     $carouselItems = $employeeDocs->concat($companyDocs)
-    //         ->sortBy('expiry_date'); // Optional: Sort by expiry date
-
-    //     return response()->json(['carousel_items' => $carouselItems]);
-    // }
-
-
-
 }

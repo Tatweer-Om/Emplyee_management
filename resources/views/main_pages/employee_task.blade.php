@@ -131,51 +131,7 @@
                             </div>
                             <!-- end col -->
 
-                            {{-- <div class="col-xl-4">
-                                <!-- card -->
-                                <div class="card bg-primary text-white shadow-primary card-h-100">
-                                    <!-- card body -->
-                                    <div class="card-body p-0">
-                                        <div id="carouselExampleCaptions" class="carousel slide text-center widget-carousel"
-                                            data-bs-ride="carousel">
-                                            <div class="carousel-inner">
-                                                <div class="carousel-item active">
-                                                    <div class="text-center p-4">
-                                                        <i class="mdi mdi-bitcoin widget-box-1-icon"></i>
-                                                        <div class="avatar-md m-auto">
-                                                            <span
-                                                                class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
-                                                                <i class="mdi mdi-currency-btc"></i>
-                                                            </span>
-                                                        </div>
-                                                        <h4 class="mt-3 lh-base fw-normal text-white"><b>Recently</b> Added
-                                                        </h4>
-                                                        <p class="text-white-50 font-size-13">document name
-                                                        </p>
-                                                        <p class="text-white-50 font-size-13">created at
-                                                        </p>
-                                                        <p class="text-white-50 font-size-13">expiry date
-                                                        </p>
 
-                                                    </div>
-                                                </div>
-                                                <!-- end carousel-item -->
-
-                                                <!-- end carousel-item -->
-
-                                                <!-- end carousel-item -->
-                                            </div>
-                                            <!-- end carousel-inner -->
-
-
-                                            <!-- end carousel-indicators -->
-                                        </div>
-                                        <!-- end carousel -->
-                                    </div>
-                                    <!-- end card body -->
-                                </div>
-                                <!-- end card -->
-                            </div> --}}
 
 
                             <!-- end col -->
@@ -212,9 +168,9 @@
                                         </li>
 
                                     </ul>
-                                    <!-- end nav tabs -->
+
                                 </div>
-                            </div><!-- end card header -->
+                            </div>
 
                             <div class="card-body px-0">
                                 <div class="tab-content">
@@ -269,71 +225,20 @@
 
                                         </div>
                                     </div>
-                                    <!-- end tab pane -->
 
-                                    <!-- end tab pane -->
                                 </div>
-                                <!-- end tab content -->
+
                             </div>
-                            <!-- end card body -->
+
                         </div>
-                        <!-- end card -->
+
                     </div>
-                    <!-- end col -->
 
-                    {{-- <div class="col-xl-6">
-                        <div class="card">
-                            <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Under Renewl Process</h4>
-
-                            </div><!-- end card header -->
-
-                            <div class="card-body px-0">
-                                <div class="px-3" data-simplebar style="max-height: 352px;">
-                                    <ul class="list-unstyled activity-wid mb-0">
-
-
-
-                                        <li class="activity-list activity-border">
-                                            <div class="activity-icon avatar-md">
-                                                <span class="avatar-title  bg-primary-subtle text-primary rounded-circle">
-                                                    <i class="mdi mdi-ethereum font-size-24"></i>
-                                                </span>
-                                            </div>
-                                            <div class="timeline-list-item">
-                                                <div class="d-flex">
-                                                    <div class="flex-grow-1 overflow-hidden me-4">
-
-                                                        <div class="progress">
-                                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                                role="progressbar" aria-valuenow="75" aria-valuemin="0"
-                                                                aria-valuemax="100" style="width: 75%"></div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="flex-shrink-0 text-end me-3">
-                                                        <h6 class="mb-1">Document Name</h6>
-                                                        <div class="font-size-13">Company or Employee Name</div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </li>
-
-
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- end card body -->
-                        </div>
-                        <!-- end card -->
-                    </div> --}}
                     <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
                                 <h4 class="card-title mb-0 flex-grow-1">Under Renewal Process</h4>
-                            </div><!-- end card header -->
+                            </div>
 
                             <div class="card-body px-0">
                                 <div class="px-3" data-simplebar style="max-height: 352px;">
@@ -342,27 +247,24 @@
                                     </ul>
                                 </div>
                             </div>
-                            <!-- end card body -->
+
                         </div>
-                        <!-- end card -->
+
                     </div>
 
 
-
-
-                    <!-- end col -->
-                </div><!-- end row -->
+                </div>
             </div>
-            <!-- container-fluid -->
+
         </div>
-        <!-- End Page-content -->
+
 
 
 
     </div>
 
     <div>
-        <div class="modal  fade employee_modal" id="employee_modal2" tabindex="-1" role="dialog"
+        <div class="modal modal-lg fade employee_modal" id="employee_modal2" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
@@ -371,46 +273,26 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="add_employee_status" id="add_employee_status" method="POST" action="#">
-                            @csrf
-                            <input type="hidden" class="employee_company">
-                            <input type="hidden" id="update_source" name="source">
-                            <div class="mb-3">
-                                <label for="expiry_date" class="col-form-label ">Old Expiry Date</label>
-                                <input type="text" class="expiry_date form-control" name="expiry_date" id="expiry_date" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="new_expiry" class="col-form-label ">New Expiry DATE</label>
-                                <input type="date" class="new_expiry form-control" name="new_expiry" id="new_expiry">
-                            </div>
-                            {{-- new --}}
-                            <div class="mb-3">
-                                <label for="choices-single-groups" class="form-label font-size-13" >Document Status
-                                    </label>
-                                <select class="doc_status form-control" searchable  name="doc_status"
-                                    id="choices-single-groups">
-                                    <option value="">Document Statsu</option>
-                                    <option value="1">UNDER PROCESS</option>
-                                    <option value="2">Recieved</option>
-                                    <option value="3">Some Issue</option>
+                        <table class="table align-middle dt-responsive table-check nowrap"
+                        style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_profile_docs">
+                        <thead>
+                            <tr class="bg-transparent">
+                                <th style="width: 120px; text-align:center;">رقم التسلسل</th>
+                                <th style="text-align:center;">تفاصيل الوثيقة</th>
+                                <th style="text-align:center;">حالة تاريخ الانتهاء</th>
+                                <th style="text-align:center;">حالة التجديد</th>
+                                <th style="text-align:center;">ملاحظات التجديد</th>
+                                <th style="text-align:center;">تاريخ الإضافة</th>
+                                <th style="text-align:center;">مستخدم المكتب</th>
 
-                                </select>
-                            </div>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                            <div class="mb-3">
-                                <label for="message-text" class="col-form-label">Renewl Notes</label>
-                                <textarea class="renewl_note form-control" class="renewl_note" name="renewl_note" id="renewl_note"></textarea>
-                            </div>
 
-                            {{-- endnew  --}}
-                            <input type="text" class="employee_id" name="employee_id" id="employee_id" hidden>
-                            <input type="text" class="document_id" name="document_id" id="document_id" hidden>
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
-                            </div>
-                        </form>
+                        </tbody>
+                    </table>
                     </div>
 
                 </div><!-- /.modal-content -->

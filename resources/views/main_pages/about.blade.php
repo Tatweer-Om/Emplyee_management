@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title> Office Details</title>
+        <title>تفاصيل المكتب</title>
     @endpush
 
 
@@ -10,23 +10,23 @@
         <div class="page-content">
             <div class="container-fluid">
 
-                <!-- start page title -->
+                <!-- بداية عنوان الصفحة -->
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Office Details</h4>
+                            <h4 class="mb-sm-0 font-size-18">تفاصيل المكتب</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Office Details</a></li>
-                                    <li class="breadcrumb-item active">All details</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">تفاصيل المكتب</a></li>
+                                    <li class="breadcrumb-item active">جميع التفاصيل</li>
                                 </ol>
                             </div>
 
                         </div>
                     </div>
                 </div>
-                <!-- end page title -->
+                <!-- نهاية عنوان الصفحة -->
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -37,34 +37,12 @@
                                         <div class="mb-4">
                                             <button type="button" class="btn btn-primary waves-effect waves-light"
                                                 data-bs-toggle="modal" data-bs-target="#about_modal"><i
-                                                class="bx bx-plus me-1"></i> Add Office Details</button>
+                                                class="bx bx-plus me-1"></i> إضافة تفاصيل المكتب</button>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-sm-auto">
-                                        <div class="d-flex align-items-center gap-1 mb-4">
-                                            <div class="input-group datepicker-range">
-                                                <input type="text" class="form-control flatpickr-input" data-input
-                                                    aria-describedby="date1">
-                                                <button class="input-group-text" id="date1" data-toggle><i
-                                                        class="bx bx-calendar-event"></i></button>
-                                            </div>
-                                            <div class="dropdown">
-                                                <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle"
-                                                    href="#" role="button" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="bx bx-dots-horizontal-rounded"></i>
-                                                </a>
 
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                 </div>
-                                <!-- end row -->
+                                <!-- نهاية الصف -->
 
                                 <div class="table-responsive">
                                     <table class="table align-middle datatable dt-responsive table-check nowrap"
@@ -72,14 +50,14 @@
                                         <thead>
                                             <tr class="bg-transparent">
 
-                                                <th style="text-align:right;">Sr.No</th>
-                                                <th  style="text-align:center;">Office Name</th>
-                                                <th  style="text-align:center;">Office Address</th>
-                                                <th style="text-align:center;">Office Phone</th>
-                                                <th style="text-align:center;">Office Detail</th>
+                                                <th style="text-align:right;">رقم س.ت</th>
+                                                <th  style="text-align:center;">اسم المكتب</th>
+                                                <th  style="text-align:center;">عنوان المكتب</th>
+                                                <th style="text-align:center;">هاتف المكتب</th>
+                                                <th style="text-align:center;">تفاصيل المكتب</th>
 
-                                                <th  style="text-align:center;">Added By</th>
-                                                <th  style="text-align:center;">Action</th>
+                                                <th  style="text-align:center;">أضيف بواسطة</th>
+                                                <th  style="text-align:center;">إجراء</th>
 
                                             </tr>
                                         </thead>
@@ -89,15 +67,15 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- end table responsive -->
+                                <!-- نهاية الجدول القابل للتمرير -->
                             </div>
-                            <!-- end card body -->
+                            <!-- نهاية جسم البطاقة -->
                         </div>
-                        <!-- end card -->
+                        <!-- نهاية البطاقة -->
                     </div>
-                    <!-- end col -->
+                    <!-- نهاية العمود -->
                 </div>
-                <!-- end row -->
+                <!-- نهاية الصف -->
             </div> <!-- container-fluid -->
         </div>
 
@@ -107,44 +85,43 @@
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalScrollableTitle">Office Modal</h5>
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">نموذج المكتب</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form class="add_about" id="add_about" method="POST" action="#">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="about_name" class="col-form-label ">Office Name</label>
+                                    <label for="about_name" class="col-form-label ">اسم المكتب</label>
                                     <input type="text" class="about_name form-control" name="about_name" id="about_name">
                                 </div>
 
                                 <input type="text" class="about_id" name="about_id" id="about_id" hidden>
 
                                 <div class="mb-3">
-                                    <label for="about_phone" class="col-form-label about_phone">Office Phone</label>
+                                    <label for="about_phone" class="col-form-label about_phone">هاتف المكتب</label>
                                     <input type="text" class="about_phone form-control" name="about_phone" id="about_phone">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="about_address" class="col-form-label about_address">about
-                                        Address</label>
+                                    <label for="about_address" class="col-form-label about_address">عنوان المكتب</label>
                                     <input type="text" class="about_address form-control" name="about_address"
                                         id="about_address">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">Office Detail</label>
+                                    <label for="message-text" class="col-form-label">تفاصيل المكتب</label>
                                     <textarea class="about_detail form-control" class="about_detail" name="about_detail" id="about_detail"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">إغلاق</button>
+                                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
                                 </div>
                             </form>
                         </div>
 
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+                    </div><!-- /.محتوى النموذج -->
+                </div><!-- /.حوار النموذج -->
+            </div><!-- /.نموذج -->
         </div>
 
         @include('layouts.footer')

@@ -32,7 +32,7 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                 
+
                                 <!-- end row -->
 
                                 <div class="table-responsive">
@@ -42,8 +42,8 @@
                                             <tr class="bg-transparent">
 
                                                 <th style="text-align: right;">Sr.No</th>
-                                                <th style="text-align: right; width: 20px;">Company Name</th>
-                                                <th style="text-align: right;">Employee Name</th>
+                                                <th style="text-align: right; width: 20px;">Company or Employee</th>
+
                                                 <th style="text-align: right;">Office User</th>
                                                 <th style="text-align: right;">Document Name</th>
                                                 <th style="text-align: right;">Expiry Date</th>
@@ -77,7 +77,7 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalScrollableTitle">employee Modal</h5>
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Renewel Modal</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -90,10 +90,9 @@
                                 <input type="date" class="new_expiry form-control" name="new_expiry" id="new_expiry">
                             </div>
                             {{-- new --}}
-                            <div class="mb-3">
-                                <label for="message-text" class="col-form-label">Document Name</label>
-                                <input class="form-control doc_name" name="doc_name" id="doc_name">
-                            </div>
+
+
+
                             <div class="mb-3">
                                 <label for="message-text" class="col-form-label">Renewl Notes</label>
                                 <textarea class="renewl_note form-control" class="renewl_note" name="renewl_note" id="renewl_note"></textarea>
@@ -112,7 +111,7 @@
         </div><!-- /.modal -->
 
 
-        
+
 
 
         @include('layouts.footer')

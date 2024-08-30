@@ -63,7 +63,6 @@ class UserController extends Controller
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#user_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printuser(' . $value->user_id . ')">Print</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
                         </ul>
                     </div>';
@@ -207,7 +206,9 @@ class UserController extends Controller
 
         public function login(){
 
-            return view ('login_page.login');
+            $about= About::first();
+
+            return view ('login_page.login', compact('about'));
         }
 
 
@@ -216,9 +217,9 @@ class UserController extends Controller
             // Retrieve input credentials
             $username = $request->input('username');
             $password = $request->input('password');
-             
+
             // Attempt to find the user by username
-            $user = User::where('user_name', $username)->first(); 
+            $user = User::where('user_name', $username)->first();
             if ($user && Hash::check($password, $user->password)) {
 
                 Auth::login($user);
@@ -226,7 +227,7 @@ class UserController extends Controller
                 return response()->json([
                     'status' => 1,
                     'message' => 'Login successful!',
-                    'redirect_url' => url('home')
+                    'redirect_url' => url('/')
                     // You can add more data here if needed, like a redirect URL
                 ]);
             } else {
