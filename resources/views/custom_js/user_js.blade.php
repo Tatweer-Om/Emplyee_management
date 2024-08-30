@@ -1,5 +1,3 @@
-
-
 <script type="text/javascript">
     $(document).ready(function() {
         // Reset form and clear user_id when modal is closed
@@ -19,8 +17,8 @@
             "language": {
                 search: ' ',
                 sLengthMenu: '_MENU_',
-                searchPlaceholder: '<?php echo trans('messages.search_lang',[],session('locale')); ?>',
-                info: "_START_ - _END_ of _TOTAL_ items",
+                searchPlaceholder: 'البحث',
+                info: "_START_ - _END_ من _TOTAL_ عناصر",
             },
             initComplete: (settings, json)=>{
                 $('.dataTables_filter').appendTo('#tableSearch');
@@ -36,7 +34,7 @@
             var id = $('.user_id').val();
 
             if (title === "") {
-                show_notification('error', '<?php echo trans('messages.add_user_name_lang', [], session('locale')); ?>');
+                show_notification('error', 'يرجى إدخال اسم المستخدم');
                 return false;
             }
 
@@ -49,18 +47,16 @@
                 contentType: false,
                 processData: false,
                 success: function(data) {
-                    show_notification('success', id !== '' ? '<?php echo trans('messages.data_update_success_lang', [], session('locale')); ?>' : '<?php echo trans('messages.data_add_success_lang', [], session('locale')); ?>');
+                    show_notification('success', id !== '' ? 'تم تحديث البيانات بنجاح' : 'تمت إضافة البيانات بنجاح');
                     $('#user_modal').modal('hide');
                     $('#all_user').DataTable().ajax.reload();
                 },
                 error: function(data) {
-                    show_notification('error', id !== '' ? '<?php echo trans('messages.data_update_failed_lang', [], session('locale')); ?>' : '<?php echo trans('messages.data_add_failed_lang', [], session('locale')); ?>');
+                    show_notification('error', id !== '' ? 'فشل في تحديث البيانات' : 'فشل في إضافة البيانات');
                     $('#all_user').DataTable().ajax.reload();
                 }
             });
         });
-
-        // Handle form submission for login
 
         // Function to handle edit
         window.edit = function(id) {
@@ -80,11 +76,11 @@
                         $(".user_branch").val(fetch.user_branch).trigger('change');
                         $(".user_type").val(fetch.user_type).trigger('change');
                         $(".user_id").val(fetch.user_id);
-                        $(".modal-title").html('<?php echo trans('messages.update_lang', [], session('locale')); ?>');
+                        $(".modal-title").html('تحديث البيانات');
                     }
                 },
                 error: function(html) {
-                    show_notification('error', '<?php echo trans('messages.edit_failed_lang', [], session('locale')); ?>');
+                    show_notification('error', 'فشل في تحرير البيانات');
                     console.log(html);
                 }
             });
@@ -93,13 +89,13 @@
         // Function to handle delete
         window.del = function(id) {
             Swal.fire({
-                title: 'Are You Sure To delete',
-                text: 'Delete',
+                title: 'هل أنت متأكد من الحذف؟',
+                text: 'حذف',
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: 'Delete',
+                confirmButtonText: 'حذف',
                 buttonsStyling: false
             }).then(function(result) {
                 if (result.value) {
@@ -109,14 +105,14 @@
                         data: { id: id, _token: $('meta[name="csrf-token"]').attr('content') },
                         success: function(data) {
                             $('#all_user').DataTable().ajax.reload();
-                            show_notification('success', 'delete success');
+                            show_notification('success', 'تم الحذف بنجاح');
                         },
                         error: function() {
-                            show_notification('error', 'Delete Failed');
+                            show_notification('error', 'فشل في الحذف');
                         }
                     });
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    show_notification('success', 'data is safe');
+                    show_notification('success', 'البيانات آمنة');
                 }
             });
         };

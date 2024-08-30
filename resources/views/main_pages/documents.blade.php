@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title> document </title>
+        <title> المستندات </title>
     @endpush
 
 
@@ -10,23 +10,23 @@
         <div class="page-content">
             <div class="container-fluid">
 
-                <!-- start page title -->
+                <!-- بداية عنوان الصفحة -->
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">document List</h4>
+                            <h4 class="mb-sm-0 font-size-18">قائمة المستندات</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">documents</a></li>
-                                    <li class="breadcrumb-item active">document List</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">المستندات</a></li>
+                                    <li class="breadcrumb-item active">قائمة المستندات</li>
                                 </ol>
                             </div>
 
                         </div>
                     </div>
                 </div>
-                <!-- end page title -->
+                <!-- نهاية عنوان الصفحة -->
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -37,34 +37,12 @@
                                         <div class="mb-4">
                                             <button type="button" class="btn btn-primary waves-effect waves-light"
                                                 data-bs-toggle="modal" data-bs-target="#document_modal"><i
-                                                class="bx bx-plus me-1"></i> Add document</button>
+                                                class="bx bx-plus me-1"></i> إضافة مستند</button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-auto">
-                                        <div class="d-flex align-items-center gap-1 mb-4">
-                                            <div class="input-group datepicker-range">
-                                                <input type="text" class="form-control flatpickr-input" data-input
-                                                    aria-describedby="date1">
-                                                <button class="input-group-text" id="date1" data-toggle><i
-                                                        class="bx bx-calendar-event"></i></button>
-                                            </div>
-                                            <div class="dropdown">
-                                                <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle"
-                                                    href="#" role="button" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="bx bx-dots-horizontal-rounded"></i>
-                                                </a>
 
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                                <!-- end row -->
+                                <!-- نهاية الصف -->
 
                                 <div class="table-responsive">
                                     <table class="table align-middle datatable dt-responsive table-check nowrap"
@@ -72,12 +50,12 @@
                                         <thead>
                                             <tr class="bg-transparent">
 
-                                                <th style="text-align:right;">Sr.No</th>
-                                                <th  style="text-align:center;">document Name</th>
-                                                <th  style="text-align:center;">document Type</th>
-                                                <th style="text-align:center;">document Detail</th>
-                                                <th  style="text-align:center;">Added By</th>
-                                                <th  style="text-align:center;">Action</th>
+                                                <th style="text-align:center;">الرقم التسلسلي</th>
+                                                <th  style="text-align:center;">اسم المستند</th>
+                                                <th  style="text-align:center;">نوع المستند</th>
+                                                <th style="text-align:center;">تفاصيل المستند</th>
+                                                <th  style="text-align:center;">أضيف بواسطة</th>
+                                                <th  style="text-align:center;">الإجراءات</th>
 
                                             </tr>
                                         </thead>
@@ -87,16 +65,16 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- end table responsive -->
+                                <!-- نهاية الجدول القابل للاستجابة -->
                             </div>
-                            <!-- end card body -->
+                            <!-- نهاية محتوى البطاقة -->
                         </div>
-                        <!-- end card -->
+                        <!-- نهاية البطاقة -->
                     </div>
-                    <!-- end col -->
+                    <!-- نهاية العمود -->
                 </div>
-                <!-- end row -->
-            </div> <!-- container-fluid -->
+                <!-- نهاية الصف -->
+            </div> <!-- نهاية الحاوية -->
         </div>
 
         <div>
@@ -105,25 +83,25 @@
                 <div class="modal-dialog modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalScrollableTitle">document Modal</h5>
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">نموذج المستندات</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form class="add_document" id="add_document" method="POST" action="#">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="document_name" class="col-form-label ">document Name</label>
+                                    <label for="document_name" class="col-form-label ">اسم المستند</label>
                                     <input type="text" class="document_name form-control" name="document_name" id="document_name">
                                 </div>
 
 
                                 <div class="mb-3">
 
-                                        <label for="choices-single-groups" class="form-label font-size-13"> Document Type</label>
+                                        <label for="choices-single-groups" class="form-label font-size-13"> نوع المستند</label>
                                         <select class="document_type form-control" name="document_type">
-                                            <option value="">Choose a Document</option>
-                                            <option value="1">Company Documents</option>
-                                            <option value="2">Employee Documents</option>
+                                            <option value="">اختر مستند</option>
+                                            <option value="1">مستندات الشركة</option>
+                                            <option value="2">مستندات الموظف</option>
 
                                         </select>
 
@@ -132,19 +110,19 @@
                                 <input type="text" class="document_id" name="document_id" hidden>
 
                                 <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">document Detail</label>
+                                    <label for="message-text" class="col-form-label">تفاصيل المستند</label>
                                     <textarea class="document_detail form-control" class="document_detail" name="document_detail" id="document_detail"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">إغلاق</button>
+                                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
                                 </div>
                             </form>
                         </div>
 
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+                    </div><!-- /.محتوى-النموذج -->
+                </div><!-- /.حوار-النموذج -->
+            </div><!-- /.النموذج -->
         </div>
 
         @include('layouts.footer')

@@ -1,58 +1,55 @@
-
 <script>
 
     $('.login_user').on('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
+        e.preventDefault(); // منع الإرسال الافتراضي للنموذج
 
-            // Get form data
-            var username = $('#username').val().trim();
-            var password = $('#password').val().trim();
+        // الحصول على بيانات النموذج
+        var username = $('#username').val().trim();
+        var password = $('#password').val().trim();
 
-            // Validate form fields
-            if (username === '') {
-                show_notification('error', 'Invalid Username');
-                return; // Stop form submission
-            }
+        // التحقق من صحة حقول النموذج
+        if (username === '') {
+            show_notification('error', 'اسم المستخدم غير صحيح');
+            return; // إيقاف إرسال النموذج
+        }
 
-            if (password === '') {
-                show_notification('error', 'Invalid Password');
-                return; // Stop form submission
-            }
+        if (password === '') {
+            show_notification('error', 'كلمة المرور غير صحيحة');
+            return; // إيقاف إرسال النموذج
+        }
 
-            $.ajax({
-                url: "{{ route('login_user') }}",
-                type: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'), // CSRF token
-                    username: username,
-                    password: password
-                },
-                success: function(response) {
-                    if (response.status === 1) {
-
-                        window.location.href = response.redirect_url;
-                        show_notification('success', 'Login success');
-                    } else {
-                        show_notification('error', 'Login error');
-                    }
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText);
-                    show_notification('error', 'Login error');
+        $.ajax({
+            url: "{{ route('login_user') }}",
+            type: "POST",
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'), // رمز CSRF
+                username: username,
+                password: password
+            },
+            success: function(response) {
+                if (response.status === 1) {
+                    window.location.href = response.redirect_url;
+                    show_notification('success', 'تم تسجيل الدخول بنجاح');
+                } else {
+                    show_notification('error', 'خطأ في تسجيل الدخول');
                 }
-            });
-        });
-
-        $(document).ready(function() {
-            // Check if the alert exists
-            var alert = $('#error-alert');
-            if (alert.length) {
-                // Hide the alert after 3 seconds
-                setTimeout(function() {
-                    alert.fadeOut('slow');
-                }, 3000); // 3000 milliseconds = 3 seconds
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+                show_notification('error', 'خطأ في تسجيل الدخول');
             }
         });
+    });
 
+    $(document).ready(function() {
+        // التحقق من وجود التنبيه
+        var alert = $('#error-alert');
+        if (alert.length) {
+            // إخفاء التنبيه بعد 3 ثواني
+            setTimeout(function() {
+                alert.fadeOut('slow');
+            }, 3000); // 3000 مللي ثانية = 3 ثواني
+        }
+    });
 
 </script>

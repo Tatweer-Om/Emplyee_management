@@ -42,7 +42,6 @@ class AboutController extends Controller
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#about_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printabout(' . $value->about_id . ')">Print</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
                         </ul>
                     </div>';

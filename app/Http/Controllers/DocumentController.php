@@ -49,7 +49,6 @@ class DocumentController extends Controller
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#document_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" onclick="printdocument(' . $value->document_id . ')">Print</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
                         </ul>
                     </div>';
@@ -62,7 +61,7 @@ class DocumentController extends Controller
                 }
                 $sno++;
                 $json[]= array(
-                            $sno,
+                          '<div style="text-align: center;">' . $sno . '</div>',
 
                             $document_name,
                             $doc,

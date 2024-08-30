@@ -6,7 +6,7 @@
 <head>
 
         <meta charset="utf-8" />
-        <title>Login | Minia - Minimal Admin & Dashboard Template</title>
+        <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
@@ -44,14 +44,15 @@
                         <div class="auth-full-page-content d-flex p-sm-5 p-4">
                             <div class="w-100">
                                 <div class="d-flex flex-column h-100">
-                                    <div class="mb-4 mb-md-5 text-center">
-                                        <a href="index.html" class="d-block auth-logo">
-                                            <img src="{{ asset('images/logo-sm.svg')}}" alt="" height="28"> <span class="logo-txt">Minia</span>
-                                        </a>
-                                    </div>
+
                                     <div class="auth-content my-auto">
                                         <div class="text-center">
-                                            <h5 class="mb-0">Welcome Back !</h5>
+                                            <div class="mb-4 mb-md-5 text-center">
+                                                <a href="index.html" class="d-block auth-logo">
+                                                    <img src="" alt="" height="28"> <span class="logo-txt">{{ $about->about_name ?? '' }}</span>
+                                                </a>
+                                            </div>
+                                            <h5 class="mb-0">Welcome To The System</h5>
                                             <p class="text-muted mt-2">Sign in Using UserName and Password.</p>
                                         </div>
                                         <form id="loginForm" class="mt-4 pt-2 login_user" method="POST" action="#">
@@ -79,7 +80,7 @@
                                         </form>
 
 
-                                        <div class="mt-4 pt-2 text-center">
+                                        {{-- <div class="mt-4 pt-2 text-center">
                                             <div class="signin-other-title">
                                                 <h5 class="font-size-14 mb-3 text-muted fw-medium">- Sign in with -</h5>
                                             </div>
@@ -104,7 +105,7 @@
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
 
                                         {{-- <div class="mt-5 text-center">
                                             <p class="text-muted mb-0">Don't have an account ? <a href="auth-register.html"
@@ -157,8 +158,8 @@
                                                             That's why
                                                             I ultricies enim
                                                             at malesuada nibh diam on tortor neaded to throw curve balls.”
-                                                        </h4>
-                                                        <div class="mt-4 pt-3 pb-5">
+                                                        </h4><br>
+                                                        {{-- <div class="mt-4 pt-3 pb-5">
                                                             <div class="d-flex align-items-start">
                                                                 <div class="flex-shrink-0">
                                                                     <img src="{{ asset('images/users/avatar-1.jpg')}}" class="avatar-md img-fluid rounded-circle" alt="...">
@@ -169,7 +170,7 @@
                                                                     <p class="mb-0 text-white-50">Web Designer</p>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
 
@@ -182,8 +183,8 @@
                                                             all living
                                                             creatures and
                                                             the whole of quis consectetur nunc sit amet semper justo. nature
-                                                            and its beauty.”</h4>
-                                                        <div class="mt-4 pt-3 pb-5">
+                                                            and its beauty.”</h4> <br>
+                                                        {{-- <div class="mt-4 pt-3 pb-5">
                                                             <div class="d-flex align-items-start">
                                                                 <div class="flex-shrink-0">
                                                                     <img src="{{ asset('images/users/avatar-2.jpg')}}" class="avatar-md img-fluid rounded-circle" alt="...">
@@ -194,7 +195,7 @@
                                                                     <p class="mb-0 text-white-50">Web Developer</p>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
 
@@ -207,8 +208,9 @@
                                                             did,
                                                             but people will never forget
                                                             how donec in efficitur lectus, nec lobortis metus you made them
-                                                            feel.”</h4>
-                                                        <div class="mt-4 pt-3 pb-5">
+                                                            feel.”</h4> <br>
+
+                                                        {{-- <div class="mt-4 pt-3 pb-5">
                                                             <div class="d-flex align-items-start">
                                                                 <img src="{{ asset('images/users/avatar-3.jpg')}}"
                                                                     class="avatar-md img-fluid rounded-circle" alt="...">
@@ -218,7 +220,7 @@
                                                                     </p>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                             </div>

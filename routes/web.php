@@ -14,12 +14,10 @@ use App\Http\Controllers\EmployeeDocController;
 use App\Http\Controllers\TaskController;
 
 Route::match(['get', 'post'], 'login', [UserController::class, 'login'])->name('login');
+Route::match(['get', 'post'], 'logout', [UserController::class, 'logout'])->name('logout');
 Route::match(['get', 'post'], 'login_user', [UserController::class, 'login_user'])->name('login_user');
 
-
-
-
-Route::get('home', [HomeController::class, 'home'])->name('home');
+Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('calender', [HomeController::class, 'calender'])->name('calender');
 
 Route::get('company_detail', [HomeController::class, 'company_detail'])->name('company_detail');
@@ -128,10 +126,13 @@ Route::post('update_employee_doc', [HomeController::class, 'update_employee_doc'
 
 //task
 Route::get('employee_task_page/{id}', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
-Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');
- 
-Route::post('update_employee_doc', [TaskController::class, 'update_employee_doc'])->name('update_employee_doc');
-Route::get('/fetch-carousel-data', [TaskController::class, 'fetchCarouselData'])->name('fetch.carousel.data');
+Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');// web.php (routes file)
+Route::get('document_history', [TaskController::class, 'document_history'])->name('document_history');;
 
- 
+
+
+
+
+
+
 
