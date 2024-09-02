@@ -41,6 +41,7 @@ Route::get('company_profile/{id}', [CompanyController::class, 'company_profile']
 Route::match(['get', 'post'], 'show_company_doc', [CompanyController::class, 'show_company_doc'])->name('show_company_doc');
 Route::post('delete_employee3', [CompanyController::class, 'delete_employee3'])->name('delete_employee3');
 Route::post('delete_company_doc', [CompanyController::class, 'delete_company_doc'])->name('delete_company_doc');
+Route::match(['get', 'post'], 'show_company_employee', [CompanyController::class, 'show_company_employee'])->name('show_company_employee');
 
 //Branches
 

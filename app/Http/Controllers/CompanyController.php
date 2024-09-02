@@ -91,6 +91,74 @@ class CompanyController extends Controller
         }
     }
 
+
+    public function show_company_employee(Request $request)
+    {
+        $sno=0;
+        $company_id =  $request['company_id'];
+        $view_employee= Employee::where('employee_company', $company_id)->get();
+        if(count($view_employee)>0)
+        {
+            foreach($view_employee as $value)
+            {
+
+
+                $company = Company::where('id', $value->employee_company)->first();
+                $company_name="";
+                if(!empty($company))
+                {
+                    $company_name = $company->company_name;
+                }
+                $employee_name='<a style="width:20px;" href="' . url('employee_document_addition/' . $value->id) . '">'.$value->employee_name.'</a>';
+                $employee_company='<p tyle="width:20px;" href="javascript:void(0);">'. $company_name.'</p>';
+                $employee_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->employee_email . ' <br> ' . $value->employee_phone . '</p>';
+
+
+                $employee_detail='<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">'.$value->employee_detail.'</p>';
+                $cr_no='<p href="javascript:void(0);">'.$value->cr_no.'</p>';
+
+                $modal='<div class="dropdown">
+                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-dots-horizontal-rounded"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                         <li><a class="dropdown-item" href="' . url('employee_document_addition/' . $value->id) . '">Add Document</a></li>
+                            
+                        </ul>
+                    </div>';
+                    // <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#employee_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
+                    //         <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
+                $add_data=get_date_only($value->created_at);
+
+                $sno++;
+                $json[]= array(
+                            $sno,
+                            // '<img class="table_image" src="'.$img.'" alt="'.$value->employee_name.'">',
+                            $employee_name,
+                            $employee_contact,
+                            $employee_company,
+                            $employee_detail,
+                            $value->added_by . '<br>' . $add_data,
+                            $modal
+                        );
+            }
+            $response = array();
+            $response['success'] = true;
+            $response['aaData'] = $json;
+            echo json_encode($response);
+        }
+        else
+        {
+            $response = array();
+            $response['sEcho'] = 0;
+            $response['iTotalRecords'] = 0;
+            $response['iTotalDisplayRecords'] = 0;
+            $response['aaData'] = [];
+            echo json_encode($response);
+        }
+    }
+
     public function add_company(Request $request){
 
         $user_id = Auth::id();

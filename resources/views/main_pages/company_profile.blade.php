@@ -40,6 +40,7 @@
                                                     {{ $company->company_name ?? '' }}</span>
                                             </div>
                                         </div>
+                                        <input type="hidden" id="company_ids" value="{{ $company->id }}">
                                         <div class="flex-shrink-0">
                                             <div class="mb-4">
                                                 <h4 class="float-end font-size-16">رقم الشركة-{{ $company->id ?? '' }}</h4>
@@ -106,12 +107,13 @@
                                                         style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_company_employee">
                                                         <thead>
                                                             <tr class="bg-transparent">
-                                                                <th style="width: 120px; text-align:center;">رقم</th>
-                                                                <th style="text-align:center;">اسم الموظف</th>
-                                                                <th style="text-align:center;">مستندات الموظف</th>
-                                                                <th style="text-align:center;">تاريخ الإضافة</th>
-                                                                <th style="text-align:center;">مستخدم المكتب</th>
-                                                                <th style="text-align:center;">الإجراء</th>
+                                                                <th style="text-align: right;">رقم</th>
+                                                <th style="text-align: right; width: 20px;">اسم الموظف</th>
+                                                <th style="text-align: right;">تواصل الموظف</th>
+                                                <th style="text-align: right;">شركة الموظف</th>
+                                                <th style="text-align: right;">تفاصيل الموظف</th>
+                                                <th style="text-align: right; width: 20px;">أضيف بواسطة</th>
+                                                <th style="text-align: right; width: 20px;">إجراء</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
