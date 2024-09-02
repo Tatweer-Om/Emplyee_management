@@ -31,6 +31,9 @@ class TaskController extends Controller
         $companies = Company::where('user_id', $user->id)->get();
         $employees = Employee::where('user_id', $user->id)->get();
         $company_count = $companies->count();
+        $comps = Company::get();
+
+
 
         // Check if the user exists and is either the intended user or an Admin
         $user_check = User::where('id', $id)->where(function($query) {
@@ -39,7 +42,8 @@ class TaskController extends Controller
 
         // If the user is authorized, return the view with necessary data
         if($user_check) {
-            return view('main_pages.employee_task', compact('user', 'branch_name', 'user_type', 'companies', 'employees', 'company_count'));
+            return view('main_pages.employee_task', compact('user', 'branch_name', 'user_type', 'companies',
+             'comps', 'employees', 'company_count'));
         } else {
             // Redirect to login with an error message if unauthorized
             return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');

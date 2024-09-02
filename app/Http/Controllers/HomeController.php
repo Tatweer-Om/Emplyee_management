@@ -115,11 +115,18 @@ class HomeController extends Controller
         $company_doc_count = CompanyDocs::where('doc_status', 2)->count();
 
         $totalDocs = $employee_doc + $comp_docs + $renewed;
-        $total_docs= $employee_doc + $comp_docs;
+        $total_docs = $employee_doc + $comp_docs;
 
-        $employeeDocsPercent = ($employee_doc / $totalDocs) * 100;
-        $companyDocsPercent = ($comp_docs / $totalDocs) * 100;
-        $renewedDocsPercent = ($renewed / $totalDocs) * 100;
+        if ($totalDocs > 0) {
+            $employeeDocsPercent = ($employee_doc / $totalDocs) * 100;
+            $companyDocsPercent = ($comp_docs / $totalDocs) * 100;
+            $renewedDocsPercent = ($renewed / $totalDocs) * 100;
+        } else {
+            // Handle the case where totalDocs is 0
+            $employeeDocsPercent = 0;
+            $companyDocsPercent = 0;
+            $renewedDocsPercent = 0;
+        }
         // Get counts per user_id from various tables
         $companyCounts = DB::table('companies')
             ->select('user_id', DB::raw('count(*) as count'))

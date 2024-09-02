@@ -21,17 +21,17 @@
 
                 const totalEmployees = response.employees.length;
                 const totalEmployeeDocs = response.employee_docs_total
-                .length; // Assuming response.employee_docs is an array
+                    .length; // Assuming response.employee_docs is an array
                 const totalCompanies = response.companies
-                .length; // Assuming response.companies is an array
+                    .length; // Assuming response.companies is an array
                 const totalCompanyDocs = response.company_docs_total
-                .length; // Assuming response.company_docs is an array
+                    .length; // Assuming response.company_docs is an array
 
                 // Update the HTML elements
                 $('#total-employees').text(totalEmployees);
                 $('#employee-docs').html(
                     `${totalEmployeeDocs} <i class="mdi mdi-arrow-up ms-1 text-success"></i> Employee Documents`
-                    );
+                );
                 $('#total-companies').text(totalCompanies);
                 $('#company-docs').text(totalCompanyDocs);
 
@@ -44,92 +44,12 @@
         // Function to populate the company table
 
         function populateCompanyTable(data) {
-    companyTable.clear(); // Clear existing table data
+            companyTable.clear(); // Clear existing table data
 
-    let companies = data.companies;
-    let companyDocuments = data.company_documents;
+            let companies = data.companies;
+            let companyDocuments = data.company_documents;
 
-    // Function to calculate remaining time from the expiry date
-    function getRemainingTime(expiryDate) {
-        let now = new Date();
-        let expiry = new Date(expiryDate);
-        let diff = expiry - now;
-
-        if (diff <= 0) return 'Expired';
-
-        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        let years = Math.floor(days / 365);
-        days -= years * 365;
-        let months = Math.floor(days / 30);
-        days -= months * 30;
-
-        let result = '';
-        if (years > 0) result += `${years} year${years > 1 ? 's' : ''} `;
-        if (months > 0) result += `${months} month${months > 1 ? 's' : ''} `;
-        if (days > 0) result += `${days} day${days > 1 ? 's' : ''} `;
-
-        return result + 'remaining';
-    }
-
-    $.each(companies, function(index, company) {
-        let documents = companyDocuments[company.id] || []; // Ensure documents is an array
-
-        if (documents.length > 0) {
-            $.each(documents, function(docIndex, document) {
-                let statusDisplay = document.doc_status ?
-                    `<div class="badge badge-soft-success font-size-12">${document.doc_status}</div>` :
-                    `<div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
-
-                let row = [
-                    docIndex === 0 ? index + 1 : '',
-                    docIndex === 0 ? company.company_name : '',
-                    document.companydoc_name,
-                    statusDisplay,
-                    `<div class="dropdown">
-                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bx bx-dots-horizontal-rounded"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item update-status"
-                                   href="#"
-                                   data-document-id="${document.id}"
-                                   data-source="company"> <!-- Added source data attribute -->
-                                  History
-                                </a>
-                            </li>
-                        </ul>
-                    </div>`
-                ];
-                companyTable.row.add(row).draw();
-            });
-        } else {
-            let row = [
-                index + 1,
-                company.company_name,
-                'No documents found',
-                '',
-                ''
-            ];
-            companyTable.row.add(row).draw();
-        }
-    });
-}
-
-
-
-        // Function to populate the employee table
-        function populateEmployeeTable(data) {
-
-
-            employeeTable.clear(); // Clear existing table data
-
-            let employees = data.employees;
-
-            let employeeDocuments = data.employee_documents;
-            let companies = data.companies; // Assuming companies are passed with their names
-
+            // Function to calculate remaining time from the expiry date
             function getRemainingTime(expiryDate) {
                 let now = new Date();
                 let expiry = new Date(expiryDate);
@@ -151,32 +71,19 @@
                 return result + 'remaining';
             }
 
-            $.each(employees, function(index, employee) {
-
-                let documents = employeeDocuments[employee.id];
-
-                let companyObj = {};
-                companies.forEach(company => {
-                    companyObj[company.id] = company.company_name;
-                });
-
-                // Get the company name for the employee, defaulting to 'Unknown Company'
-                let companyName = companyObj[employee.employee_company] || 'Unknown Company';
-
+            $.each(companies, function(index, company) {
+                let documents = companyDocuments[company.id] || []; // Ensure documents is an array
 
                 if (documents.length > 0) {
                     $.each(documents, function(docIndex, document) {
                         let statusDisplay = document.doc_status ?
-
                             `<div class="badge badge-soft-success font-size-12">${document.doc_status}</div>` :
                             `<div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
 
                         let row = [
                             docIndex === 0 ? index + 1 : '',
-                            docIndex === 0 ?
-                            `${employee.employee_name}<br><small>${companyName}</small>` :
-                            '',
-                            document.employeedoc_name,
+                            docIndex === 0 ? company.company_name : '',
+                            document.companydoc_name,
                             statusDisplay,
                             `<div class="dropdown">
                         <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
@@ -188,29 +95,114 @@
                                 <a class="dropdown-item update-status"
                                    href="#"
                                    data-document-id="${document.id}"
-
-                                   data-source="employee">
+                                   data-source="company"> <!-- Added source data attribute -->
                                   History
                                 </a>
                             </li>
-
                         </ul>
                     </div>`
                         ];
-                        employeeTable.row.add(row).draw();
+                        companyTable.row.add(row).draw();
                     });
                 } else {
                     let row = [
                         index + 1,
-                        `${employee.employee_name}<br><small>${companyName}</small>`,
+                        company.company_name,
                         'No documents found',
                         '',
                         ''
                     ];
-                    employeeTable.row.add(row).draw();
+                    companyTable.row.add(row).draw();
                 }
             });
         }
+
+
+
+        // Function to populate the employee table
+        function populateEmployeeTable(data) {
+    employeeTable.clear(); // Clear existing table data
+
+    let employees = data.employees;
+    let employeeDocuments = data.employee_documents;
+    let companies = data.companies; // Assuming companies are passed with their names
+
+    function getRemainingTime(expiryDate) {
+        let now = new Date();
+        let expiry = new Date(expiryDate);
+        let diff = expiry - now;
+
+        if (diff <= 0) return 'Expired';
+
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let years = Math.floor(days / 365);
+        days -= years * 365;
+        let months = Math.floor(days / 30);
+        days -= months * 30;
+
+        let result = '';
+        if (years > 0) result += `${years} year${years > 1 ? 's' : ''} `;
+        if (months > 0) result += `${months} month${months > 1 ? 's' : ''} `;
+        if (days > 0) result += `${days} day${days > 1 ? 's' : ''} `;
+
+        return result + 'remaining';
+    }
+
+    $.each(employees, function(index, employee) {
+        // Ensure documents is always an array, even if undefined
+        let documents = employeeDocuments[employee.id] || [];
+
+        let companyObj = {};
+        companies.forEach(company => {
+            companyObj[company.id] = company.company_name;
+        });
+
+        // Get the company name for the employee, defaulting to 'Unknown Company'
+        let companyName = companyObj[employee.employee_company] || 'Unknown Company';
+
+        if (documents.length > 0) {
+            $.each(documents, function(docIndex, document) {
+                let statusDisplay = document.doc_status ?
+                    `<div class="badge badge-soft-success font-size-12">${document.doc_status}</div>` :
+                    `<div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
+
+                let row = [
+                    docIndex === 0 ? index + 1 : '',
+                    docIndex === 0 ? `${employee.employee_name}<br><small>${companyName}</small>` : '',
+                    document.employeedoc_name,
+                    statusDisplay,
+                    `<div class="dropdown">
+                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-dots-horizontal-rounded"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item update-status"
+                                   href="#"
+                                   data-document-id="${document.id}"
+                                   data-source="employee">
+                                  History
+                                </a>
+                            </li>
+                        </ul>
+                    </div>`
+                ];
+                employeeTable.row.add(row).draw();
+            });
+        } else {
+            let row = [
+                index + 1,
+                `${employee.employee_name}<br><small>${companyName}</small>`,
+                'No documents found',
+                '',
+                ''
+            ];
+            employeeTable.row.add(row).draw();
+        }
+    });
+}
+
 
 
         function renderRenewalDocuments(docs, type) {
@@ -308,56 +300,61 @@
 
 
         $(document).on('click', '.update-status', function(e) {
-    e.preventDefault();
+            e.preventDefault();
 
-    // Get the document ID and source from the data attributes
-    let documentId = $(this).data('document-id');
-    let source = $(this).data('source');  // Assuming you have a data-source attribute
+            // Get the document ID and source from the data attributes
+            let documentId = $(this).data('document-id');
+            let source = $(this).data('source'); // Assuming you have a data-source attribute
 
-    // Call the function to fetch document history with both documentId and source
-    fetchDocumentHistory(documentId, source);
-});
+            // Call the function to fetch document history with both documentId and source
+            fetchDocumentHistory(documentId, source);
+        });
 
-function fetchDocumentHistory(documentId, source) {
-    $.ajax({
-        url: '{{ route('document_history') }}',  // Your route URL here
-        type: 'GET',
-        data: {
-            id: documentId,
-            source: source  // Include the source in the request data
-        },
-        success: function(response) {
-            // Populate the modal with the received data
-            populateModalWithHistory(response.data);
+        function fetchDocumentHistory(documentId, source) {
+            $.ajax({
+                url: '{{ route('document_history') }}', // Your route URL here
+                type: 'GET',
+                data: {
+                    id: documentId,
+                    source: source // Include the source in the request data
+                },
+                success: function(response) {
+                    // Populate the modal with the received data
+                    populateModalWithHistory(response.data);
 
-            // Show the modal
-            $('#employee_modal2').modal('show');
-        },
-        error: function(xhr) {
-            console.log("An error occurred: " + xhr.status + " " + xhr.statusText);
+                    // Show the modal
+                    $('#employee_modal2').modal('show');
+                },
+                error: function(xhr) {
+                    console.log("An error occurred: " + xhr.status + " " + xhr.statusText);
+                }
+            });
         }
-    });
-}
 
-function populateModalWithHistory(data) {
-    // Clear any existing rows in the table body
-    let tableBody = $('#all_profile_docs tbody');
-    tableBody.empty();
+        function populateModalWithHistory(data) {
+            // Clear any existing rows in the table body
+            let tableBody = $('#all_profile_docs tbody');
+            tableBody.empty();
 
-    // Check if there's any history data
-    if (data.length > 0) {
-        // Loop through each history record
-        data.forEach(function(item, index) {
-            // Check if new_expiry is null and handle accordingly
-            let newExpiry = item.new_expiry ? `new expiry: ${item.new_expiry}` : 'new expiry: Not added yet';
-            let statusText = item.status == 1 ? 'Under Process' : item.status == 2 ? 'Completed' : 'Unknown Status';
-            let createdAt = new Date(item.created_at);
-            let formattedDate = createdAt.toLocaleDateString('en-GB'); // Format as dd-mm-yyyy
-            let formattedTime = createdAt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); // Format as hh:mm AM/PM
+            // Check if there's any history data
+            if (data.length > 0) {
+                // Loop through each history record
+                data.forEach(function(item, index) {
+                    // Check if new_expiry is null and handle accordingly
+                    let newExpiry = item.new_expiry ? `new expiry: ${item.new_expiry}` :
+                        'new expiry: Not added yet';
+                    let statusText = item.status == 1 ? 'Under Process' : item.status == 2 ?
+                        'Completed' : 'Unknown Status';
+                    let createdAt = new Date(item.created_at);
+                    let formattedDate = createdAt.toLocaleDateString('en-GB'); // Format as dd-mm-yyyy
+                    let formattedTime = createdAt.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }); // Format as hh:mm AM/PM
 
 
-            // Create a table row for each history record
-            let tableRow = `
+                    // Create a table row for each history record
+                    let tableRow = `
                 <tr>
                     <td style="text-align:center;">${index + 1}</td>
                     <td style="text-align:center;">${item.doc_name}</td>
@@ -370,19 +367,19 @@ function populateModalWithHistory(data) {
                     <td style="text-align:center;">${item.added_by}</td>
                 </tr>
             `;
-            // Append the row to the table body
-            tableBody.append(tableRow);
-        });
-    } else {
-        // If there's no history, show a message
-        let emptyRow = `
+                    // Append the row to the table body
+                    tableBody.append(tableRow);
+                });
+            } else {
+                // If there's no history, show a message
+                let emptyRow = `
             <tr>
                 <td colspan="7" class="text-center">No history available for this document.</td>
             </tr>
         `;
-        tableBody.append(emptyRow);
-    }
-}
+                tableBody.append(emptyRow);
+            }
+        }
 
     });
 </script>
