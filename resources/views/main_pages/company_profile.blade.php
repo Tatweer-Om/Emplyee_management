@@ -100,9 +100,9 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane" id="profile3" role="tabpanel">
-                                                {{-- <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal" onclick="add_employee(' . $company->id . ')">Add Employee</a> <br><br> --}}
+                                                <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal3" onclick="add_employee3({{ $company->id }})">Add Employee</a> <br><br>
                                                 <div class="table-responsive">
-                                                    <table class="table align-middle dt-responsive table-check nowrap"
+                                                    <table class="table align-middle  dt-responsive table-check nowrap"
                                                         style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_company_employee">
                                                         <thead>
                                                             <tr class="bg-transparent">
@@ -115,56 +115,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {{-- <tr>
-                                                                <td>
-                                                                    <div class="form-check font-size-16">
-                                                                        <input type="checkbox" class="form-check-input">
-                                                                        <label class="form-check-label"></label>
-                                                                    </div>
-                                                                </td>
 
-                                                                <td><a href="javascript: void(0);"
-                                                                        class="text-body fw-medium">#MN0215</a> </td>
-                                                                <td>
-                                                                    12 أكتوبر، 2020
-                                                                </td>
-                                                                <td>كوني فرانكو</td>
-
-                                                                <td>
-                                                                    $26.30
-                                                                </td>
-                                                                <td>
-                                                                    <div class="badge badge-soft-success font-size-12">مدفوع
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div>
-                                                                        <button type="button"
-                                                                            class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light"><i
-                                                                                class="bx bx-download label-icon"></i>
-                                                                            Pdf</button>
-                                                                    </div>
-                                                                </td>
-
-                                                                <td>
-                                                                    <div class="dropdown">
-                                                                        <button
-                                                                            class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                                            type="button" data-bs-toggle="dropdown"
-                                                                            aria-expanded="false">
-                                                                            <i class="bx bx-dots-horizontal-rounded"></i>
-                                                                        </button>
-                                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                                            <li><a class="dropdown-item"
-                                                                                    href="#">تعديل</a></li>
-                                                                            <li><a class="dropdown-item"
-                                                                                    href="#">طباعة</a></li>
-                                                                            <li><a class="dropdown-item"
-                                                                                    href="#">حذف</a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </td>
-                                                            </tr> --}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -186,56 +137,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {{-- <tr>
-                                                                <td>
-                                                                    <div class="form-check font-size-16">
-                                                                        <input type="checkbox" class="form-check-input">
-                                                                        <label class="form-check-label"></label>
-                                                                    </div>
-                                                                </td>
 
-                                                                <td><a href="javascript: void(0);"
-                                                                        class="text-body fw-medium">#MN0215</a> </td>
-                                                                <td>
-                                                                    12 أكتوبر، 2020
-                                                                </td>
-                                                                <td>كوني فرانكو</td>
-
-                                                                <td>
-                                                                    $26.30
-                                                                </td>
-                                                                <td>
-                                                                    <div class="badge badge-soft-success font-size-12">مدفوع
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div>
-                                                                        <button type="button"
-                                                                            class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light"><i
-                                                                                class="bx bx-download label-icon"></i>
-                                                                            Pdf</button>
-                                                                    </div>
-                                                                </td>
-
-                                                                <td>
-                                                                    <div class="dropdown">
-                                                                        <button
-                                                                            class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                                            type="button" data-bs-toggle="dropdown"
-                                                                            aria-expanded="false">
-                                                                            <i class="bx bx-dots-horizontal-rounded"></i>
-                                                                        </button>
-                                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                                            <li><a class="dropdown-item"
-                                                                                    href="#">تعديل</a></li>
-                                                                            <li><a class="dropdown-item"
-                                                                                    href="#">طباعة</a></li>
-                                                                            <li><a class="dropdown-item"
-                                                                                    href="#">حذف</a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </td>
-                                                            </tr> --}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -295,7 +197,7 @@
     </div>
 
     <div>
-        <div class="modal fade employee_modal" id="employee_modal" tabindex="-1" role="dialog"
+        <div class="modal fade employee_modal3" id="employee_modal3" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
@@ -304,7 +206,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="add_employee" id="add_employee" method="POST" action="#">
+                        <form class="add_employee3" id="add_employee3" method="POST" action="#">
                             @csrf
                             <div class="mb-3">
                                 <label for="employee_name" class="col-form-label">اسم الموظف</label>
@@ -313,6 +215,7 @@
 
                             {{-- endnew --}}
                             <input type="text" class="employee_id" name="employee_id" id="employee_id" hidden>
+                            <input type="text" class="employee_company2" name="employee_company2" id="employee_company2" hidden>
                             <div class="mb-3">
                                 <label for="employee_email" class="col-form-label employee_email">بريد الموظف الإلكتروني</label>
                                 <input type="text" class="employee_email form-control" name="employee_email" id="employee_email">

@@ -172,7 +172,7 @@ class CompanyController extends Controller
         $company->updated_by =  $user;
         $company->save();
         return response()->json([
-            trans('messages.success_lang', [], session('locale')) => trans('messages.company_update_lang', [], session('locale'))
+            'success' => trans('messages.company_update_lang', [], session('locale'))
             ,'last_id'=>$company->id]);
     }
 
@@ -180,11 +180,11 @@ class CompanyController extends Controller
         $company_id = $request->input('id');
         $company = Company::where('id', $company_id)->first();
         if (!$company) {
-            return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.company_not_found', [], session('locale'))], 404);
+            return response()->json(['error' => trans('messages.company_not_found', [], session('locale'))], 404);
         }
         $company->delete();
         return response()->json([
-            trans('messages.success_lang', [], session('locale')) => trans('messages.company_deleted_lang', [], session('locale'))
+           'success' => trans('messages.company_deleted_lang', [], session('locale'))
         ]);
     }
 
@@ -207,7 +207,7 @@ class CompanyController extends Controller
         $employee->employee_company = $request['employee_company'];
         $employee->employee_email = $request['employee_email'];
         $employee->employee_phone = $request['employee_phone'];
-        $employee->employee_company = $request['employee_company'];
+
         $employee->employee_detail = $request['employee_detail'];
         $employee->added_by = $user;
         $employee->user_id =  $user_id;
@@ -216,6 +216,33 @@ class CompanyController extends Controller
         return response()->json(['employee_id' => $employee->employee_id,'last_id'=>$lastInsertedId]);
 
     }
+
+    public function add_employee3(Request $request){
+
+        $user_id = Auth::id();
+        $data= User::where('id', $user_id)->first();
+        $user= $data->user_name;
+
+
+
+
+        $employee = new Employee();
+
+        $employee->employee_id = genUuid() . time();
+        $employee->employee_name = $request['employee_name'];
+
+        $employee->employee_email = $request['employee_email'];
+        $employee->employee_phone = $request['employee_phone'];
+        $employee->employee_company = $request['employee_company2'];
+        $employee->employee_detail = $request['employee_detail'];
+        $employee->added_by = $user;
+        $employee->user_id =  $user_id;
+        $employee->save();
+        $lastInsertedId = $employee->id;
+        return response()->json(['employee_id' => $employee->employee_id,'last_id'=>$lastInsertedId]);
+
+    }
+
 
 
     public function company_profile($id){
@@ -278,10 +305,12 @@ class CompanyController extends Controller
 }
 
 
-public function del_company_doc(Request $request){
-    $company_id = $request->input('id');
+public function delete_company_doc(Request $request){
+    $doc_id = $request->input('id');
 
-    $company = CompanyDocs::where('id', $company_id)->first();
+
+
+    $company = CompanyDocs::where('id', $doc_id)->first();
     if (!$company) {
         return response()->json([
             'status' => 2,
@@ -299,6 +328,32 @@ public function del_company_doc(Request $request){
 
 
 
+public function delete_employee3(Request $request){
+    $emp_id = $request->input('id');
+
+    // Fetch the employee
+    $emp = Employee::where('id', $emp_id)->first();
+
+    // Check if the employee exists
+    if (!$emp) {
+        return response()->json(['error' => 'Employee Not Found'], 404);
+    }
+
+    // Fetch the employee document
+    $empdoc = EmployeeDoc::where('employee_id', $emp_id)->first();
+
+    // Check if the document exists before attempting to delete
+    if ($empdoc) {
+        $empdoc->delete();
+    }
+
+    // Delete the employee
+    $emp->delete();
+
+    return response()->json([
+        'success' => 'Employee Deleted Successfully',
+    ]);
+}
 
 
 
