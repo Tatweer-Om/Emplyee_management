@@ -34,12 +34,13 @@ Route::get('show_company', [CompanyController::class, 'show_company'])->name('sh
 Route::post('edit_company', [CompanyController::class, 'edit_company'])->name('edit_company');
 Route::post('update_company', [CompanyController::class, 'update_company'])->name('update_company');
 Route::post('delete_company', [CompanyController::class, 'delete_company'])->name('delete_company');
-Route::post('del_company_doc', [CompanyController::class, 'del_company_doc'])->name('del_company_doc');
+
 Route::post('add_employee2', [CompanyController::class, 'add_employee2'])->name('add_employee2');
 Route::post('add_employee3', [CompanyController::class, 'add_employee3'])->name('add_employee3');
 Route::get('company_profile/{id}', [CompanyController::class, 'company_profile'])->name('company_profile');
 Route::match(['get', 'post'], 'show_company_doc', [CompanyController::class, 'show_company_doc'])->name('show_company_doc');
-
+Route::post('delete_employee3', [CompanyController::class, 'delete_employee3'])->name('delete_employee3');
+Route::post('delete_company_doc', [CompanyController::class, 'delete_company_doc'])->name('delete_company_doc');
 
 //Branches
 

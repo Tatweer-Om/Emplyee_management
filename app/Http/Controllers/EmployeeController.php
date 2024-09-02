@@ -96,7 +96,6 @@ class EmployeeController extends Controller
         $user= $data->user_name;
 
 
-
         $employee = new Employee();
 
         $employee->employee_id = genUuid() . time();
