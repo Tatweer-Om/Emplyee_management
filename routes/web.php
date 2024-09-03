@@ -3,15 +3,17 @@
 use App\Models\EmployeeDoc;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CompanyDocController;
 use App\Http\Controllers\EmployeeDocController;
-use App\Http\Controllers\TaskController;
+use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 Route::match(['get', 'post'], 'login', [UserController::class, 'login'])->name('login');
 Route::match(['get', 'post'], 'logout', [UserController::class, 'logout'])->name('logout');
@@ -128,7 +130,13 @@ Route::post('update_employee_doc', [HomeController::class, 'update_employee_doc'
 //task
 Route::get('employee_task_page/{id}', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
 Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');// web.php (routes file)
-Route::get('document_history', [TaskController::class, 'document_history'])->name('document_history');;
+Route::get('document_history', [TaskController::class, 'document_history'])->name('document_history');
+
+
+Route::get('employee_doc_report', [ReportController::class, 'employee_doc_report'])->name('employee_doc_report');
+
+
+
 
 
 
