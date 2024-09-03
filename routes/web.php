@@ -142,6 +142,7 @@ Route::get('document_history', [TaskController::class, 'document_history'])->nam
 
 Route::get('employee_doc_report', [ReportController::class, 'employee_doc_report'])->name('employee_doc_report');
 
+Route::get('company_doc_report', [ReportController::class, 'company_doc_report'])->name('company_doc_report');
 
 
 

@@ -65,13 +65,13 @@
                                         <div class="flex-shrink-0">
                                             <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs"
                                                 role="tablist">
-                                                <li class="nav-item">
+                                                {{-- <li class="nav-item">
                                                     <a class="nav-link active" data-bs-toggle="tab" href="#home2"
                                                         role="tab">
                                                         <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
                                                         <span class="d-none d-sm-block">مستندات الموظفين</span>
                                                     </a>
-                                                </li>
+                                                </li> --}}
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-bs-toggle="tab" href="#profile2"
                                                         role="tab">
@@ -93,13 +93,13 @@
                                     <div class="card-body">
                                         <!-- Tab panes -->
                                         <div class="tab-content text-muted">
-                                            <div class="tab-pane active" id="home2" role="tabpanel">
+                                            {{-- <div class="tab-pane active" id="home2" role="tabpanel">
                                                 <div class="mt-5">
                                                     <h5 class="mb-3">مستندات الموظفين التي تحتاج إلى تجديد</h5>
                                                     <div class="row" id="employee_docs_list">
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="tab-pane" id="profile3" role="tabpanel">
                                                 <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal3" onclick="add_employee3({{ $company->id }})">Add Employee</a> <br><br>
                                                 <div class="table-responsive">

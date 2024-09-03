@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title> Employee Documents Report</title>
+        <title> Company Document Report</title>
     @endpush
 
 
@@ -79,7 +79,7 @@
                                     <thead>
                                         <tr class="bg-transparent">
                                             <th style="width: 120px; text-align:center;">Sr.no</th>
-                                            <th style="width: 120px; text-align:center;">Employee & Company Name</th>
+                                            <th style="width: 120px; text-align:center;">Company Name</th>
                                             <th style="width: 120px; text-align:center;">Documents and Expiry</th>
                                             <th style="width: 120px; text-align:center;">Added By</th>
                                             <th style="width: 120px; text-align:center;">Created AT</th>
@@ -87,18 +87,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($employeeDocs as $key => $doc)
+                                        @foreach($companyDocs as $key => $doc)
 
-                                        @php
-                                        $employee_name = DB::table('employees')
-                                            ->where('id', $doc->employee_id)
-                                            ->value('employee_name');
-                                    @endphp
 
                                         <tr>
                                             <td style="width: 120px; text-align:center;">{{ $key + 1 }}</td>
-                                            <td style="width: 120px; text-align:center;">{{ $employee_name }} <br> {{ $doc->employee_company }}</td>
-                                            <td style="width: 120px; text-align:center;">{{ $doc->employeedoc_name }} - Expires on: {{ $doc->expiry_date }}</td>
+                                            <td style="width: 120px; text-align:center;"> {{ $doc->company_name ?? '' }}</td>
+                                            <td style="width: 120px; text-align:center;">{{ $doc->companydoc_name }} - Expires on: {{ $doc->expiry_date }}</td>
                                             <td style="width: 120px; text-align:center;">{{ $doc->added_by }}</td>
                                             <td style="width: 120px; text-align:center;">{{ \Carbon\Carbon::parse($doc->created_at)->format('Y-m-d') }}</td>
 
