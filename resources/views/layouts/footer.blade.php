@@ -137,6 +137,8 @@
         @include('custom_js.employee_task_js')
         @elseif ($route == 'employee_task')
         @include('custom_js.employee_task_js')
+        @elseif ($route == 'employee_doc_report')
+        @include('custom_js.reports_js')
         @endif
         <script>var base_url= "<?php echo url('/'); ?>";</script>
 
