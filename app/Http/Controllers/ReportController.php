@@ -18,7 +18,7 @@ class ReportController extends Controller
         // Default values to show all data if the form is not submitted
         $sdate = $request->input('date_from') ?? '';
 
-        dd( $sdate);
+
         $edate = $request->input('date_to') ?? '';
         $company_id = $request->input('company_id') ?? 'all';
 

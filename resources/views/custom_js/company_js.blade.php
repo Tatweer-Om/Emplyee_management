@@ -467,19 +467,26 @@
                 expiringSoonCount); // Assuming you have an element with ID 'expiring-soon-count'
 
                 // Initialize DataTable
+                
+
                 $('#all_company_employee').DataTable({
-                    responsive: true,
-                    autoWidth: false,
-                    paging: true,
-                    searching: true,
-                    ordering: true,
-                    order: [
-                        [0, 'asc']
-                    ], // Example: Order by first column ascending
-                    language: {
-                        url: "//cdn.datatables.net/plug-ins/1.11.3/i18n" // Example for Arabic language support
-                    }
+                    "sAjaxSource": "{{ url('show_company_employee') }}" + "?company_id=" + companyId,
+                    "bFilter": true,
+                    "sDom": 'fBtlpi',
+                    'pagingType': 'numbers',
+                    "ordering": true,
+                    "language": {
+                        search: ' ',
+                        sLengthMenu: '_MENU_',
+                        searchPlaceholder: 'search',
+                        info: "_START_ - _END_ of _TOTAL_ items",
+                    },
+                    initComplete: (settings, json) => {
+                        $('.dataTables_filter').appendTo('#tableSearch');
+                        $('.dataTables_filter').appendTo('.search-input');
+                    },
                 });
+
             },
             error: function(xhr, status, error) {
                 console.error('Error loading documents:', error);

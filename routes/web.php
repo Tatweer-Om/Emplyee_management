@@ -3,7 +3,7 @@
 use App\Models\EmployeeDoc;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\TaskController;
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BranchController;
@@ -13,8 +13,14 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CompanyDocController;
 use App\Http\Controllers\EmployeeDocController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CronJobController;
 use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
+
+
+
+Route::get('getAndSendEmails', [CronJobController::class, 'getAndSendEmails']);
 Route::match(['get', 'post'], 'login', [UserController::class, 'login'])->name('login');
 Route::match(['get', 'post'], 'logout', [UserController::class, 'logout'])->name('logout');
 Route::match(['get', 'post'], 'login_user', [UserController::class, 'login_user'])->name('login_user');
@@ -43,6 +49,7 @@ Route::get('company_profile/{id}', [CompanyController::class, 'company_profile']
 Route::match(['get', 'post'], 'show_company_doc', [CompanyController::class, 'show_company_doc'])->name('show_company_doc');
 Route::post('delete_employee3', [CompanyController::class, 'delete_employee3'])->name('delete_employee3');
 Route::post('delete_company_doc', [CompanyController::class, 'delete_company_doc'])->name('delete_company_doc');
+Route::match(['get', 'post'], 'show_company_employee', [CompanyController::class, 'show_company_employee'])->name('show_company_employee');
 
 //Branches
 

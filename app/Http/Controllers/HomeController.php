@@ -113,7 +113,7 @@ class HomeController extends Controller
 
         $employee_doc_count = EmployeeDoc::where('doc_status', 2)->count();
         $company_doc_count = CompanyDocs::where('doc_status', 2)->count();
-
+        
         $totalDocs = $employee_doc + $comp_docs + $renewed;
         $total_docs = $employee_doc + $comp_docs;
 
