@@ -82,6 +82,30 @@ class ReportController extends Controller
         return view('reports.company_doc_report', compact('companies', 'about', 'companyDocs', 'sdate', 'edate', 'report_name', 'company_id'));
     }
 
+    public function doc_expiry(Request $request){
+
+        $sdate = $request->input('date_from', date('Y-m-d'));
+        $edate = $request->input('date_to', date('Y-m-d'));
+
+        // Query EmployeeDoc table for documents within the date range
+        $employeeDocs = EmployeeDoc::query()
+            ->whereDate('expiry_date', '>=', $sdate)
+            ->whereDate('expiry_date', '<=', $edate)
+            ->get();
+
+        // Query CompanyDoc table for documents within the date range
+        $companyDocs = CompanyDocs::query()
+            ->whereDate('expiry_date', '>=', $sdate)
+            ->whereDate('expiry_date', '<=', $edate)
+            ->get();
+
+        // Combine the two collections
+        $documents = $employeeDocs->merge($companyDocs)->sortBy('expiry_date');
+
+        // Return the view with the combined data
+        return view('reports.doc_expiry', compact('documents', 'sdate', 'edate'));
+    }
+
 
 
 
