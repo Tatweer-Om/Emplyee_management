@@ -12,7 +12,9 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CompanyDocController;
 use App\Http\Controllers\EmployeeDocController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CronJobController;
 
+Route::get('getAndSendEmails', [CronJobController::class, 'getAndSendEmails']);
 Route::match(['get', 'post'], 'login', [UserController::class, 'login'])->name('login');
 Route::match(['get', 'post'], 'logout', [UserController::class, 'logout'])->name('logout');
 Route::match(['get', 'post'], 'login_user', [UserController::class, 'login_user'])->name('login_user');
