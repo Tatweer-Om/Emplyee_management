@@ -154,6 +154,8 @@
                                 <div class="flex-shrink-0">
                                     <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs"
                                         role="tablist">
+
+
                                         <li class="nav-item">
                                             <a class="nav-link active" data-bs-toggle="tab" href="#transactions-all-tab"
                                                 role="tab">
@@ -167,6 +169,7 @@
                                             </a>
                                         </li>
 
+
                                     </ul>
 
                                 </div>
@@ -177,7 +180,7 @@
 
                                     <!-- end tab pane -->
                                     <div class="tab-pane" id="transactions-all-tab" role="tabpanel">
-                                        {{-- <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal" onclick="add_employee(' . $company->id . ')">Add Employee</a> <br><br> --}}
+                                        <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#company_modal2" >Add Company</a> <br><br>
                                         <div class="table-responsive">
 
                                             <table class="table align-middle datatable dt-responsive table-check nowrap"
@@ -201,7 +204,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="transactions-buy-tab" role="tabpanel">
-                                        {{-- <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal" onclick="add_employee(' . $company->id . ')">Add Employee</a> <br><br> --}}
+                                        <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal4" >Add Employee</a> <br><br>
                                         <div class="table-responsive">
 
                                             <table class="table align-middle datatable dt-responsive table-check nowrap"
@@ -293,6 +296,115 @@
 
                         </tbody>
                     </table>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+
+
+    <div>
+        <div class="modal fade company_modal2" id="company_modal2" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">نافذة الشركة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="add_company2" id="add_company2" method="POST" action="#">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="company_name" class="col-form-label ">اسم الشركة</label>
+                                <input type="text" class="company_name form-control" name="company_name" id="company_name">
+                            </div>
+
+                            <input type="text" class="company_id" name="company_id" id="company_id" hidden>
+                            <div class="mb-3">
+                                <label for="company_email" class="col-form-label company_email">بريد الشركة الإلكتروني</label>
+                                <input type="text" class="company_email form-control" name="company_email" id="company_email">
+                            </div>
+                            <div class="mb-3">
+                                <label for="company_phone" class="col-form-label company_phone">رقم هاتف الشركة</label>
+                                <input type="text" class="company_phone form-control" name="company_phone" id="company_phone">
+                            </div>
+                            <div class="mb-3">
+                                <label for="company_address" class="col-form-label company_address">عنوان الشركة</label>
+                                <input type="text" class="company_address form-control" name="company_address"
+                                    id="company_address">
+                            </div>
+                            <div class="mb-3">
+                                <label for="cr_no" class="col-form-label cr_no">رقم السجل التجاري</label>
+                                <input type="text" class="cr_no form-control" name="cr_no" id="cr_no">
+                            </div>
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">تفاصيل الشركة</label>
+                                <textarea class="company_detail form-control" name="company_detail" id="company_detail"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">إغلاق</button>
+                                <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+
+
+    <div>
+        <div class="modal  fade employee_modal4" id="employee_modal4" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">نافذة الموظف</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="add_employee4" id="add_employee4" method="POST" action="#">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="employee_name" class="col-form-label ">اسم الموظف</label>
+                                <input type="text" class="employee_name form-control" name="employee_name" id="employee_name">
+                            </div>
+                            {{-- new --}}
+                            <div class="mb-3">
+                                <label for="choices-single-groups" class="form-label font-size-13">الشركات</label>
+                                <select class="employee_company searchable_select select2 form-control"  searchable  name="employee_company"
+                                    id="choices-single-groups">
+                                    <option value="">اختر الشركة</option>
+                                    @foreach($comps as $company)
+                                    <option value="{{ $company->id }}">{{ $company->company_name ?? ''}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+
+                            {{-- endnew  --}}
+                            <input type="text" class="employee_id" name="employee_id" id="employee_id" hidden>
+                            <div class="mb-3">
+                                <label for="employee_email" class="col-form-label employee_email">بريد الموظف الإلكتروني</label>
+                                <input type="text" class="employee_email form-control" name="employee_email" id="employee_email">
+                            </div>
+                            <div class="mb-3">
+                                <label for="employee_phone" class="col-form-label employee_phone">رقم هاتف الموظف</label>
+                                <input type="text" class="employee_phone form-control" name="employee_phone" id="employee_phone">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">تفاصيل الموظف</label>
+                                <textarea class="employee_detail form-control" class="employee_detail" name="employee_detail" id="employee_detail"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">إغلاق</button>
+                                <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                            </div>
+                        </form>
                     </div>
 
                 </div><!-- /.modal-content -->
