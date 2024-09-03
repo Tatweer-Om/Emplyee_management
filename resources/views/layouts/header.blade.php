@@ -376,6 +376,17 @@
                             </ul>
                         </li>
 
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow">
+                                <i data-feather="file-text"></i>
+                                <span data-key="t-pages">  Reports</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> Employee Document report</a></li>
+                                <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> Company Document report</a></li>
+                            </ul>
+                        </li>
+
                     </ul>
 
                 </div>

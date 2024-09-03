@@ -180,7 +180,7 @@
 
                                     <!-- end tab pane -->
                                     <div class="tab-pane" id="transactions-all-tab" role="tabpanel">
-                                        <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#company_modal2" >Add Company</a> <br><br>
+                                        {{-- <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#company_modal2" >Add Company</a> <br><br> --}}
                                         <div class="table-responsive">
 
                                             <table class="table align-middle datatable dt-responsive table-check nowrap"
@@ -204,7 +204,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="transactions-buy-tab" role="tabpanel">
-                                        <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal4" >Add Employee</a> <br><br>
+                                        {{-- <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal4" >Add Employee</a> <br><br> --}}
                                         <div class="table-responsive">
 
                                             <table class="table align-middle datatable dt-responsive table-check nowrap"
