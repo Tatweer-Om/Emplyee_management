@@ -16,32 +16,25 @@ class ReportController extends Controller
     {
         $companies = Company::get();
         $about = About::first();
-
+        $today=date('Y-m-d');
         // Default values to show all data if the form is not submitted
-        $sdate = $request->input('date_from') ?? '';
-
-
-        $edate = $request->input('to_date') ?? '';
-        $company_id = $request->input('company_id') ?? 'all';
-
-        // Build the query
-        $query = EmployeeDoc::query();
-
-        // Filter by expiration date if dates are provided
-        if ($sdate) {
-            $query->whereDate('expiry_date', '>=', $sdate);
-        }
-        if ($edate) {
-            $query->whereDate('expiry_date', '<=', $edate);
-        }
+        
+        $sdate = !empty($request['date_from']) ? $request['date_from'] : date('Y-m-d');
+        $edate = !empty($request['to_date']) ? $request['to_date'] : date('Y-m-d');
+        $company_id = $request->input('company_id');
+        
+         
+        $employeeDocs = EmployeeDoc::whereDate('created_at', '>=', $sdate)
+                ->whereDate('created_at', '<=', $edate);
 
         // Filter by company if a company is selected and it's not "All"
-        if ($company_id !== 'all') {
-            $query->where('employee_company_id', $company_id);
+        if (!empty($company_id)) {
+            $employeeDocs->where('employee_company_id', $company_id);
         }
 
         // Execute the query and get the results
-        $employeeDocs = $query->get();
+        $employeeDocs = $employeeDocs->get();
+
         $report_name = 'Employee Doc Report';
 
         return view('reports.employee_doc_report', compact('companies', 'about', 'employeeDocs', 'sdate', 'edate', 'report_name', 'company_id'));
@@ -52,41 +45,35 @@ class ReportController extends Controller
         $companies = Company::get();
         $about = About::first();
 
-        // Default values to show all data if the form is not submitted
-        $sdate = $request->input('date_from') ?? '';
+        $today=date('Y-m-d');
 
-
-        $edate = $request->input('to_date') ?? '';
-        $company_id = $request->input('company_id') ?? 'all';
-
-        // Build the query
-        $query = CompanyDocs::query();
-
-        // Filter by expiration date if dates are provided
-        if ($sdate) {
-            $query->whereDate('expiry_date', '>=', $sdate);
-        }
-        if ($edate) {
-            $query->whereDate('expiry_date', '<=', $edate);
-        }
+        $sdate = !empty($request['date_from']) ? $request['date_from'] : date('Y-m-d');
+        $edate = !empty($request['to_date']) ? $request['to_date'] : date('Y-m-d');
+        $company_id = $request->input('company_id');
+        
+         
+        $companyDocs = CompanyDocs::whereDate('created_at', '>=', $sdate)
+                ->whereDate('created_at', '<=', $edate);
 
         // Filter by company if a company is selected and it's not "All"
-        if ($company_id !== 'all') {
-            $query->where('employee_company_id', $company_id);
+        if (!empty($company_id)) {
+            $companyDocs->where('company_id', $company_id);
         }
 
         // Execute the query and get the results
-        $companyDocs = $query->get();
+        $companyDocs = $companyDocs->get();
+         
         $report_name = 'Employee Doc Report';
 
         return view('reports.company_doc_report', compact('companies', 'about', 'companyDocs', 'sdate', 'edate', 'report_name', 'company_id'));
     }
 
     public function doc_expiry(Request $request){
+        $about = About::first();
+        $sdate = !empty($request['date_from']) ? $request['date_from'] : date('Y-m-d');
+        $edate = !empty($request['to_date']) ? $request['to_date'] : date('Y-m-d');
 
-        $sdate = $request->input('date_from', date('Y-m-d'));
-        $edate = $request->input('date_to', date('Y-m-d'));
-
+        $today=date('Y-m-d');
         // Query EmployeeDoc table for documents within the date range
         $employeeDocs = EmployeeDoc::query()
             ->whereDate('expiry_date', '>=', $sdate)
@@ -100,10 +87,10 @@ class ReportController extends Controller
             ->get();
 
         // Combine the two collections
-        $documents = $employeeDocs->merge($companyDocs)->sortBy('expiry_date');
-
+        // $documents = $employeeDocs->merge($companyDocs)->sortBy('expiry_date');
+        $report_name = 'Documnet Expiry Report';
         // Return the view with the combined data
-        return view('reports.doc_expiry', compact('documents', 'sdate', 'edate'));
+        return view('reports.doc_expiry', compact('about','companyDocs','employeeDocs', 'sdate', 'edate','report_name'));
     }
 
 

@@ -1,46 +1,97 @@
 <script>
     $(document).ready(function () {
 
+        $('#example').DataTable({
+   
+    "bFilter": true,
+    'pagingType': 'numbers',
+    "ordering": true,
+    "language": {
+        search: ' ',
+        sLengthMenu: '_MENU_',
+        searchPlaceholder: 'البحث',
+        info: "_START_ - _END_ من _TOTAL_ عناصر",
+    },
+    dom: 'Blfrtip', // Include 'B' for buttons, 'l' for length, 'f' for filter, 'r' for processing, 'i' for information, 'p' for pagination, 't' for table
+    buttons: [
+        {
+            extend: 'print',
+            text: 'طباعة', // Arabic for "Print"
+            footer: true,
+            title: '',
+            filename: 'Report',
+            customize: function (win) {
 
-        var table =$('#example').DataTable({
-            "pageLength": 500,
-            dom: 'Blfript',
-            buttons: [
-                {
-                    extend: 'print',
-                    footer: true,
-                    title: '',
-                    visible: false,
-                    filename: 'Report',
-                    customize: function (win) {
+                $(win.document.body).prepend(`
+                    <div style="text-align:center;  margin-top:10px;"><h3><?php echo "$about->about_name"; ?></h3></div>
+                    <div style="border:1px solid #333; display: flex; justify-content: space-between; padding: 5px; margin-top:10px;">
+                        <div>date from: <?php echo "$sdate"; ?>  </div> <div>to date: <?php echo "$edate"; ?>  </div>
+                        <div><?php echo $report_name; ?></div>
+                    </div>`);
+                }
+        },
+        {
+            extend: 'csv',
+            text: 'تصدير CSV', // Arabic for "Export CSV"
+            footer: true,
+            title: '',
+            filename: 'Report'
+        },
+    ],
+    initComplete: (settings, json) => {
+        $('.dataTables_filter').appendTo('#tableSearch');
+        $('.dataTables_filter').appendTo('.search-input');
+    },
+});
 
-                        $(win.document.body).prepend(`
-                            <div style="text-align:center;  margin-top:10px;"><h3><?php echo "$about->about_name"; ?></h3></div>
-                            <div style="border:1px solid #333; display: flex; justify-content: space-between; padding: 5px; margin-top:10px;">
-                                <div>date from: <?php echo "$sdate"; ?>  </div> <div>to date: <?php echo "$edate"; ?>  </div>
-                                <div><?php echo $report_name; ?></div>
-                            </div>`);
-                    }
-                },
-                {
-                    extend: 'csv',
-                    footer: true,
-                    title: '',
-                    filename: 'Report',
-                    visible: false
-                },
+        // var table =$('#example').DataTable({
+        //     "pageLength": 100,
+        //     "bFilter": true,
+        //     "sDom": 'fBtlpi',
+        //     'pagingType': 'numbers',
+        //     "ordering": true,
+        //     "language": {
+        //         search: ' ',
+        //         sLengthMenu: '_MENU_',
+        //         searchPlaceholder: 'البحث',
+        //         info: "_START_ - _END_ من _TOTAL_ عناصر",
+        //     },
+        //     buttons: [
+        //         {
+        //             extend: 'print',
+        //             footer: true,
+        //             title: '',
+        //             visible: false,
+        //             filename: 'Report',
+        //             customize: function (win) {
 
-            ],
-        });
-        $('.buttons-csv, .buttons-excel , .buttons-print').hide();
+        //                 $(win.document.body).prepend(`
+        //                     <div style="text-align:center;  margin-top:10px;"><h3><?php echo "$about->about_name"; ?></h3></div>
+        //                     <div style="border:1px solid #333; display: flex; justify-content: space-between; padding: 5px; margin-top:10px;">
+        //                         <div>date from: <?php echo "$sdate"; ?>  </div> <div>to date: <?php echo "$edate"; ?>  </div>
+        //                         <div><?php echo $report_name; ?></div>
+        //                     </div>`);
+        //             }
+        //         },
+        //         {
+        //             extend: 'csv',
+        //             footer: true,
+        //             title: '',
+        //             filename: 'Report',
+        //             visible: false
+        //         },
 
-        $('#printButton').on('click', function() {
-            table.button('.buttons-print').trigger();
-        });
+        //     ],
+        // });
+        // // $('.buttons-csv, .buttons-excel , .buttons-print').hide();
 
-        $('#csvButton').on('click', function() {
-            table.button('.buttons-csv').trigger();
-        });
+        // $('#printButton').on('click', function() {
+        //     table.button('.buttons-print').trigger();
+        // });
+
+        // $('#csvButton').on('click', function() {
+        //     table.button('.buttons-csv').trigger();
+        // });
 
         // $.fn.dataTable.moment('YYYY-MM-DD HH:mm:ss'); // Format of your timestamps
 

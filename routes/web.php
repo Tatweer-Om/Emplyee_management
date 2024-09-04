@@ -140,9 +140,9 @@ Route::get('employee_task', [TaskController::class, 'employee_task'])->name('emp
 Route::get('document_history', [TaskController::class, 'document_history'])->name('document_history');
 
 
-Route::get('employee_doc_report', [ReportController::class, 'employee_doc_report'])->name('employee_doc_report');
-Route::get('doc_expiry', [ReportController::class, 'doc_expiry'])->name('doc_expiry');
-Route::get('company_doc_report', [ReportController::class, 'company_doc_report'])->name('company_doc_report');
+Route::match(['get', 'post'],'employee_doc_report', [ReportController::class, 'employee_doc_report'])->name('employee_doc_report');
+Route::match(['get', 'post'],'doc_expiry', [ReportController::class, 'doc_expiry'])->name('doc_expiry');
+Route::match(['get', 'post'],'company_doc_report', [ReportController::class, 'company_doc_report'])->name('company_doc_report');
 
 
 

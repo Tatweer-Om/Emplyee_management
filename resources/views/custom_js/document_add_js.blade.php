@@ -37,7 +37,7 @@
                 }
             },
             "bFilter": true,
-            "sDom": 'fBtlpi',
+            // "sDom": 'fBtlpi',
             'pagingType': 'numbers',
             "ordering": true,
             "language": {
