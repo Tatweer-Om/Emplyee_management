@@ -11,7 +11,7 @@
         $('#all_user').DataTable({
             "sAjaxSource": "{{ url('show_user') }}",
             "bFilter": true,
-            "sDom": 'fBtlpi',
+            // "sDom": 'fBtlpi',
             'pagingType': 'numbers',
             "ordering": true,
             "language": {

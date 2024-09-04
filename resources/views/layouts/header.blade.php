@@ -53,8 +53,10 @@
 <!-- Responsive datatable examples -->
 <link href="{{ asset('libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{asset('css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 
-
+<style>table.dataTable.no-footer{border-bottom:0px}</style>
 </head>
 
 <body>
@@ -379,12 +381,12 @@
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="file-text"></i>
-                                <span data-key="t-pages">  Reports</span>
+                                <span data-key="t-pages">  تقارير</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> Employee Document report</a></li>
-                                <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> Company Document report</a></li>
-                                <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> Document Expiry report</a></li>
+                                <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الموظف</a></li>
+                                <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الشركة</a></li>
+                                <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
                             </ul>
                         </li>
 
