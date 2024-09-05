@@ -152,6 +152,8 @@
         @include('custom_js.reports_js')
         @elseif ($route == 'doc_expiry')
         @include('custom_js.reports_js')
+        @elseif ($route == 'employee_task_report')
+        @include('custom_js.reports_js')
         @endif
         <script>var base_url= "<?php echo url('/'); ?>"</script>
 

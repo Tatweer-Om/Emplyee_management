@@ -138,11 +138,16 @@ Route::post('update_employee_doc', [HomeController::class, 'update_employee_doc'
 Route::get('employee_task_page/{id}', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
 Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');// web.php (routes file)
 Route::get('document_history', [TaskController::class, 'document_history'])->name('document_history');
+Route::post('add_employee4', [TaskController::class, 'add_employee4'])->name('add_employee4');
+Route::match(['get', 'post'],'show_employee4', [TaskController::class, 'show_employee4'])->name('show_employee4');
+Route::post('add_company4', [TaskController::class, 'add_company4'])->name('add_company4');
+Route::match(['get', 'post'], 'show_company4', [TaskController::class, 'show_company4'])->name('show_company4');
 
 
 Route::match(['get', 'post'],'employee_doc_report', [ReportController::class, 'employee_doc_report'])->name('employee_doc_report');
 Route::match(['get', 'post'],'doc_expiry', [ReportController::class, 'doc_expiry'])->name('doc_expiry');
 Route::match(['get', 'post'],'company_doc_report', [ReportController::class, 'company_doc_report'])->name('company_doc_report');
+Route::match(['get', 'post'],'employee_task_report', [ReportController::class, 'employee_task_report'])->name('employee_task_report');
 
 
 

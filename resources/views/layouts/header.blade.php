@@ -24,6 +24,10 @@
     <link href="{{ asset('css/bootstrap-rtl.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
     <link href="{{ asset('css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/style.css') }}"  rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/earlyaccess/droidarabickufi.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css" rel="stylesheet">
+
     <!-- App Css-->
     <link href="{{ asset('css/app-rtl.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <link href="{{  asset('libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
@@ -378,6 +382,7 @@
                             </ul>
                         </li>
 
+
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="file-text"></i>
@@ -389,6 +394,7 @@
                                 <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
                             </ul>
                         </li>
+
 
                     </ul>
 

@@ -361,7 +361,8 @@
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1 overflow-hidden">
                                 <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>
-                                <p class="mb-0 text-truncate">${doc.employeedoc_name} <span class="text-danger">Expired</span></p>
+                                <p class="mb-0 text-truncate">${doc.employeedoc_name} <span class="text-danger">منتهي</span></p>
+
                             </div>
                             <div class="fs-1">
                                 <i class="mdi mdi-calendar"></i>
@@ -375,8 +376,9 @@
                             itemHtml = `<a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1 overflow-hidden">
-                                <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>
-                                <p class="mb-0 text-truncate">${doc.employeedoc_name} <span class="">/${daysRemaining} days Left</span></p>
+                                <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name} <br>${doc.employeedoc_name}</h5>
+                                <p class="mb-0 text-truncate"> <span class="">${daysRemaining} يوم متبقي < /span></p>
+
                             </div>
                             <div class="fs-1">
                                 <i class="mdi mdi-calendar"></i>
@@ -393,8 +395,8 @@
                             itemHtml = `<a href="javascript: void(0);" class="list-group-item text-muted pb-3 pt-0 px-2">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1 overflow-hidden">
-                                <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name}</h5>
-                                <p class="mb-0 text-truncate">${doc.employeedoc_name} <span class="">/${months} months, ${days} days Left</span></p>
+                                <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name} <br>${doc.employeedoc_name}</h5>
+                               <p class="mb-0 text-truncate"> <span class=""> ${months} شهر, ${days} يوم متبقي </span></p>
                             </div>
                             <div class="fs-1">
                                 <i class="mdi mdi-calendar"></i>
@@ -467,7 +469,7 @@
                 expiringSoonCount); // Assuming you have an element with ID 'expiring-soon-count'
 
                 // Initialize DataTable
-                
+
 
                 $('#all_company_employee').DataTable({
                     "sAjaxSource": "{{ url('show_company_employee') }}" + "?company_id=" + companyId,

@@ -31,9 +31,9 @@ class TaskController extends Controller
         $companies = Company::where('user_id', $user->id)->get();
         $employees = Employee::where('user_id', $user->id)->get();
         $company_count = $companies->count();
-        $comps = Company::get();
+        $comps = Company::all();
 
-
+        // dd($comps);
 
         // Check if the user exists and is either the intended user or an Admin
         $user_check = User::where('id', $id)->where(function($query) {
@@ -159,5 +159,55 @@ class TaskController extends Controller
             'success' => true,
             'data' => $history
         ]);
+    }
+
+
+    public function add_employee4(Request $request){
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
+
+
+        $employee = new Employee();
+
+        $employee->employee_id = genUuid() . time();
+        $employee->employee_name = $request['employee_name'];
+        $employee->employee_email = $request['employee_email'];
+        $employee->employee_phone = $request['employee_phone'];
+        $employee->employee_company = $request['employee_company'];
+        $employee->employee_detail = $request['employee_detail'];
+        $employee->added_by =  $user;
+        $employee->user_id =  $user_id;
+        $employee->save();
+        $lastInsertedId = $employee->id;
+        return response()->json(['employee_id' => $employee->employee_id,'last_id'=>$lastInsertedId]);
+    }
+
+
+
+
+
+    public function add_company4(Request $request){
+
+        $user_id = Auth::id();
+        $data= User::find( $user_id)->first();
+        $user= $data->user_name;
+
+        $company = new Company();
+
+        $company->company_id = genUuid() . time();
+        $company->company_name = $request['company_name'];
+        $company->company_email = $request['company_email'];
+        $company->company_phone = $request['company_phone'];
+        $company->office_user = $request['office_user'];
+        $company->company_address = $request['company_address'];
+        $company->company_detail = $request['company_detail'];
+        $company->cr_no = $request['cr_no'];
+        $company->added_by = $user;
+        $company->user_id = $user_id;
+        $company->save();
+        $lastInsertedId = $company->id;
+        return response()->json(['company_id' => $company->company_id,'last_id'=>$lastInsertedId]);
+
     }
 }

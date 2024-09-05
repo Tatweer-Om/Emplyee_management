@@ -1,0 +1,11 @@
+body {
+    /* font-family: Droid; */
+    font-family: 'Droid Arabic Kufi', 'Droid Sans', sans-serif;
+
+
+
+}
+.select2-container--default .select2-selection--single {
+    background-color: var(--bs-tertiary-bg)!important;
+    border: 0px!important;
+}
