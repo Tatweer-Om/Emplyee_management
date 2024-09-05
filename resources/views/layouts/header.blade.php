@@ -24,6 +24,10 @@
     <link href="{{ asset('css/bootstrap-rtl.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
     <link href="{{ asset('css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/style.css') }}"  rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/earlyaccess/droidarabickufi.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css" rel="stylesheet">
+
     <!-- App Css-->
     <link href="{{ asset('css/app-rtl.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <link href="{{  asset('libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
@@ -376,17 +380,17 @@
                             </ul>
                         </li>
 
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="file-text"></i>
-                                <span data-key="t-pages">  Reports</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> Employee Document report</a></li>
-                                <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> Company Document report</a></li>
-                                <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> Document Expiry report</a></li>
-                            </ul>
-                        </li>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow">
+                            <i data-feather="file-text"></i>
+                            <span data-key="t-pages"> التقارير</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> تقرير مستندات الموظفين</a></li>
+                            <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> تقرير مستندات الشركة</a></li>
+                            <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء المستندات</a></li>
+                        </ul>
+                    </li>
 
                     </ul>
 

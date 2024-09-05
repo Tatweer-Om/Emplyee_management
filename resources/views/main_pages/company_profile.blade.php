@@ -101,19 +101,19 @@
                                                 </div>
                                             </div> --}}
                                             <div class="tab-pane" id="profile3" role="tabpanel">
-                                                <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal3" onclick="add_employee3({{ $company->id }})">Add Employee</a> <br><br>
+                                                <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal3" onclick="add_employee3({{ $company->id }})">إضافة موظف</a> <br><br>
                                                 <div class="table-responsive">
                                                     <table class="table align-middle  dt-responsive table-check nowrap"
                                                         style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_company_employee">
                                                         <thead>
                                                             <tr class="bg-transparent">
-                                                                <th style="text-align: right;">رقم</th>
-                                                <th style="text-align: right; width: 20px;">اسم الموظف</th>
-                                                <th style="text-align: right;">تواصل الموظف</th>
-                                                <th style="text-align: right;">شركة الموظف</th>
-                                                <th style="text-align: right;">تفاصيل الموظف</th>
-                                                <th style="text-align: right; width: 20px;">أضيف بواسطة</th>
-                                                <th style="text-align: right; width: 20px;">إجراء</th>
+                                                            <th style="text-align: right;">رقم</th>
+                                                            <th style="text-align: right; width: 20px;">اسم الموظف</th>
+                                                            <th style="text-align: right;">تواصل الموظف</th>
+                                                            {{-- <th style="text-align: right;">شركة الموظف</th> --}}
+                                                            <th style="text-align: right;">تفاصيل الموظف</th>
+                                                            <th style="text-align: right; width: 20px;">أضيف بواسطة</th>
+                                                            <th style="text-align: right; width: 20px;">إجراء</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
