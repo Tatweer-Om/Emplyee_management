@@ -61,6 +61,15 @@
 <script src="{{ asset('libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
 
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+
 <!-- init js -->
 <script src="{{ asset('js/pages/invoices-list.init.js') }}"></script>
 <script src="{{ asset('js/pages/modal.init.js') }}"></script>
@@ -141,8 +150,12 @@
         @include('custom_js.reports_js')
         @elseif ($route == 'company_doc_report')
         @include('custom_js.reports_js')
+        @elseif ($route == 'doc_expiry')
+        @include('custom_js.reports_js')
+        @elseif ($route == 'employee_task_report')
+        @include('custom_js.reports_js')
         @endif
-        <script>var base_url= "<?php echo url('/'); ?>";</script>
+        <script>var base_url= "<?php echo url('/'); ?>"</script>
 
 </body>
 

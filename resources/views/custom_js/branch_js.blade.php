@@ -11,7 +11,7 @@
      $('#all_branch').DataTable({
          "sAjaxSource": "{{ url('show_branch') }}",
          "bFilter": true,
-         "sDom": 'fBtlpi',
+        //  "sDom": 'fBtlpi',
          'pagingType': 'numbers',
          "ordering": true,
          "language": {

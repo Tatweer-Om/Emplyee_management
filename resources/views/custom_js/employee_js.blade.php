@@ -22,7 +22,7 @@
         $('#all_employee').DataTable({
             "sAjaxSource": "{{ url('show_employee') }}",
             "bFilter": true,
-            "sDom": 'fBtlpi',
+            // "sDom": 'fBtlpi',
             'pagingType': 'numbers',
             "ordering": true,
             "language": {
@@ -119,6 +119,7 @@
             }
 
         });
+
     });
 
 
@@ -194,5 +195,9 @@
             }
         });
     }
+
+
+
+
 
     </script>

@@ -14,12 +14,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Reports</h4>
+                        <h4 class="mb-sm-0 font-size-18">تقارير</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Reports</a></li>
-                                <li class="breadcrumb-item active">Employee Documents Report</li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">تقارير</a></li>
+                                <li class="breadcrumb-item active">تقرير وثائق الموظف</li>
                             </ol>
                         </div>
 
@@ -32,13 +32,10 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('employee_doc_report') }}" method="GET">
+                            <form action="{{ route('employee_doc_report') }}" method="post">
+                                @csrf
                                 <div class="row">
-                                    <div class="col-sm">
-                                        <div class="mb-4">
-                                            <button type="submit" class="btn btn-light waves-effect waves-light"><i class="bx bx-plus me-1"></i> Add Invoice</button>
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-sm-auto">
                                         <div class="d-flex align-items-center gap-1 mb-4">
@@ -60,13 +57,17 @@
                                         <div class="d-flex align-items-center gap-1 mb-4">
                                             <select class="employee_company form-control" searchable name="company_id" id="choices-single-groups">
                                                 <option value="">اختر الشركة</option>
-                                                <option value="all" {{ old('company_id', $company_id) === 'all' ? 'selected' : '' }}>All</option>
-                                                @foreach($companies as $company)
+                                                 @foreach($companies as $company)
                                                     <option value="{{ $company->id }}" {{ old('company_id', $company_id) == $company->id ? 'selected' : '' }}>
                                                         {{ $company->company_name ?? '' }}
                                                     </option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="mb-4">
+                                            <button type="submit" class="btn btn-light waves-effect waves-light">إرسال</button>
                                         </div>
                                     </div>
                                 </div>
@@ -75,16 +76,16 @@
                             <!-- end row -->
 
                             <div class="table-responsive">
-                                <table class="table align-middle datatable dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+                                <table id="example" class="table align-middle dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                                     <thead>
                                         <tr class="bg-transparent">
-                                            <th style="width: 120px; text-align:center;">Sr.no</th>
-                                            <th style="width: 120px; text-align:center;">Employee & Company Name</th>
-                                            <th style="width: 120px; text-align:center;">Documents and Expiry</th>
-                                            <th style="width: 120px; text-align:center;">Added By</th>
-                                            <th style="width: 120px; text-align:center;">Created AT</th>
-
+                                            <th style="width: 120px; text-align:center;">الرقم التسلسلي</th>
+                                            <th style="width: 120px; text-align:center;">اسم الموظف والشركة</th>
+                                            <th style="width: 120px; text-align:center;">الوثائق وتاريخ الانتهاء</th>
+                                            <th style="width: 120px; text-align:center;">أضيف بواسطة</th>
+                                            <th style="width: 120px; text-align:center;">تاريخ الإنشاء</th>
                                         </tr>
+                                        
                                     </thead>
                                     <tbody>
                                         @foreach($employeeDocs as $key => $doc)

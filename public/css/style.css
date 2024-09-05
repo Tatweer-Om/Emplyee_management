@@ -5,3 +5,7 @@ body {
 
 
 }
+.select2-container--default .select2-selection--single {
+    background-color: var(--bs-tertiary-bg)!important;
+    border: 0px!important;
+}

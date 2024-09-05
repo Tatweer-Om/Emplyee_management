@@ -20,7 +20,7 @@ class EmployeeDocController extends Controller
         $company_id= $employee->employee_company;
 
         $company= Company::where('id',  $company_id )->first();
-        $company_name= $company->company_name;
+        $company_name= $company->company_name ?? null;
 
         $documents= Document::where('document_type', 2)->get();
 

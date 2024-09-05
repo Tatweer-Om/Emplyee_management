@@ -16,7 +16,7 @@
         $('#all_company').DataTable({
             "sAjaxSource": "{{ url('show_company') }}",
             "bFilter": true,
-            "sDom": 'fBtlpi',
+            // "sDom": 'fBtlpi',
             'pagingType': 'numbers',
             "ordering": true,
             "language": {
@@ -474,7 +474,7 @@
                 $('#all_company_employee').DataTable({
                     "sAjaxSource": "{{ url('show_company_employee') }}" + "?company_id=" + companyId,
                     "bFilter": true,
-                    "sDom": 'fBtlpi',
+                    // "sDom": 'fBtlpi',
                     'pagingType': 'numbers',
                     "ordering": true,
                     "language": {

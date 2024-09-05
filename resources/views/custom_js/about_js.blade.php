@@ -11,7 +11,7 @@
         $('#all_about').DataTable({
             "sAjaxSource": "{{ url('show_about') }}",
             "bFilter": true,
-            "sDom": 'fBtlpi',
+            // "sDom": 'fBtlpi',
             'pagingType': 'numbers',
             "ordering": true,
             "language": {
