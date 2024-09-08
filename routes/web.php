@@ -49,6 +49,7 @@ Route::get('company_profile/{id}', [CompanyController::class, 'company_profile']
 Route::match(['get', 'post'], 'show_company_doc', [CompanyController::class, 'show_company_doc'])->name('show_company_doc');
 Route::post('delete_employee3', [CompanyController::class, 'delete_employee3'])->name('delete_employee3');
 Route::post('delete_company_doc', [CompanyController::class, 'delete_company_doc'])->name('delete_company_doc');
+Route::post('delete_employee_doc', [CompanyController::class, 'delete_employee_doc'])->name('delete_employee_doc');
 Route::match(['get', 'post'], 'show_company_employee', [CompanyController::class, 'show_company_employee'])->name('show_company_employee');
 
 //Branches
@@ -132,12 +133,20 @@ Route::get('all_expired_docs', [HomeController::class, 'all_expired_docs'])->nam
 Route::post('renew_docs_request', [HomeController::class, 'renew_docs_request'])->name('renew_docs_request');
 Route::post('update_employee_doc', [HomeController::class, 'update_employee_doc'])->name('update_employee_doc');
 
+Route::get('under_process', [HomeController::class, 'under_process'])->name('under_process');
+Route::get('all_expired_docs2', [HomeController::class, 'all_expired_docs2'])->name('all_expired_docs2');
+Route::post('renew_docs_request2', [HomeController::class, 'renew_docs_request2'])->name('renew_docs_request2');
+Route::post('update_employee_doc2', [HomeController::class, 'update_employee_doc2'])->name('update_employee_doc2');
+
+
 
 
 //task
 Route::get('employee_task_page/{id}', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
 Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');// web.php (routes file)
 Route::get('document_history', [TaskController::class, 'document_history'])->name('document_history');
+Route::get('document_renew', [TaskController::class, 'document_renew'])->name('document_renew');
+Route::post('document_renew_confirm', [TaskController::class, 'document_renew_confirm'])->name('document_renew_confirm');
 Route::post('add_employee4', [TaskController::class, 'add_employee4'])->name('add_employee4');
 Route::match(['get', 'post'],'show_employee4', [TaskController::class, 'show_employee4'])->name('show_employee4');
 Route::post('add_company4', [TaskController::class, 'add_company4'])->name('add_company4');

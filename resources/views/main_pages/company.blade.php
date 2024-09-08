@@ -39,29 +39,7 @@
                                                 class="bx bx-plus me-1"></i> إضافة شركة</button>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-sm-auto">
-                                        <div class="d-flex align-items-center gap-1 mb-4">
-                                            <div class="input-group datepicker-range">
-                                                <input type="text" class="form-control flatpickr-input" data-input
-                                                    aria-describedby="date1">
-                                                <button class="input-group-text" id="date1" data-toggle><i
-                                                        class="bx bx-calendar-event"></i></button>
-                                            </div>
-                                            <div class="dropdown">
-                                                <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle"
-                                                    href="#" role="button" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="bx bx-dots-horizontal-rounded"></i>
-                                                </a>
 
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="#">إجراء</a></li>
-                                                    <li><a class="dropdown-item" href="#">إجراء آخر</a></li>
-                                                    <li><a class="dropdown-item" href="#">شيء آخر هنا</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                 </div>
                                 <!-- end row -->
 
@@ -133,6 +111,15 @@
                                 <div class="mb-3">
                                     <label for="cr_no" class="col-form-label cr_no">رقم السجل التجاري</label>
                                     <input type="text" class="cr_no form-control" name="cr_no" id="cr_no">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label font-size-13">Assign Company </label>
+                                    <select class="user form-control" searchable name="user">
+                                        <option value="" > Choose A Employee</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->user_name ?? ''}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="message-text" class="col-form-label">تفاصيل الشركة</label>

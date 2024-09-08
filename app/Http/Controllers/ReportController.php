@@ -115,8 +115,8 @@ class ReportController extends Controller
 
         // Fetch company documents filtered by user ID and date range
         $companyDocs = CompanyDocs::where('user_id', $user_id)
-            ->whereDate('created_at', '>=', $sdate)
-            ->whereDate('created_at', '<=', $edate)
+            ->whereDate('expiry_date', '>=', $sdate)
+            ->whereDate('expiry_date', '<=', $edate)
             ->get();
 
         // Report name

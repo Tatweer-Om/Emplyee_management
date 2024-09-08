@@ -210,4 +210,112 @@ class TaskController extends Controller
         return response()->json(['company_id' => $company->company_id,'last_id'=>$lastInsertedId]);
 
     }
+
+
+    public function document_renew(Request $request)
+    {
+
+
+        // Retrieve the document ID and source
+        $documentId = $request->input('id');
+        $source = $request->input('source');
+
+        // Initialize document variable
+        $doc = null;
+
+        try {
+            // Retrieve the document based on the source
+            if ($source == '1') {
+                $doc = EmployeeDoc::where('id', $documentId)->first();
+            } elseif ($source == '2') {
+                $doc = CompanyDocs::where('id', $documentId)->first();
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid source provided.'
+                ], 400);
+            }
+
+            // Check if the document was found
+            if (!$doc) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Document not found.'
+                ], 404);
+            }
+
+            // Format the expiry date
+            $expiryDate = $doc->expiry_date;
+            $formattedExpiryDate = 'N/A'; // Default value
+
+            if ($expiryDate) {
+                try {
+                    $formattedExpiryDate = (new \DateTime($expiryDate))->format('Y-m-d');
+                } catch (\Exception $e) {
+                    $formattedExpiryDate = 'Invalid date format';
+                }
+            }
+
+            // Return the document data as a JSON response
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'expiry_date' => $formattedExpiryDate
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            // Handle unexpected errors
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function document_renew_confirm(Request $request) {
+        // Validate the request data
+        $request->validate([
+            'id' => 'required|integer',
+            'source' => 'required|string'
+        ]);
+
+        // Retrieve the document ID and source
+        $docId = $request->input('id');
+        $source = $request->input('source');
+
+        // Initialize variable for document
+        $doc = null;
+
+        try {
+            // Retrieve the document based on the source
+            if ($source == '1') {
+                $doc = EmployeeDoc::where('id', $docId)->first();
+            } else {
+                $doc = CompanyDocs::where('id', $docId)->first();
+            }
+
+            // Check if the document was found
+            if ($doc) {
+                // Update document status
+                $doc->doc_status = '2'; // Update to the desired status
+                $doc->save();
+
+                // Return success response
+                return response()->json(['success' => 'Document renewed successfully.']);
+            } else {
+                // Document not found
+                return response()->json(['error' => 'Document not found.'], 404);
+            }
+        } catch (\Exception $e) {
+            // Handle unexpected errors
+            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+
+
+
+
+
 }

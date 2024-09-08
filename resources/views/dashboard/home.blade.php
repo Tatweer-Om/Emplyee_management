@@ -407,8 +407,9 @@
 
                                                             <td>
                                                                 <div>
-                                                                    <h5 class="font-size-14 mb-1">اسم الشركة</h5>
-                                                                    <p class="text-muted mb-0 font-size-12">{{ $comp->company_name ?? '' }}</p>
+                                                                    <h5 class="font-size-14 mb-1"> {{ $comp->employee_company ?? '' }}</h5>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $comp->employee_name ?? '' }}</p>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $comp->employeedoc_name ?? '' }}</p>
                                                                 </div>
                                                             </td>
 
@@ -471,8 +472,8 @@
 
                                                             <td>
                                                                 <div>
-                                                                    <h5 class="font-size-14 mb-1">اسم الوثيقة</h5>
-                                                                    <p class="text-muted mb-0 font-size-12">{{ $doc->document_name ?? '' }}</p>
+                                                                    <h5 class="font-size-14 mb-1">{{ $doc->company_name ?? '' }} </h5>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $doc->companydoc_name ?? '' }}</p>
                                                                 </div>
                                                             </td>
 

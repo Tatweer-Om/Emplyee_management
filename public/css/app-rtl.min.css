@@ -6,6 +6,8 @@ Website: https://themesbrand.com/
 Contact: themesbrand@gmail.com
 File: Main Css File
 */
+
+
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&amp;display=swap");
 [data-bs-theme=dark] .bg-dark {
   background-color: var(--bs-sidebar-dark-bg) !important;
@@ -1434,10 +1436,10 @@ body[data-layout=horizontal][data-layout-size=boxed] .container-fluid, body[data
 
 /*!
  * Waves v0.7.6
- * http://fian.my.id/Waves 
- * 
- * Copyright 2014-2018 Alfiana E. Sibuea and other contributors 
- * Released under the MIT license 
+ * http://fian.my.id/Waves
+ *
+ * Copyright 2014-2018 Alfiana E. Sibuea and other contributors
+ * Released under the MIT license
  * https://github.com/fians/Waves/blob/master/LICENSE */
 .waves-effect {
   position: relative;
@@ -2036,7 +2038,7 @@ body[data-layout=horizontal][data-layout-size=boxed] .container-fluid, body[data
   padding: 0.47rem 0.75rem!important;
   height: 37px!important;
 }
- 
+
 
 .form-switch-lg {
   font-size: 26px;
@@ -3490,7 +3492,7 @@ span.flatpickr-weekday {
   color: var(--bs-body-color) !important;
 }
 
-/* 
+/*
 Datatable
 */
 div.dataTables_wrapper div.dataTables_filter {

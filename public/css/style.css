@@ -9,3 +9,25 @@ body {
     background-color: var(--bs-tertiary-bg)!important;
     border: 0px!important;
 }
+
+
+
+.company-row-blue-1 > td {
+    background-color: #0000FF !important; /* Strong Blue */
+}
+
+.company-row-blue-2 > td {
+    background-color: #4C66FF; /* Slightly lighter blue */
+}
+
+.company-row-blue-3 > td {
+    background-color: #99A3FF; /* Even lighter blue */
+}
+
+.company-row-blue-4 > td {
+    background-color: #CCD4FF; /* Light blue */
+}
+
+.company-row-blue-5 > td {
+    background-color: #E6ECFF; /* Very light blue */
+}
