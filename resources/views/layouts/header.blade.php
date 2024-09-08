@@ -360,7 +360,7 @@
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="file-text"></i>
+                                <i data-feather="pie-chart"></i>
                                 <span data-key="t-pages">إدارة الشركات</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -371,9 +371,24 @@
                             </ul>
                         </li>
 
+
+
+
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="file-text"></i>
+                                <i data-feather="cpu"></i>
+                                <span data-key="t-pages">  تقارير</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الموظف</a></li>
+                                <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الشركة</a></li>
+                                <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
+                                <li><a href="{{ url('employee_task_report') }}" data-key="t-starter-page">  Employee Task Report</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow">
+                                <i data-feather="map"></i>
                                 <span data-key="t-pages">صفحة مهام الموظف</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -381,17 +396,14 @@
 
                             </ul>
                         </li>
-
-
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="file-text"></i>
-                                <span data-key="t-pages">  تقارير</span>
+                                <i data-feather="share-2"></i>
+                                <span data-key="t-pages"> الوثائق المنتهية </span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الموظف</a></li>
-                                <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الشركة</a></li>
-                                <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
+                                <li><a href="{{ url('show_expired_docs')}}" data-key="t-starter-page"> الوثائق قيد المعالجة </a></li>
+                                <li><a href="{{ url('show_expired_docs')}}" data-key="t-starter-page">  Uder Process Documents  </a></li>
                             </ul>
                         </li>
 

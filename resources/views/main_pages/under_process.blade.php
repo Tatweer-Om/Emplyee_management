@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title>Expired Documents </title>
+        <title>Under Process </title>
     @endpush
 
 
@@ -37,7 +37,7 @@
 
                                 <div class="table-responsive">
                                     <table class="table align-middle dt-responsive table-check nowrap"
-                                        style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_expired_documents">
+                                        style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_expired_documents2">
                                         <thead>
                                             <tr class="bg-transparent">
 
@@ -81,7 +81,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="add_employee_status" id="add_employee_status" method="POST" action="#">
+                        <form class="add_employee_status2" id="add_employee_status2" method="POST" action="#">
                             @csrf
                             <input type="hidden" class="docs_id" name="docs_id">
                             <input type="hidden" class="docs_type" name="docs_type">

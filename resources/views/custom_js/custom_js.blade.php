@@ -207,6 +207,104 @@
         });
     });
 
+
+    //under_process
+
+    $('#all_expired_documents2').DataTable({
+            "sAjaxSource": "{{ url('all_expired_docs2') }}",
+            "bFilter": true,
+            "sDom": 'fBtlpi',
+            'pagingType': 'numbers',
+            "ordering": true,
+            "language": {
+                search: ' ',
+                sLengthMenu: '_MENU_',
+                searchPlaceholder: 'بحث',
+                info: "_START_ - _END_ من _TOTAL_ العناصر",
+            },
+            "rowCallback": function(row, data) {
+                // Access the doc_status via the data attribute
+                var docStatus = $(row).attr('data-status');
+                if (docStatus == 2) {
+                    // Apply yellow color to the entire row (tr)
+                    $(row).css('background-color', 'yellow');
+
+                    // Apply yellow color to all cells (td) within the row
+                    $('td', row).css('background-color', 'yellow');
+                }
+            },
+            initComplete: (settings, json) => {
+                $('.dataTables_filter').appendTo('#tableSearch');
+                $('.dataTables_filter').appendTo('.search-input');
+            },
+        });
+    function renew_docs2(id, type) {
+        Swal.fire({
+            title: 'هل تريد تجديد الوثائق؟',
+            text: 'تجديد',
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: 'تجديد',
+            confirmButtonClass: "btn btn-primary",
+            cancelButtonClass: "btn btn-danger ml-1",
+            buttonsStyling: false
+        }).then(function(result) {
+            if (result.value) {
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: "{{ url('renew_docs_request2') }}",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        type: type,
+                        _token: csrfToken
+                    },
+                    error: function() {
+                        show_notification('error', 'فشل تجديد الوثائق');
+                    },
+                    success: function(data) {
+                        $('#all_expired_documents2').DataTable().ajax.reload();
+                        show_notification('success', 'بدأت عملية التجديد');
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                show_notification('success', 'تم إلغاء التجديد');
+            }
+        });
+    }
+
+    function finish_renew2(id, type) {
+        $('.docs_id').val(id);
+        $('.docs_type').val(type);
+    }
+
+    // Handle form submission
+    $('#add_employee_status2').on('submit', function(e) {
+        e.preventDefault();
+        if ($('.new_expiry').val() == "") {
+            show_notification('error', 'يرجى اختيار تاريخ انتهاء صلاحية جديد');
+            return false;
+        }
+
+        $.ajax({
+            url: '{{ route("update_employee_doc2") }}', // Route to handle form submission
+            type: 'POST',
+            data: $(this).serialize(), // Serialize form data
+            success: function(response) {
+                show_notification('success', 'تم تحديث البيانات بنجاح'); // Display success message
+                $('#renew_modal').modal('hide'); // Hide the modal
+                $('#all_expired_documents2').DataTable().ajax.reload();
+            },
+            error: function(xhr, status, error) {
+                console.log('خطأ في AJAX: ' + status + ' ' + error);
+            }
+        });
+    });
+
+    //end
+
     $(document).ready(function() {
         $('.logout').on('click', function(e) {
             e.preventDefault();
