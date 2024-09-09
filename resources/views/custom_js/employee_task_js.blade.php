@@ -85,6 +85,8 @@
             success: function(response) {
                 populateCompanyTable(response);
                 populateEmployeeTable(response);
+                populatecomps(response)
+
                 renderRenewalDocuments(response.company_docs, 'شركة');
 
                 const employees = response.employees || [];
@@ -173,6 +175,8 @@
                                             data-source="company">
                                             تاريخ
                                         </a>
+ <a class="dropdown-item" href="/document_addition/${document.company_id}">إضافة مستند</a>
+
                                         <a class="dropdown-item renew_modal"
                                             href="javascript:void(0);"
                                             data-document-id="${document.id}"
@@ -275,6 +279,8 @@
                                    data-source="employee">
                                    تاريخ
                                 </a>
+                                 <a class="dropdown-item" href="/employee_document_addition/${document.employee_id}">إضافة مستند</a>
+
                                   <a class="dropdown-item renew_modal"
                                    href="#"
                                    data-document-id="${document.id}"
@@ -302,6 +308,51 @@
             });
         }
 
+        function populatecomps(data) {
+    let companies = data.companies;
+
+    // Ensure companies is an array and is defined
+    if (Array.isArray(companies) && companies.length > 0) {
+        let html = ''; // Initialize HTML as an empty string
+
+        // Iterate over each company
+        let sr = 1;
+        companies.forEach(comp => {
+            // Build the HTML string for each company
+            html += `<tr>
+                 <td style="text-align:center;">${sr++}</td>
+                        <td style="text-align:center;">${comp.company_name}</td>
+                        <td style="text-align:center;">${comp.added_by}</td>
+                        <td style="text-align:center;">${new Date(comp.created_at).toLocaleDateString()}</td>
+
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+
+                                        <a class="dropdown-item" href="/document_addition/${comp.id || ''}">
+                                           إضافة مستند
+                                        </a>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>`;
+        });
+
+        // Append or set the HTML in the target element (replace 'your-table-body-id' with your actual table body ID)
+        document.getElementById('comps_all_tbody').innerHTML = html;
+    } else {
+        console.error('Companies is not defined or is not an array');
+    }
+}
+
+
 
 
 
@@ -327,13 +378,8 @@
                         company_name = doc.employee_company || 'شركة غير معروفة';
                     }
 
-                    const statusMap = {
-                        1: 'قيد المعالجة',
-                        2: 'قيد المعالجة',
-                        3: 'هناك مشكلة'
-                    };
+                    let status = (doc.doc_status === 2) ? 'قيد المعالجة' : '';
 
-                    let status = statusMap[doc.doc_status] || 'حالة غير معروفة';
 
                     console.log(`مستند: ${documentName}, الحالة: ${status}`);
 

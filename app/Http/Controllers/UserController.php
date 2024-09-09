@@ -212,8 +212,6 @@ class UserController extends Controller
 
             return view ('login_page.login', compact('about'));
         }
-
-
         public function login_user(Request $request)
         {
             // Retrieve input credentials
@@ -221,9 +219,19 @@ class UserController extends Controller
             $password = $request->input('password');
 
             // Attempt to find the user by username
-            $user = User::where('user_name', $username)->first();
-            if ($user && Hash::check($password, $user->password)) {
+            $user = User::where('user_name', $username)
+                        ->orWhere('user_email', $username)
+                        ->first();
 
+            // Display hashed password for debugging (remove this in production)
+            // if ($user) {
+            //     $hashedPassword = $user->password;
+            //     // Note: Avoid using echo for debugging in production; use logging instead
+            //     \Log::info('Hashed Password: ' . $hashedPassword);
+            // }
+
+            // Check if user exists and if the password matches
+            if ($user && Hash::check($password, $user->password)) {
                 Auth::login($user);
                 // Authentication successful
                 return response()->json([
@@ -240,6 +248,9 @@ class UserController extends Controller
                 ]);
             }
         }
+
+
+
 
 
 

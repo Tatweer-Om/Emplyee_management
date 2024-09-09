@@ -160,6 +160,12 @@
                                                 مستندات الموظف
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#comps"
+                                                role="tab">
+                                                الشركات
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -204,6 +210,28 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <!-- Rows will be populated here via JavaScript -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="comps" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle datatable dt-responsive table-check nowrap"
+                                                style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;"
+                                                id="comps_all">
+                                                <thead>
+                                                    <tr class="bg-transparent">
+                                                        <th style="width: 30px; text-align:center;">الرقم</th>
+                                                        <th style="text-align:center;">الشركة</th>
+                                                        <th style="text-align:center;">أُضيف بواسطة</th>
+                                                        <th style="text-align:center;">أُضيف في</th>
+
+                                                        <th style="width: 30px; text-align:center;">الإجراء</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="comps_all_tbody">
+
                                                     <!-- Rows will be populated here via JavaScript -->
                                                 </tbody>
                                             </table>

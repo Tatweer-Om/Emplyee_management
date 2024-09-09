@@ -333,17 +333,17 @@
                         </li>
 
                         <li>
+                            @if(Auth::check() && Auth::user()->user_type == 1)
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="grid"></i>
                                 <span data-key="t-apps">إدارة المكتب</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li>
-                                    <a href="{{url('user')}}">
+                                    <a href="{{ url('user') }}">
                                         <span data-key="t-calendar">موظفو المكتب</span>
                                     </a>
                                 </li>
-
                                 <li>
                                     <a href="{{ url('branch') }}">
                                         <span data-key="t-chat">فروع المكتب</span>
@@ -354,12 +354,18 @@
                                         <span data-key="t-chat">عن المكتب</span>
                                     </a>
                                 </li>
-                                <li><a href="{{ url('document') }}" data-key="t-maintenance">إضافة مستند</a></li>
-
+                                <li>
+                                    <a href="{{ url('document') }}" data-key="t-maintenance">إضافة مستند</a>
+                                </li>
                             </ul>
+                        @endif
+
+
+
                         </li>
 
                         <li>
+                            @if(Auth::check() && Auth::user()->user_type == 1)
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="pie-chart"></i>
                                 <span data-key="t-pages">إدارة الشركات</span>
@@ -370,12 +376,14 @@
 
 
                             </ul>
+                            @endif
                         </li>
 
 
 
 
                         <li>
+                            @if(Auth::check() && Auth::user()->user_type == 1)
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="cpu"></i>
                                 <span data-key="t-pages">  تقارير</span>
@@ -386,6 +394,7 @@
                                 <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
                                 <li><a href="{{ url('employee_task_report') }}" data-key="t-starter-page">تقرير مهام الموظفين</a></li>
                             </ul>
+                            @endif
                         </li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
@@ -398,6 +407,7 @@
                             </ul>
                         </li>
                         <li>
+                            @if(Auth::check() && Auth::user()->user_type == 1)
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="share-2"></i>
                                 <span data-key="t-pages"> الوثائق المنتهية </span>
@@ -406,6 +416,7 @@
                                 <li><a href="{{ url('show_expired_docs')}}" data-key="t-starter-page"> الوثائق قيد المعالجة </a></li>
                                 <li><a href="{{ url('under_process')}}" data-key="t-starter-page">  المستندات قيد المعالجة  </a></li>
                             </ul>
+                            @endif
                         </li>
 
 

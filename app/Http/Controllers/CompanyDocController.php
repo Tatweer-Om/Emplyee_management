@@ -82,7 +82,8 @@ class CompanyDocController extends Controller
                     $expiry_date='<p style="text-align:center;" href="javascript:void(0);">'.$value->expiry_date.'</p>';
 
 
-                $office_user = $value->added_by;
+                $officer = $value->user_id;
+                $office_user= User::where('id', $officer)->value('user_name');
 
                 $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
 

@@ -135,7 +135,7 @@ class CompanyController extends Controller
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                         <li><a class="dropdown-item" href="' . url('employee_document_addition/' . $value->id) . '">Add Document</a></li>
+                         <li><a class="dropdown-item" href="' . url('employee_document_addition/' . $value->id) . '">إضافة مستند</a></li>
                         </ul>
                     </div>';
 

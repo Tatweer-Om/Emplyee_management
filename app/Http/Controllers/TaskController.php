@@ -72,52 +72,72 @@ class TaskController extends Controller
             ->where('doc_status', 2)
             ->get();
 
+            // print_r($company_docs->toArray()); exit;
+
         $company_count = $companies->count();
 
         // Initialize arrays to hold documents for each company and employee
         $company_documents = [];
         $employee_documents = [];
 
-        // Function to translate status values to human-readable strings
-        function translateStatus($status) {
-            switch ($status) {
-                case 1:
-                    return 'None';
-                case 2:
-                    return 'Under Process';
-
-                default:
-                    return null; // Fallback for unexpected status values
-            }
-        }
-
         // Loop through each company to get its documents
+        // $documents_company=[];
+        $renew_company_documents=[];
         foreach ($companies as $company) {
             $documents = CompanyDocs::where('company_id', $company->id)->get();
+            $documents_company = CompanyDocs::where('company_id', $company->id)->where('doc_status', 2)->get();
             foreach ($documents as $doc) {
                 $company_documents[$company->id][] = [
                     'id' => $doc->id,
                     'companydoc_name' => $doc->companydoc_name,
-                    'status' => translateStatus($doc->doc_status), // Translate status here
+                    'status' =>$doc->doc_status, // Translate status here
                     'expiry_date' => $doc->expiry_date,
                     'company_id' => $doc->company_id,
                 ];
             }
+
+            foreach ($documents_company as $docs) {
+                $renew_company_documents[] = [
+                    'id' => $doc->id,
+                    'companydoc_name' => $docs->companydoc_name,
+                    'company_name' => $doc->company_name,
+                    'status' =>$docs->doc_status, // Translate status here
+                    'expiry_date' => $docs->expiry_date,
+                    'company_id' => $docs->company_id,
+                ];
+            }
         }
 
+
+
+
+        $renew_employee_documents=[];
         // Loop through each employee to get their documents
         foreach ($employees as $employee) {
             $documents = EmployeeDoc::where('employee_id', $employee->id)->get();
+            $documents_emp = EmployeeDoc::where('employee_id', $employee->id)->where('doc_status', 2)->get();
             foreach ($documents as $doc) {
                 $employee_documents[$employee->id][] = [
                     'id' => $doc->id,
                     'employeedoc_name' => $doc->employeedoc_name,
-                    'status' => translateStatus($doc->doc_status), // Translate status here
+                    'status' => $doc->doc_status, // Translate status here
                     'employee_id' => $doc->employee_id,
                     'expiry_date' => $doc->expiry_date,
                 ];
             }
+
+            foreach ($documents_emp as $docss) {
+                $renew_employee_documents[] = [
+                    'id' => $docss->id,
+                    'employeedoc_name' => $docss->employeedoc_name,
+                    'employee_name' => $doc->employee_name,
+                    'status' => $docss->doc_status, // Translate status here
+                    'employee_id' => $docss->employee_id,
+                    'expiry_date' => $docss->expiry_date,
+                ];
+            }
         }
+
 
         // Return the data as a JSON response
         return response()->json([
@@ -126,8 +146,8 @@ class TaskController extends Controller
             'employees' => $employees,
             'company_documents' => $company_documents,
             'employee_documents' => $employee_documents,
-            'employee_docs' => $employee_docs,
-            'company_docs' => $company_docs,
+            'employee_docs' => $renew_employee_documents,
+            'company_docs' => $renew_company_documents,
             'employee_docs_total'=>$employee_docs_total,
             'company_docs_total'=>$company_docs_total,
         ]);

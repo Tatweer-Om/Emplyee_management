@@ -55,7 +55,7 @@
                                             <h5 class="mb-0">مرحبًا بكم في النظام</h5>
                                             <p class="text-muted mt-2">قم بتسجيل الدخول باستخدام اسم المستخدم وكلمة المرور.</p>
                                         </div>
-                                        <form id="loginForm" class="mt-4 pt-2 login_user" method="POST" action="#">
+                                        <form id="loginForm" class="mt-4 pt-2 login_user" method="POST" >
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="username" class="form-label">اسم المستخدم</label>
