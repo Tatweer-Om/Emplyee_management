@@ -382,7 +382,7 @@
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1 overflow-hidden">
                                 <h5 class="font-size-13 text-truncate">${employee_data.employee.employee_name} <br>${doc.employeedoc_name}</h5>
-                                <p class="mb-0 text-truncate"> <span class="">${daysRemaining} يوم متبقي < /span></p>
+                                <p class="mb-0 text-truncate"> <span class="">${daysRemaining} يوم متبقي </span></p>
 
                             </div>
                             <div class="fs-1">
