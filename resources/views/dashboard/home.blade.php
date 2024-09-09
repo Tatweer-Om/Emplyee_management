@@ -383,7 +383,7 @@
                         <div class="col-xl-4">
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">أحدث الشركات المضافة</h4>
+                                    <h4 class="card-title mb-0 flex-grow-1">  أحدث الموظفين والشركات المضافة</h4>
                                     <div class="flex-shrink-0">
                                         <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs" role="tablist">
                                         </ul>

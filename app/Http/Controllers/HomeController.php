@@ -100,7 +100,7 @@ class HomeController extends Controller
     public function home()
 {
     // Check if the user is authenticated and authorized
-    if (Auth::check() && Auth::user()->user_type == 1) {
+    if (Auth::check()) {
         // Retrieve counts of various models
         $users = User::count();
         $employee = Employee::count();
@@ -108,8 +108,6 @@ class HomeController extends Controller
         $comp_docs = CompanyDocs::count();
         $company = Company::count();
         $renewed = DocumentHistory::where('status', 2)->count();
-
-
 
         $employee_doc_count = EmployeeDoc::where('doc_status', 2)->count();
         $company_doc_count = CompanyDocs::where('doc_status', 2)->count();
