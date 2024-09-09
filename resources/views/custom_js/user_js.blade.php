@@ -87,15 +87,22 @@
         };
 
         // Function to handle delete
-        window.del = function(id) {
+
+
+        // Toggle password visibility
+    });
+
+    function del(id) {
             Swal.fire({
                 title: 'هل أنت متأكد من الحذف؟',
                 text: 'حذف',
-                type: "warning",
+                icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: 'حذف',
+                confirmButtonClass: "btn btn-primary",
+                cancelButtonClass: "btn btn-danger ml-1",
                 buttonsStyling: false
             }).then(function(result) {
                 if (result.value) {
@@ -116,7 +123,4 @@
                 }
             });
         };
-
-        // Toggle password visibility
-    });
 </script>

@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title>الملف الشخصي للشركة</title>
+        <title>{{ $company->company_name ?? '' }}</title>
     @endpush
 
     <div class="main-content">
@@ -63,27 +63,17 @@
                                     <div class="card-header align-items-center d-flex">
                                         <h4 class="card-title mb-0 flex-grow-1">مستندات الشركة والموظفين</h4>
                                         <div class="flex-shrink-0">
-                                            <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs"
-                                                role="tablist">
-                                                {{-- <li class="nav-item">
-                                                    <a class="nav-link active" data-bs-toggle="tab" href="#home2"
-                                                        role="tab">
-                                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                                        <span class="d-none d-sm-block">مستندات الموظفين</span>
-                                                    </a>
-                                                </li> --}}
+                                            <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#profile2"
-                                                        role="tab">
+                                                    <a class="nav-link active" data-bs-toggle="tab" href="#profile3" role="tab">
                                                         <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                                        <span class="d-none d-sm-block">مستندات الشركة</span>
+                                                        <span class="d-none d-sm-block">جميع الموظفين</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#profile3"
-                                                        role="tab">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#profile2" role="tab">
                                                         <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                                        <span class="d-none d-sm-block">جميع الموظفين</span>
+                                                        <span class="d-none d-sm-block">مستندات الشركة</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -93,59 +83,45 @@
                                     <div class="card-body">
                                         <!-- Tab panes -->
                                         <div class="tab-content text-muted">
-                                            {{-- <div class="tab-pane active" id="home2" role="tabpanel">
-                                                <div class="mt-5">
-                                                    <h5 class="mb-3">مستندات الموظفين التي تحتاج إلى تجديد</h5>
-                                                    <div class="row" id="employee_docs_list">
-                                                    </div>
-                                                </div>
-                                            </div> --}}
-                                            <div class="tab-pane" id="profile3" role="tabpanel">
-                                                <a href="#" class="btn btn-success"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal3" onclick="add_employee3({{ $company->id }})">إضافة موظف</a> <br><br>
+                                            <div class="tab-pane fade show active" id="profile3" role="tabpanel">
+                                                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#employee_modal3" onclick="add_employee3({{ $company->id }})">إضافة موظف</a> <br><br>
                                                 <div class="table-responsive">
-                                                    <table class="table align-middle  dt-responsive table-check nowrap"
-                                                        style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_company_employee">
+                                                    <table class="table align-middle dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_company_employee2">
                                                         <thead>
-                                                            <tr class="bg-transparent">
-                                                            <th style="text-align: right;">رقم</th>
-                                                            <th style="text-align: right; width: 20px;">اسم الموظف</th>
-                                                            <th style="text-align: right;">تواصل الموظف</th>
-                                                            {{-- <th style="text-align: right;">شركة الموظف</th> --}}
-                                                            <th style="text-align: right;">تفاصيل الموظف</th>
-                                                            <th style="text-align: right; width: 20px;">أضيف بواسطة</th>
-                                                            <th style="text-align: right; width: 20px;">إجراء</th>
-                                                            </tr>
+                                                            <th style="width:30px; text-align: center;">رقم</th>
+                                                            <th style="text-align: center;">الموظف</th>
+                                                            <th style="text-align: center;">المستندات</th>
+                                                            <th style="text-align: center;">تفاصيل إضافية</th>
+                                                            <th style="text-align: center;">إجراء</th>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane" id="profile2" role="tabpanel">
+
+                                            <div class="tab-pane fade" id="profile2" role="tabpanel">
                                                 <a href="{{ url('document_addition').'/'.$company->id }}" class="btn btn-success">إضافة مستندات</a>
                                                 <div class="table-responsive">
-                                                    <table class="table align-middle dt-responsive table-check nowrap"
-                                                        style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_profile_docs">
+                                                    <table class="table align-middle dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_profile_docs">
                                                         <thead>
                                                             <tr class="bg-transparent">
                                                                 <th style="width: 120px; text-align:center;">رقم</th>
-                                                                <th style="text-align:center;">اسم المستند</th>
-                                                                <th style="text-align:center;">تاريخ الانتهاء</th>
-                                                                <th style="text-align:center;">فترة التجديد</th>
-                                                                <th style="text-align:center;">تاريخ الإضافة</th>
-                                                                <th style="text-align:center;">مستخدم المكتب</th>
+                                                                <th style="text-align:center;">مستند</th>
+                                                                <th style="text-align:center;">تجديد</th>
+                                                                <th style="text-align:center;">مستخدم</th>
                                                                 <th style="text-align:center;">الإجراء</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
+                                                            <!-- Data for documents will go here -->
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div><!-- end card-body -->
+
                                 </div><!-- end card -->
                             </div><!-- end col -->
                         </div>

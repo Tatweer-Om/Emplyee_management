@@ -333,17 +333,17 @@
                         </li>
 
                         <li>
+                            @if(Auth::check() && Auth::user()->user_type == 1)
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="grid"></i>
                                 <span data-key="t-apps">إدارة المكتب</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li>
-                                    <a href="{{url('user')}}">
+                                    <a href="{{ url('user') }}">
                                         <span data-key="t-calendar">موظفو المكتب</span>
                                     </a>
                                 </li>
-
                                 <li>
                                     <a href="{{ url('branch') }}">
                                         <span data-key="t-chat">فروع المكتب</span>
@@ -354,26 +354,51 @@
                                         <span data-key="t-chat">عن المكتب</span>
                                     </a>
                                 </li>
-
+                                <li>
+                                    <a href="{{ url('document') }}" data-key="t-maintenance">إضافة مستند</a>
+                                </li>
                             </ul>
+                        @endif
+
+
+
                         </li>
 
                         <li>
+                            @if(Auth::check() && Auth::user()->user_type == 1)
                             <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="file-text"></i>
+                                <i data-feather="pie-chart"></i>
                                 <span data-key="t-pages">إدارة الشركات</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="{{ url('company') }}" data-key="t-starter-page">الشركات</a></li>
                                 <li><a href="{{ url('employee') }}" data-key="t-maintenance">الموظفون</a></li>
-                                <li><a href="{{ url('document') }}" data-key="t-maintenance">إضافة مستند</a></li>
+
 
                             </ul>
+                            @endif
                         </li>
 
+
+
+
+                        <li>
+                            @if(Auth::check() && Auth::user()->user_type == 1)
+                            <a href="javascript: void(0);" class="has-arrow">
+                                <i data-feather="cpu"></i>
+                                <span data-key="t-pages">  تقارير</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الموظف</a></li>
+                                <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الشركة</a></li>
+                                <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
+                                <li><a href="{{ url('employee_task_report') }}" data-key="t-starter-page">تقرير مهام الموظفين</a></li>
+                            </ul>
+                            @endif
+                        </li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="file-text"></i>
+                                <i data-feather="map"></i>
                                 <span data-key="t-pages">صفحة مهام الموظف</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -381,18 +406,17 @@
 
                             </ul>
                         </li>
-
-
                         <li>
+                            @if(Auth::check() && Auth::user()->user_type == 1)
                             <a href="javascript: void(0);" class="has-arrow">
-                                <i data-feather="file-text"></i>
-                                <span data-key="t-pages">  تقارير</span>
+                                <i data-feather="share-2"></i>
+                                <span data-key="t-pages"> الوثائق المنتهية </span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الموظف</a></li>
-                                <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الشركة</a></li>
-                                <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
+                                <li><a href="{{ url('show_expired_docs')}}" data-key="t-starter-page"> الوثائق قيد المعالجة </a></li>
+                                <li><a href="{{ url('under_process')}}" data-key="t-starter-page">  المستندات قيد المعالجة  </a></li>
                             </ul>
+                            @endif
                         </li>
 
 

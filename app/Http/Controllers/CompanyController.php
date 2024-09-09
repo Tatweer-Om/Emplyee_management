@@ -16,9 +16,10 @@ class CompanyController extends Controller
     public function index (){
 
         $companies= Company::all();
+        $users= User::all();
         if (Auth::check() && Auth::user()->user_type == 1) {
             // If the conditions are met, show the dashboard
-            return view ('main_pages.company', compact( 'companies' ));
+            return view ('main_pages.company', compact( 'companies', 'users' ));
         } else {
             // If the conditions are not met, redirect to the login page with an Arabic error message
             return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
@@ -28,60 +29,58 @@ class CompanyController extends Controller
 
     public function show_company()
     {
-        $sno=0;
+        $sno = 0;
 
-        $view_company= Company::all();
-        if(count($view_company)>0)
-        {
-            foreach($view_company as $value)
-            {
+        $view_company = Company::all();
+        if (count($view_company) > 0) {
+            foreach ($view_company as $value) {
+
+                $office_user2 = User::where('id', $value->office_user)->value('user_name');
+                $assigned = User::where('id', $value->user_id)->value('user_name');
 
 
-
-                $office_user = $value->added_by;
 
                 $company_name = '<a style="width:20px;" href="company_profile/' . $value->id . '" target="_blank" class="company-link">' . $value->company_name . '</a>';
-                $office_user='<p tyle="width:20px;" href="javascript:void(0);">'.$office_user.'</p>';
+                $office_user = '<p tyle="width:20px;" href="javascript:void(0);">' . $office_user2 . '</p>';
                 $company_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->company_email . ' <br> ' . $value->company_phone . '</p>';
 
-                $company_address='<p tyle="width:20px;" href="javascript:void(0);">'.$value->company_address.'</p>';
-                $company_detail='<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">'.$value->company_detail.'</p>';
-                $cr_no='<p href="javascript:void(0);">'.$value->cr_no.'</p>';
+                $company_address = '<p tyle="width:20px;" href="javascript:void(0);">' . $value->company_address . '</p>';
+                $company_detail = '<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">' . $value->company_detail . '</p>';
+                $cr_no = '<p href="javascript:void(0);">' . $value->cr_no . '</p>';
 
-                $modal='<div class="dropdown">
-                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bx bx-dots-horizontal-rounded"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#company_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item"  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal" onclick="add_employee(' . $value->id . ')">Add Employee</a></li>
-                            <li><a class="dropdown-item" href="' . url('document_addition/' . $value->id) . '">Add Document</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
-                        </ul>
-                    </div>';
-                $add_data=get_date_only($value->created_at);
+                $modal = '<div class="dropdown">
+                            <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bx bx-dots-horizontal-rounded"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#company_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">تعديل</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal" onclick="add_employee(' . $value->id . ')">إضافة موظف</a></li>
+                                <li><a class="dropdown-item" href="' . url('document_addition/' . $value->id) . '">إضافة مستند</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">حذف</a></li>
+                            </ul>
+                        </div>';
+
+                $add_data = get_date_only($value->created_at);
 
                 $sno++;
-                $json[]= array(
-                            $sno,
-                            // '<img class="table_image" src="'.$img.'" alt="'.$value->company_name.'">',
-                            $company_name . '<br>'. $company_address,
-                            $company_contact,
-                            $office_user,
-                            $company_detail,
-                            $cr_no,
-                            $add_data,
-                            $modal
-                        );
+                $json[] = array(
+                    $sno,
+                    $company_name . '<br>' . $company_address,
+                    $company_contact,
+                    'أضيف بواسطة: ' . $office_user . '<br>' . 'مدير الشركة: ' . $assigned,
+                    $company_detail,
+                    $cr_no,
+                    $add_data,
+                    $modal
+                );
+
             }
             $response = array();
             $response['success'] = true;
             $response['aaData'] = $json;
             echo json_encode($response);
-        }
-        else
-        {
+        } else {
             $response = array();
             $response['sEcho'] = 0;
             $response['iTotalRecords'] = 0;
@@ -90,6 +89,7 @@ class CompanyController extends Controller
             echo json_encode($response);
         }
     }
+
 
 
     public function show_company_employee(Request $request)
@@ -109,11 +109,23 @@ class CompanyController extends Controller
                 {
                     $company_name = $company->company_name;
                 }
-                $employee_name='<a style="width:20px;" href="' . url('employee_document_addition/' . $value->id) . '">'.$value->employee_name.'</a>';
-                $employee_company='<p tyle="width:20px;" href="javascript:void(0);">'. $company_name.'</p>';
-                $employee_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->employee_email . ' <br> ' . $value->employee_phone . '</p>';
 
+                $documents = EmployeeDoc::where('employee_id', $value->id)->get();
+                $document_list = '';
+                foreach ($documents as $document) {
+                    // Format the expiry date in Arabic
+                    $expiryDate = Carbon::parse($document->expiry_date)->format('d-m-Y');
 
+                    // Add the document information to the list with the Arabic expiry date
+                    $document_list .= '<p style="text-align:center;">' .
+                                        $document->employeedoc_name .
+                                        ' - <span>(' . 'تاريخ الانتهاء: ' . $expiryDate . ')</span>' .
+                                      '</p>';
+                }
+
+                $employee_name='<a style="width:20px;  text-align:center;" href="' . url('employee_document_addition/' . $value->id) . '">'.$value->employee_name.'</a>';
+                $employee_company='<p style="width:20px;  text-align:center;" href="javascript:void(0);">'. $company_name.'</p>';
+                $employee_contact = '<p style="width:20px; text-align:center;" href="javascript:void(0);">' . $value->employee_email . ' <br>' . $value->employee_phone . '</p>';
                 $employee_detail='<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">'.$value->employee_detail.'</p>';
                 $cr_no='<p href="javascript:void(0);">'.$value->cr_no.'</p>';
 
@@ -123,23 +135,26 @@ class CompanyController extends Controller
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                         <li><a class="dropdown-item" href="' . url('employee_document_addition/' . $value->id) . '">Add Document</a></li>
-                            
+                         <li><a class="dropdown-item" href="' . url('employee_document_addition/' . $value->id) . '">إضافة مستند</a></li>
                         </ul>
                     </div>';
-                    // <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#employee_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                    //         <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
+
                 $add_data=get_date_only($value->created_at);
 
                 $sno++;
                 $json[]= array(
-                            $sno,
-                            // '<img class="table_image" src="'.$img.'" alt="'.$value->employee_name.'">',
-                            $employee_name,
-                            $employee_contact,
-                            $employee_company,
-                            $employee_detail,
-                            $value->added_by . '<br>' . $add_data,
+
+                            '<div style="text-align: center;">' . $sno . '</div>',
+
+
+                                        '<div style="text-align: center;">' .
+                        '<div style="margin-bottom: 5px;">' . $employee_name . '</div>' .
+                        '<div style="text-align:center;>' . $employee_company . '</div>' .
+
+                    '</div>',
+
+                            $document_list,
+                            '<div style="text-align: center;">' . $value->added_by . '<br>' . $add_data . '</div>',
                             $modal
                         );
             }
@@ -164,21 +179,18 @@ class CompanyController extends Controller
         $user_id = Auth::id();
         $data= User::find( $user_id)->first();
         $user= $data->user_name;
-
-
-
         $company = new Company();
 
         $company->company_id = genUuid() . time();
         $company->company_name = $request['company_name'];
         $company->company_email = $request['company_email'];
         $company->company_phone = $request['company_phone'];
-        $company->office_user = $request['office_user'];
+        $company->office_user = $user_id;
         $company->company_address = $request['company_address'];
         $company->company_detail = $request['company_detail'];
         $company->cr_no = $request['cr_no'];
         $company->added_by = $user;
-        $company->user_id = $user_id;
+        $company->user_id = $request['user'];
         $company->save();
         $lastInsertedId = $company->id;
         return response()->json(['company_id' => $company->company_id,'last_id'=>$lastInsertedId]);
@@ -204,6 +216,7 @@ class CompanyController extends Controller
         // Add more attributes as needed
         $data = [
             'company_id' => $company_data->company_id,
+            'user_id' => $company_data->user_id,
             'company_name' => $company_data->company_name,
             'company_email' => $company_data->company_email,
             'company_phone' => $company_data->company_phone,
@@ -233,7 +246,7 @@ class CompanyController extends Controller
         $company->company_name = $request->input('company_name');
         $company->company_email = $request->input('company_email');
         $company->company_phone = $request->input('company_phone');
-        $company->office_user = $request->input('office_user');
+        $company->user_id = $request->input('user');
         $company->company_address = $request->input('company_address');
         $company->company_detail = $request->input('company_detail');
         $company->cr_no = $request->input('cr_no');
@@ -360,7 +373,7 @@ class CompanyController extends Controller
             $badgeClass = $totalDaysRemaining < 60 ? 'badge badge-soft-danger font-size-15' : 'badge badge-soft-success font-size-15';
 
             $doc->renewal_period = '<p style="text-align:center;">' . $timeLeft . '</p>'
-                . '<br>'
+                . ''
                 . '<span class="' . $badgeClass . '">' . $totalDaysRemaining . ' يوم متبقي</span>';
         }
     }
@@ -393,6 +406,7 @@ public function delete_company_doc(Request $request){
 
     ]);
 }
+
 
 
 

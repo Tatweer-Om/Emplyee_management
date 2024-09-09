@@ -61,7 +61,7 @@
 
             if (id != '') {
                 if (title == "") {
-                    show_notification('error', '<?php echo trans('messages.data_add_employee_doc_name_lang', [], session('locale')); ?>');
+                    show_notification('error', 'إضافة اسم مستند الموظف');
                     return false;
                 }
                 var str = $(".add_employee_doc").serialize();
@@ -72,14 +72,14 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        show_notification('success', '<?php echo trans('messages.data_update_success_lang', [], session('locale')); ?>');
+                        show_notification('success', 'تم تحديث البيانات بنجاح');
                         $('#employee_doc_modal').modal('hide');
                         $('#all_employee_doc').DataTable().ajax.reload();
                         $(".add_employee_doc")[0].reset();
                         return false;
                     },
                     error: function(data) {
-                        show_notification('error', '<?php echo trans('messages.data_update_failed_lang', [], session('locale')); ?>');
+                        show_notification('error', 'فشل تحديث البيانات');
                         $('#all_employee_doc').DataTable().ajax.reload();
                         console.log(data);
                         return false;
@@ -87,7 +87,7 @@
                 });
             } else if (id == '') {
                 if (title == "") {
-                    show_notification('error', '<?php echo trans('messages.data_add_employee_doc_name_lang', [], session('locale')); ?>');
+                    show_notification('error', 'إضافة اسم مستند الموظف');
                     return false;
                 }
                 var str = $(".add_employee_doc").serialize();
@@ -99,13 +99,13 @@
                     processData: false,
                     success: function(data) {
                         $('#all_employee_doc').DataTable().ajax.reload();
-                        show_notification('success', '<?php echo trans('messages.data_add_success_lang', [], session('locale')); ?>');
+                        show_notification('success', 'تمت إضافة البيانات بنجاح');
                         $('.employee_doc_modal').modal('hide');
                         $(".add_employee_doc")[0].reset();
                         return false;
                     },
                     error: function(data) {
-                        show_notification('error', '<?php echo trans('messages.data_add_failed_lang', [], session('locale')); ?>');
+                        show_notification('error', 'فشل إضافة البيانات');
                         $('#all_employee_doc').DataTable().ajax.reload();
                         console.log(data);
                         return false;
@@ -131,11 +131,11 @@
                     $(".employeedoc_name").val(fetch.employeedoc_name);
                     $(".expiry_date").val(fetch.expiry_date);
                     $(".employee_doc_id").val(fetch.id);
-                    $(".modal-title").html('<?php echo trans('messages.update_lang', [], session('locale')); ?>');
+                    $(".modal-title").html('نافذة إضافة موظف');
                 }
             },
             error: function(html) {
-                show_notification('error', '<?php echo trans('messages.edit_failed_lang', [], session('locale')); ?>');
+                show_notification('error', 'فشل التعديل');
                 console.log(html);
                 return false;
             }
@@ -165,15 +165,15 @@
                         _token: csrfToken
                     },
                     error: function() {
-                        show_notification('error', '<?php echo trans('messages.delete_failed_lang', [], session('locale')); ?>');
+                        show_notification('error', 'فشل الحذف');
                     },
                     success: function(data) {
                         $('#all_employee_doc').DataTable().ajax.reload();
-                        show_notification('success', '<?php echo trans('messages.delete_success_lang', [], session('locale')); ?>');
+                        show_notification('success', ' تم الحذف بنجاح' );
                     }
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                show_notification('success', '<?php echo trans('messages.safe_lang', [], session('locale')); ?>');
+                show_notification('success', 'البيانات آمنة');
             }
         });
     }

@@ -1,9 +1,8 @@
 @extends('layouts.header')
 @section('main')
     @push('title')
-        <title> Employee Task Report</title>
+        <title>تقرير مهام الموظفين</title>
     @endpush
-
 
 <div class="main-content">
 
@@ -14,12 +13,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">reports</h4>
+                        <h4 class="mb-sm-0 font-size-18">التقارير</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Employee Task Report  </a></li>
-                                <li class="breadcrumb-item active"> reports </li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">تقرير مهام الموظفين</a></li>
+                                <li class="breadcrumb-item active">التقارير</li>
                             </ol>
                         </div>
 
@@ -36,17 +35,16 @@
                                 @csrf
                                 <div class="row">
 
-
                                     <div class="col-sm-auto">
                                         <div class="d-flex align-items-center gap-1 mb-4">
 
                                             <div class="input-group">
-                                                <input type="date" class="form-control date_from" id="date_from" name="date_from" placeholder="from date"
+                                                <input type="date" class="form-control date_from" id="date_from" name="date_from" placeholder="من تاريخ"
                                                     value="{{ old('date_from', $sdate ?? '') }}">
                                             </div>
 
                                             <div class="input-group">
-                                                <input type="date" class="form-control to_date" id="to_date" name="to_date" placeholder="to date"
+                                                <input type="date" class="form-control to_date" id="to_date" name="to_date" placeholder="إلى تاريخ"
                                                     value="{{ old('date_to', $edate ?? '') }}">
                                             </div>
 
@@ -131,19 +129,12 @@
                 <!-- end col -->
             </div>
 
-
-
-
-
-
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
 
-
 </div>
-
 
 @include('layouts.footer')
 @endsection

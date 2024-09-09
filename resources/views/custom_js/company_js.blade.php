@@ -31,11 +31,15 @@
             },
         });
 
+
+
         $('.add_company').off().on('submit', function(e) {
             e.preventDefault();
             var formdatas = new FormData($('.add_company')[0]);
             var title = $('.company_name').val();
             var id = $('.company_id').val();
+
+
 
             if (id != '') {
                 if (title == "") {
@@ -95,77 +99,9 @@
                     }
                 });
             }
+
         });
 
-        function edit(id) {
-            console.log(id);
-
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                dataType: 'JSON',
-                url: "{{ url('edit_company') }}",
-                method: "POST",
-                data: {
-                    id: id,
-                    _token: csrfToken
-                },
-                success: function(fetch) {
-                    if (fetch != "") {
-                        $(".company_name").val(fetch.company_name);
-                        $(".company_email").val(fetch.company_email);
-                        $(".company_phone").val(fetch.company_phone);
-                        $(".office_user").val(fetch.office_user).trigger('change');
-                        $(".company_address").val(fetch.company_address);
-                        $(".company_detail").val(fetch.company_detail);
-                        $(".cr_no").val(fetch.cr_no);
-
-                        $(".company_id").val(fetch.company_id);
-                        $(".modal-title").html('تحديث');
-                    }
-                },
-                error: function(html) {
-                    show_notification('error', 'فشل تعديل البيانات');
-                    console.log(html);
-                    return false;
-                }
-            });
-        }
-
-        function del(id) {
-            Swal.fire({
-                title: 'هل أنت متأكد من الحذف؟',
-                text: 'حذف',
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: 'حذف',
-                confirmButtonClass: "btn btn-primary",
-                cancelButtonClass: "btn btn-danger ml-1",
-                buttonsStyling: false
-            }).then(function(result) {
-                if (result.value) {
-                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                    $.ajax({
-                        url: "{{ url('delete_company') }}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                            _token: csrfToken
-                        },
-                        error: function() {
-                            show_notification('error', 'فشل حذف البيانات');
-                        },
-                        success: function(data) {
-                            $('#all_company').DataTable().ajax.reload();
-                            show_notification('success', 'تم حذف البيانات بنجاح');
-                        }
-                    });
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    show_notification('success', 'تم إلغاء الحذف');
-                }
-            });
-        }
 
         //employee
         function add_employee(id) {
@@ -254,19 +190,88 @@
                 show_notification('success', 'تمت إضافة البيانات بنجاح');
                 $('.employee_modal3').modal('hide');
                 $(".add_employee3")[0].reset();
-                window.open(url, '_blank');
-                $('#all_company_employee').DataTable().ajax.reload();
+                window.location.reload();  // Corrected line
+
                 return false;
             },
             error: function(data) {
                 show_notification('error', 'فشل إضافة البيانات'); // Show error notification
-                $('#all_company_employee').DataTable().ajax.reload(); // Reload DataTable
+                window.location.reload();// Reload DataTable
                 console.log(data); // Log error for debugging
             }
         });
     });
 
 
+    function edit(id) {
+            console.log(id);
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                dataType: 'JSON',
+                url: "{{ url('edit_company') }}",
+                method: "POST",
+                data: {
+                    id: id,
+                    _token: csrfToken
+                },
+                success: function(fetch) {
+                    if (fetch != "") {
+                        $(".company_name").val(fetch.company_name);
+                        $(".company_email").val(fetch.company_email);
+                        $(".company_phone").val(fetch.company_phone);
+                        $(".user").val(fetch.user_id).trigger('change');
+                        $(".company_address").val(fetch.company_address);
+                        $(".company_detail").val(fetch.company_detail);
+                        $(".cr_no").val(fetch.cr_no);
+
+                        $(".company_id").val(fetch.company_id);
+                        $(".modal-title").html('تحديث');
+                    }
+                },
+                error: function(html) {
+                    show_notification('error', 'فشل تعديل البيانات');
+                    console.log(html);
+                    return false;
+                }
+            });
+        }
+
+        function del(id) {
+            Swal.fire({
+                title: 'هل أنت متأكد من الحذف؟',
+                text: 'حذف',
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: 'حذف',
+                confirmButtonClass: "btn btn-primary",
+                cancelButtonClass: "btn btn-danger ml-1",
+                buttonsStyling: false
+            }).then(function(result) {
+                if (result.value) {
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        url: "{{ url('delete_company') }}",
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            _token: csrfToken
+                        },
+                        error: function() {
+                            show_notification('error', 'فشل حذف البيانات');
+                        },
+                        success: function(data) {
+                            $('#all_company').DataTable().ajax.reload();
+                            show_notification('success', 'تم حذف البيانات بنجاح');
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    show_notification('success', 'تم إلغاء الحذف');
+                }
+            });
+        }
 
 
 
@@ -410,25 +415,7 @@
                         }
                     });
 
-                    let row_html = `<tr>
-                                    <td style="text-align:center;">${index + 1}</td>
-                                    <td style="text-align:center;">${employee_data.employee.employee_name}</td>
-                                    <td style="text-align:center;">${doc_names}</td>
-                                    <td style="text-align:center;">${created_at_date}</td>
-                                    <td style="text-align:center;">${employee_data.employee.added_by}</td>
-                                    <td style="text-align:center;">
-                                        <div class="dropdown">
-                                            <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_employee3(${employee_data.employee.id})">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>`;
-                    $('#all_company_employee tbody').append(row_html);
+
                 });
 
 
@@ -442,11 +429,21 @@
 
                     let doc_html = `<tr>
                                     <td style="text-align:center;">${index + 1}</td>
-                                    <td style="text-align:center;">${doc.companydoc_name ?? 'no document available'}</td>
-                                    <td style="text-align:center;">${doc.expiry_date}</td>
-                                    <td style="text-align:center;">${doc.renewal_period}</td>
-                                    <td style="text-align:center;">${formattedDate}</td>
-                                    <td style="text-align:center;">${doc.added_by}</td>
+                                   <td style="text-align:center;">
+                                     <div>${doc.companydoc_name ?? 'no document available'}</div>
+                                    <div>
+                                        <a href="/document_addition/${doc.company_id}" class="text-decoration-none">
+                                            ${doc.company_name ?? ''}
+                                        </a>
+                                    </div>
+
+                                    </td>
+                                  <td style="text-align:center;">
+                                        <div>تاريخ الانتهاء: ${doc.expiry_date}</div>
+                                        ${doc.renewal_period}
+                                    </td>
+                                    <td style="text-align:center;">${doc.added_by}
+                                        <div>${formattedDate}</div></td>
                                     <td style="text-align:center;">
                                         <div class="dropdown">
                                             <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
@@ -471,23 +468,24 @@
                 // Initialize DataTable
 
 
-                $('#all_company_employee').DataTable({
+                $('#all_company_employee2').DataTable({
                     "sAjaxSource": "{{ url('show_company_employee') }}" + "?company_id=" + companyId,
                     "bFilter": true,
                     // "sDom": 'fBtlpi',
                     'pagingType': 'numbers',
                     "ordering": true,
                     "language": {
-                        search: ' ',
-                        sLengthMenu: '_MENU_',
-                        searchPlaceholder: 'search',
-                        info: "_START_ - _END_ of _TOTAL_ items",
+                        search: 'بحث:',
+                        sLengthMenu: 'عرض _MENU_ عناصر',
+                        searchPlaceholder: 'بحث...',
+                        info: 'عرض _START_ إلى _END_ من أصل _TOTAL_ عنصر',
                     },
                     initComplete: (settings, json) => {
                         $('.dataTables_filter').appendTo('#tableSearch');
                         $('.dataTables_filter').appendTo('.search-input');
                     },
                 });
+
 
             },
             error: function(xhr, status, error) {
@@ -534,6 +532,42 @@
             });
         }
 
+        function del_employee_doc(id) {
+            Swal.fire({
+                title: 'هل أنت متأكد من الحذف؟',
+                text: 'حذف',
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: 'حذف',
+                confirmButtonClass: "btn btn-primary",
+                cancelButtonClass: "btn btn-danger ml-1",
+                buttonsStyling: false
+            }).then(function(result) {
+                if (result.value) {
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        url: "{{ url('delete_employee_doc') }}",
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            _token: csrfToken
+                        },
+                        error: function() {
+                            show_notification('error', 'فشل حذف البيانات');
+                        },
+                                                success: function(data) {
+                            window.location.reload(); // This will reload the entire page
+                            show_notification('success', 'تم حذف البيانات بنجاح');
+                        }
+
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    show_notification('success', 'تم إلغاء الحذف');
+                }
+            });
+        }
 
         function del_company_doc(id) {
             Swal.fire({
@@ -560,10 +594,11 @@
                         error: function() {
                             show_notification('error', 'فشل حذف البيانات');
                         },
-                        success: function(data) {
-                            $('#all_profile_docs').DataTable().ajax.reload();
+                                                success: function(data) {
+                            window.location.reload(); // This will reload the entire page
                             show_notification('success', 'تم حذف البيانات بنجاح');
                         }
+
                     });
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     show_notification('success', 'تم إلغاء الحذف');

@@ -52,69 +52,35 @@
                                                     <img src="" alt="" height="28"> <span class="logo-txt">{{ $about->about_name ?? '' }}</span>
                                                 </a>
                                             </div>
-                                            <h5 class="mb-0">Welcome To The System</h5>
-                                            <p class="text-muted mt-2">Sign in Using UserName and Password.</p>
+                                            <h5 class="mb-0">مرحبًا بكم في النظام</h5>
+                                            <p class="text-muted mt-2">قم بتسجيل الدخول باستخدام اسم المستخدم وكلمة المرور.</p>
                                         </div>
-                                        <form id="loginForm" class="mt-4 pt-2 login_user" method="POST" action="#">
+                                        <form id="loginForm" class="mt-4 pt-2 login_user" method="POST" >
                                             @csrf
                                             <div class="mb-3">
-                                                <label for="username" class="form-label">Username</label>
-                                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" autocomplete="username" required>
+                                                <label for="username" class="form-label">اسم المستخدم</label>
+                                                <input type="text" class="form-control" id="username" name="username" placeholder="أدخل اسم المستخدم" autocomplete="username" required>
                                             </div>
                                             <div class="mb-3">
                                                 <div class="d-flex align-items-start">
                                                     <div class="flex-grow-1">
-                                                        <label for="password" class="form-label">Password</label>
+                                                        <label for="password" class="form-label">كلمة المرور</label>
                                                     </div>
                                                 </div>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" autocomplete="current-password" required>
+                                                    <input type="password" class="form-control" id="password" name="password" placeholder="أدخل كلمة المرور" autocomplete="current-password" required>
                                                     <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon">
                                                         <i class="mdi mdi-eye-outline"></i>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Log In</button>
+                                                <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">تسجيل الدخول</button>
                                             </div>
                                         </form>
-
-
-                                        {{-- <div class="mt-4 pt-2 text-center">
-                                            <div class="signin-other-title">
-                                                <h5 class="font-size-14 mb-3 text-muted fw-medium">- Sign in with -</h5>
-                                            </div>
-
-                                            <ul class="list-inline mb-0">
-                                                <li class="list-inline-item">
-                                                    <a href="javascript:void()"
-                                                        class="social-list-item bg-primary text-white border-primary">
-                                                        <i class="mdi mdi-facebook"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a href="javascript:void()"
-                                                        class="social-list-item bg-info text-white border-info">
-                                                        <i class="mdi mdi-twitter"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a href="javascript:void()"
-                                                        class="social-list-item bg-danger text-white border-danger">
-                                                        <i class="mdi mdi-google"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div> --}}
-
-                                        {{-- <div class="mt-5 text-center">
-                                            <p class="text-muted mb-0">Don't have an account ? <a href="auth-register.html"
-                                                    class="text-primary fw-semibold"> Signup now </a> </p>
-                                        </div> --}}
                                     </div>
-                                    {{-- <div class="mt-4 mt-md-5 text-center">
-                                        <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> Minia   . Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
-                                    </div> --}}
+
+
                                 </div>
                             </div>
                         </div>
@@ -152,25 +118,9 @@
                                                     <div class="testi-contain text-white">
                                                         <i class="bx bxs-quote-alt-left text-success display-6"></i>
 
-                                                        <h4 class="mt-4 fw-medium lh-base text-white">“I feel confident
-                                                            imposing change
-                                                            on myself. It's a lot more progressing fun than looking back.
-                                                            That's why
-                                                            I ultricies enim
-                                                            at malesuada nibh diam on tortor neaded to throw curve balls.”
+                                                        <h4 class="mt-4 fw-medium lh-base text-white">"الإدارة الفعّالة تعتمد على فهم قدرات كل فرد في الفريق وتوظيف تلك القدرات بأفضل طريقة ممكنة لتحقيق النتائج المرجوة. القائد الجيد يعرف متى يقدم الدعم ومتى يمنح الحرية."
                                                         </h4><br>
-                                                        {{-- <div class="mt-4 pt-3 pb-5">
-                                                            <div class="d-flex align-items-start">
-                                                                <div class="flex-shrink-0">
-                                                                    <img src="{{ asset('images/users/avatar-1.jpg')}}" class="avatar-md img-fluid rounded-circle" alt="...">
-                                                                </div>
-                                                                <div class="flex-grow-1 ms-3 mb-4">
-                                                                    <h5 class="font-size-18 text-white">Richard Drews
-                                                                    </h5>
-                                                                    <p class="mb-0 text-white-50">Web Designer</p>
-                                                                </div>
-                                                            </div>
-                                                        </div> --}}
+
                                                     </div>
                                                 </div>
 
@@ -178,24 +128,8 @@
                                                     <div class="testi-contain text-white">
                                                         <i class="bx bxs-quote-alt-left text-success display-6"></i>
 
-                                                        <h4 class="mt-4 fw-medium lh-base text-white">“Our task must be to
-                                                            free ourselves by widening our circle of compassion to embrace
-                                                            all living
-                                                            creatures and
-                                                            the whole of quis consectetur nunc sit amet semper justo. nature
-                                                            and its beauty.”</h4> <br>
-                                                        {{-- <div class="mt-4 pt-3 pb-5">
-                                                            <div class="d-flex align-items-start">
-                                                                <div class="flex-shrink-0">
-                                                                    <img src="{{ asset('images/users/avatar-2.jpg')}}" class="avatar-md img-fluid rounded-circle" alt="...">
-                                                                </div>
-                                                                <div class="flex-grow-1 ms-3 mb-4">
-                                                                    <h5 class="font-size-18 text-white">Rosanna French
-                                                                    </h5>
-                                                                    <p class="mb-0 text-white-50">Web Developer</p>
-                                                                </div>
-                                                            </div>
-                                                        </div> --}}
+                                                        <h4 class="mt-4 fw-medium lh-base text-white">"الإدارة ليست فقط اتخاذ القرارات وتوجيه الآخرين، بل هي القدرة على خلق بيئة عمل إيجابية تشجع على الإبداع والتعاون، حيث يكون الجميع جزءًا من الحلول وليس فقط المنفذين للمهام."</h4> <br>
+
                                                     </div>
                                                 </div>
 
@@ -203,24 +137,8 @@
                                                     <div class="testi-contain text-white">
                                                         <i class="bx bxs-quote-alt-left text-success display-6"></i>
 
-                                                        <h4 class="mt-4 fw-medium lh-base text-white">“I've learned that
-                                                            people will forget what you said, people will forget what you
-                                                            did,
-                                                            but people will never forget
-                                                            how donec in efficitur lectus, nec lobortis metus you made them
-                                                            feel.”</h4> <br>
+                                                        <h4 class="mt-4 fw-medium lh-base text-white">"المدير الناجح هو الذي يدرك أن النجاح لا يتحقق بالجهود الفردية، بل من خلال العمل الجماعي والتناغم بين الفريق. دوره هو تحفيز الفريق، تمكينه من النمو، وتوفير الأدوات اللازمة لتحقيق الأهداف المشتركة."</h4> <br>
 
-                                                        {{-- <div class="mt-4 pt-3 pb-5">
-                                                            <div class="d-flex align-items-start">
-                                                                <img src="{{ asset('images/users/avatar-3.jpg')}}"
-                                                                    class="avatar-md img-fluid rounded-circle" alt="...">
-                                                                <div class="flex-1 ms-3 mb-4">
-                                                                    <h5 class="font-size-18 text-white">Ilse R. Eaton</h5>
-                                                                    <p class="mb-0 text-white-50">Manager
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div> --}}
                                                     </div>
                                                 </div>
                                             </div>

@@ -71,7 +71,6 @@
 
         //datatable
 
-
         // Initialize DataTables
         let companyTable = $('#company_table').DataTable();
         let employeeTable = $('#employee_table').DataTable();
@@ -86,6 +85,8 @@
             success: function(response) {
                 populateCompanyTable(response);
                 populateEmployeeTable(response);
+                populatecomps(response)
+
                 renderRenewalDocuments(response.company_docs, 'شركة');
 
                 const employees = response.employees || [];
@@ -95,11 +96,11 @@
 
                 const totalEmployees = response.employees.length;
                 const totalEmployeeDocs = response.employee_docs_total
-                .length; // افترض أن response.employee_docs هو مصفوفة
+                    .length; // افترض أن response.employee_docs هو مصفوفة
                 const totalCompanies = response.companies
-                .length; // افترض أن response.companies هو مصفوفة
+                    .length; // افترض أن response.companies هو مصفوفة
                 const totalCompanyDocs = response.company_docs_total
-                .length; // افترض أن response.company_docs هو مصفوفة
+                    .length; // افترض أن response.company_docs هو مصفوفة
 
                 // تحديث عناصر HTML
                 $('#total-employees').text(totalEmployees);
@@ -115,13 +116,13 @@
         });
 
 
-        // Function to populate the company table
 
         function populateCompanyTable(data) {
             companyTable.clear(); // مسح بيانات الجدول الحالية
 
             let companies = data.companies;
             let companyDocuments = data.company_documents;
+            let serialNumber = 1; // Track the serial number globally
 
             // دالة لحساب الوقت المتبقي من تاريخ الانتهاء
             function getRemainingTime(expiryDate) {
@@ -138,9 +139,9 @@
                 days -= months * 30;
 
                 let result = '';
-                if (years > 0) result += `${years} سنة${years > 1 ? '' : ''} `;
-                if (months > 0) result += `${months} شهر${months > 1 ? '' : ''} `;
-                if (days > 0) result += `${days} يوم${days > 1 ? '' : ''} `;
+                if (years > 0) result += `${years} سنة `;
+                if (months > 0) result += `${months} شهر `;
+                if (days > 0) result += `${days} يوم `;
 
                 return result + 'متبقي';
             }
@@ -153,54 +154,75 @@
                         let statusDisplay = document.doc_status ?
                             `<div class="badge badge-soft-success font-size-12">${document.doc_status}</div>` :
                             `<div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
-
+                        let colorClass = '';
+                        //
                         let row = [
-                            docIndex === 0 ? index + 1 : '',
-                            docIndex === 0 ? company.company_name : '',
+                            serialNumber++, // Increment the serial number for each document
+                            company.company_name, // Always show the company name
                             document.companydoc_name,
                             statusDisplay,
                             `<div class="dropdown">
-                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bx bx-dots-horizontal-rounded"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item update-status"
-                                   href="#"
-                                   data-document-id="${document.id}"
-                                   data-source="company"> <!-- تمت إضافة مصدر بيانات السمة -->
-                                   تاريخ
-                                </a>
-                            </li>
-                        </ul>
-                    </div>`
+                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item update-status"
+                                            href="javascript:void(0);"
+                                            style="display:block; text-align:center;"
+                                            data-document-id="${document.id}"
+                                            data-source="company">
+                                            تاريخ
+                                        </a>
+ <a class="dropdown-item" href="/document_addition/${document.company_id}">إضافة مستند</a>
+
+                                        <a class="dropdown-item renew_modal"
+                                            href="javascript:void(0);"
+                                            data-document-id="${document.id}"
+                                             style="display:block; text-align:center;"
+                                            data-doc-name="${document.companydoc_name}"
+                                            data-source="2"> تجديد
+                                         </a>
+
+                                    </li>
+                                </ul>
+                            </div>`
                         ];
-                        companyTable.row.add(row).draw();
+                        let tableRow = companyTable.row.add(row).draw();
+                        // Apply the color class to the newly added row
+                        $(tableRow.node()).addClass(colorClass);
                     });
                 } else {
                     let row = [
-                        index + 1,
+                        serialNumber++, // Increment the serial number even when there are no documents
                         company.company_name,
-                        'لم يتم العثور على مستندات',
+                        ' لا يوجد مستند   ',
                         '',
                         ''
                     ];
-                    companyTable.row.add(row).draw();
+                    let tableRow = companyTable.row.add(row).draw();
+                    // Apply a default color class or omit if no specific color is needed for no documents
+                    $(tableRow.node()).addClass('company-row-no-docs');
                 }
             });
+
         }
 
 
 
         // Function to populate the employee table
+
+
         function populateEmployeeTable(data) {
             employeeTable.clear(); // مسح بيانات الجدول الحالية
 
             let employees = data.employees;
             let employeeDocuments = data.employee_documents;
             let companies = data.companies; // على افتراض أن أسماء الشركات قد تم تمريرها
+            let serialNumber = 1; // Track the serial number globally
 
+            // دالة لحساب الوقت المتبقي من تاريخ الانتهاء
             function getRemainingTime(expiryDate) {
                 let now = new Date();
                 let expiry = new Date(expiryDate);
@@ -215,15 +237,15 @@
                 days -= months * 30;
 
                 let result = '';
-                if (years > 0) result += `${years} سنة${years > 1 ? '' : ''} `;
-                if (months > 0) result += `${months} شهر${months > 1 ? '' : ''} `;
-                if (days > 0) result += `${days} يوم${days > 1 ? '' : ''} `;
+                if (years > 0) result += `${years} سنة `;
+                if (months > 0) result += `${months} شهر `;
+                if (days > 0) result += `${days} يوم `;
 
                 return result + 'متبقي';
             }
 
             $.each(employees, function(index, employee) {
-                // تأكد أن المستندات هي دائماً مصفوفة، حتى لو لم تكن معرفة
+
                 let documents = employeeDocuments[employee.id] || [];
 
                 let companyObj = {};
@@ -231,7 +253,6 @@
                     companyObj[company.id] = company.company_name;
                 });
 
-                // الحصول على اسم الشركة للموظف، والافتراضي هو 'شركة غير معروفة'
                 let companyName = companyObj[employee.employee_company] || 'شركة غير معروفة';
 
                 if (documents.length > 0) {
@@ -241,10 +262,8 @@
                             `<div class="badge badge-soft-warning font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
 
                         let row = [
-                            docIndex === 0 ? index + 1 : '',
-                            docIndex === 0 ?
-                            `${employee.employee_name}<br><small>${companyName}</small>` :
-                            '',
+                            serialNumber++,
+                            `${employee.employee_name}<br><small>${companyName}</small>`,
                             document.employeedoc_name,
                             statusDisplay,
                             `<div class="dropdown">
@@ -260,6 +279,15 @@
                                    data-source="employee">
                                    تاريخ
                                 </a>
+                                 <a class="dropdown-item" href="/employee_document_addition/${document.employee_id}">إضافة مستند</a>
+
+                                  <a class="dropdown-item renew_modal"
+                                   href="#"
+                                   data-document-id="${document.id}"
+                                    data-doc-name="${document.employeedoc_name}"
+                                   data-source="1">
+                                  تجديد
+                                </a>
                             </li>
                         </ul>
                     </div>`
@@ -267,10 +295,11 @@
                         employeeTable.row.add(row).draw();
                     });
                 } else {
+                    // If no documents found, still increment serial number
                     let row = [
-                        index + 1,
+                        serialNumber++,
                         `${employee.employee_name}<br><small>${companyName}</small>`,
-                        'لم يتم العثور على مستندات',
+                        ' لا يوجد مستند   ',
                         '',
                         ''
                     ];
@@ -278,6 +307,52 @@
                 }
             });
         }
+
+        function populatecomps(data) {
+    let companies = data.companies;
+
+    // Ensure companies is an array and is defined
+    if (Array.isArray(companies) && companies.length > 0) {
+        let html = ''; // Initialize HTML as an empty string
+
+        // Iterate over each company
+        let sr = 1;
+        companies.forEach(comp => {
+            // Build the HTML string for each company
+            html += `<tr>
+                 <td style="text-align:center;">${sr++}</td>
+                        <td style="text-align:center;">${comp.company_name}</td>
+                        <td style="text-align:center;">${comp.added_by}</td>
+                        <td style="text-align:center;">${new Date(comp.created_at).toLocaleDateString()}</td>
+
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+
+                                        <a class="dropdown-item" href="/document_addition/${comp.id || ''}">
+                                           إضافة مستند
+                                        </a>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>`;
+        });
+
+        // Append or set the HTML in the target element (replace 'your-table-body-id' with your actual table body ID)
+        document.getElementById('comps_all_tbody').innerHTML = html;
+    } else {
+        console.error('Companies is not defined or is not an array');
+    }
+}
+
+
 
 
 
@@ -303,13 +378,8 @@
                         company_name = doc.employee_company || 'شركة غير معروفة';
                     }
 
-                    const statusMap = {
-                        1: 'قيد المعالجة',
-                        2: 'قيد المعالجة',
-                        3: 'هناك مشكلة'
-                    };
+                    let status = (doc.doc_status === 2) ? 'قيد المعالجة' : '';
 
-                    let status = statusMap[doc.doc_status] || 'حالة غير معروفة';
 
                     console.log(`مستند: ${documentName}, الحالة: ${status}`);
 
@@ -452,5 +522,98 @@
         }
 
 
+
+
+// Handle the click event for the renew_modal link
+// Handle the initial click on the 'renew_modal' link
+$(document).on('click', '.renew_modal', function(e) {
+    e.preventDefault();
+
+    // Get document details from data attributes
+    let documentId = $(this).data('document-id');
+    let documentName = $(this).data('doc-name');
+    let source = $(this).data('source');
+
+    // Call the function to populate and show the modal
+    showRenewModal(documentId, documentName, source);
+});
+
+// Function to show the renewal modal
+function showRenewModal(documentId, documentName, source) {
+    $.ajax({
+        url: '{{ route('document_renew') }}', // Your route URL for fetching document details
+        type: 'GET',
+        data: {
+            id: documentId,
+            source: source // Include source in the request data
+        },
+        success: function(response) {
+            // Ensure response contains the expected data
+            let expiryDate = response.data.expiry_date || 'Not available';
+            let documentExpiryDate = expiryDate; // Adjust if needed
+
+            // Populate the modal with received data
+            $('#renew_modal .modal-body').html(`
+                <div class="row">
+                    <div class="card card-h-100">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-10">
+                                    <span class="text-muted mb-3 lh-1 d-block text-truncate">اسم المستند: ${documentName}</span>
+                                    <span class="text-muted mb-3 lh-1 d-block text-truncate">تاريخ الانتهاء: ${documentExpiryDate}</span>
+                                </div>
+                            </div>
+                            <div class="text-nowrap">
+                                <button class="btn btn-success" id="confirm-renew-btn" data-source="${source}" data-document-id="${documentId}">تجديد</button>
+                            </div>
+                        </div><!-- نهاية محتوى الكارد -->
+                    </div><!-- نهاية الكارد -->
+                </div>
+            `);
+
+
+            // Show the modal
+            $('#renew_modal').modal('show');
+        },
+        error: function(xhr) {
+            console.log("Error occurred: " + xhr.status + " " + xhr.statusText);
+        }
     });
+}
+
+// Handle the renewal confirmation
+$(document).on('click', '#confirm-renew-btn', function(e) {
+    e.preventDefault();
+
+    let documentId = $(this).data('document-id');
+    let source = $(this).data('source');
+
+    // Perform the renewal action
+    $.ajax({
+        url: '{{ route('document_renew_confirm') }}', // Your route URL for confirming renewal
+        type: 'POST',
+        data: {
+            id: documentId,
+            source: source,
+            _token: '{{ csrf_token() }}' // Include CSRF token for POST requests
+        },
+        success: function(response) {
+            // Handle success response (e.g., update the table, show a success message)
+            show_notification('success', 'تمت إضافة الشركة بنجاح');
+            $('#renew_modal').modal('hide');
+            // Optionally, you can refresh the table or show a success message
+        },
+        error: function(xhr) {
+            show_notification('error', 'تمت إضافة الشركة بنجاح');
+            console.log("Error occurred: " + xhr.status + " " + xhr.statusText);
+        }
+    });
+});
+
+
+
+    });
+
+
+
 </script>
