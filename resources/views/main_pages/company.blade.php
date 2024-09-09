@@ -50,13 +50,14 @@
                                             <tr class="bg-transparent">
 
                                                 <th style="text-align: right;">رقم</th>
-                                                <th style="text-align: right; width: 20px;">اسم الشركة</th>
-                                                <th style="text-align: right;">تواصل الشركة</th>
-                                                <th style="text-align: right;">مستخدم المكتب</th>
-                                                <th style="text-align: right;">تفاصيل الشركة</th>
-                                                <th style="text-align: right;">رقم السجل التجاري</th>
-                                                <th style="text-align: right; width: 20px;">تاريخ الإضافة</th>
+                                                <th style="text-align: right; width: 20px;">الشركة</th>
+                                                <th style="text-align: right;">تواصل</th>
+                                                <th style="text-align: right;">المستخدم</th>
+                                                <th style="text-align: right;">التفاصيل</th>
+                                                <th style="text-align: right;">السجل</th>
+                                                <th style="text-align: right; width: 20px;">الإضافة</th>
                                                 <th style="text-align: right; width: 20px;">إجراء</th>
+                                                
 
                                             </tr>
                                         </thead>
