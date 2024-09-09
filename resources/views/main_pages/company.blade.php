@@ -97,11 +97,11 @@
                                 <input type="text" class="company_id" name="company_id" id="company_id" hidden>
                                 <div class="mb-3">
                                     <label for="company_email" class="col-form-label company_email">بريد الشركة الإلكتروني</label>
-                                    <input type="text" class="company_email form-control" name="company_email" id="company_email">
+                                    <input type="email" class="company_email form-control" name="company_email" id="company_email">
                                 </div>
                                 <div class="mb-3">
                                     <label for="company_phone" class="col-form-label company_phone">رقم هاتف الشركة</label>
-                                    <input type="text" class="company_phone form-control" name="company_phone" id="company_phone">
+                                    <input type="tel" class="company_phone form-control" name="company_phone" id="company_phone">
                                 </div>
                                 <div class="mb-3">
                                     <label for="company_address" class="col-form-label company_address">عنوان الشركة</label>

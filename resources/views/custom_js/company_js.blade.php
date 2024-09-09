@@ -31,11 +31,15 @@
             },
         });
 
+
+
         $('.add_company').off().on('submit', function(e) {
             e.preventDefault();
             var formdatas = new FormData($('.add_company')[0]);
             var title = $('.company_name').val();
             var id = $('.company_id').val();
+
+
 
             if (id != '') {
                 if (title == "") {
@@ -95,77 +99,9 @@
                     }
                 });
             }
+
         });
 
-        function edit(id) {
-            console.log(id);
-
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                dataType: 'JSON',
-                url: "{{ url('edit_company') }}",
-                method: "POST",
-                data: {
-                    id: id,
-                    _token: csrfToken
-                },
-                success: function(fetch) {
-                    if (fetch != "") {
-                        $(".company_name").val(fetch.company_name);
-                        $(".company_email").val(fetch.company_email);
-                        $(".company_phone").val(fetch.company_phone);
-                        $(".user").val(fetch.user_id).trigger('change');
-                        $(".company_address").val(fetch.company_address);
-                        $(".company_detail").val(fetch.company_detail);
-                        $(".cr_no").val(fetch.cr_no);
-
-                        $(".company_id").val(fetch.company_id);
-                        $(".modal-title").html('تحديث');
-                    }
-                },
-                error: function(html) {
-                    show_notification('error', 'فشل تعديل البيانات');
-                    console.log(html);
-                    return false;
-                }
-            });
-        }
-
-        function del(id) {
-            Swal.fire({
-                title: 'هل أنت متأكد من الحذف؟',
-                text: 'حذف',
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: 'حذف',
-                confirmButtonClass: "btn btn-primary",
-                cancelButtonClass: "btn btn-danger ml-1",
-                buttonsStyling: false
-            }).then(function(result) {
-                if (result.value) {
-                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                    $.ajax({
-                        url: "{{ url('delete_company') }}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                            _token: csrfToken
-                        },
-                        error: function() {
-                            show_notification('error', 'فشل حذف البيانات');
-                        },
-                        success: function(data) {
-                            $('#all_company').DataTable().ajax.reload();
-                            show_notification('success', 'تم حذف البيانات بنجاح');
-                        }
-                    });
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    show_notification('success', 'تم إلغاء الحذف');
-                }
-            });
-        }
 
         //employee
         function add_employee(id) {
@@ -254,19 +190,88 @@
                 show_notification('success', 'تمت إضافة البيانات بنجاح');
                 $('.employee_modal3').modal('hide');
                 $(".add_employee3")[0].reset();
-                window.open(url, '_blank');
-                $('#all_company_employee').DataTable().ajax.reload();
+                window.location.reload();  // Corrected line
+
                 return false;
             },
             error: function(data) {
                 show_notification('error', 'فشل إضافة البيانات'); // Show error notification
-                $('#all_company_employee').DataTable().ajax.reload(); // Reload DataTable
+                window.location.reload();// Reload DataTable
                 console.log(data); // Log error for debugging
             }
         });
     });
 
 
+    function edit(id) {
+            console.log(id);
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                dataType: 'JSON',
+                url: "{{ url('edit_company') }}",
+                method: "POST",
+                data: {
+                    id: id,
+                    _token: csrfToken
+                },
+                success: function(fetch) {
+                    if (fetch != "") {
+                        $(".company_name").val(fetch.company_name);
+                        $(".company_email").val(fetch.company_email);
+                        $(".company_phone").val(fetch.company_phone);
+                        $(".user").val(fetch.user_id).trigger('change');
+                        $(".company_address").val(fetch.company_address);
+                        $(".company_detail").val(fetch.company_detail);
+                        $(".cr_no").val(fetch.cr_no);
+
+                        $(".company_id").val(fetch.company_id);
+                        $(".modal-title").html('تحديث');
+                    }
+                },
+                error: function(html) {
+                    show_notification('error', 'فشل تعديل البيانات');
+                    console.log(html);
+                    return false;
+                }
+            });
+        }
+
+        function del(id) {
+            Swal.fire({
+                title: 'هل أنت متأكد من الحذف؟',
+                text: 'حذف',
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: 'حذف',
+                confirmButtonClass: "btn btn-primary",
+                cancelButtonClass: "btn btn-danger ml-1",
+                buttonsStyling: false
+            }).then(function(result) {
+                if (result.value) {
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        url: "{{ url('delete_company') }}",
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            _token: csrfToken
+                        },
+                        error: function() {
+                            show_notification('error', 'فشل حذف البيانات');
+                        },
+                        success: function(data) {
+                            $('#all_company').DataTable().ajax.reload();
+                            show_notification('success', 'تم حذف البيانات بنجاح');
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    show_notification('success', 'تم إلغاء الحذف');
+                }
+            });
+        }
 
 
 
@@ -463,23 +468,24 @@
                 // Initialize DataTable
 
 
-                $('#all_company_employee').DataTable({
+                $('#all_company_employee2').DataTable({
                     "sAjaxSource": "{{ url('show_company_employee') }}" + "?company_id=" + companyId,
                     "bFilter": true,
                     // "sDom": 'fBtlpi',
                     'pagingType': 'numbers',
                     "ordering": true,
                     "language": {
-                        search: ' ',
-                        sLengthMenu: '_MENU_',
-                        searchPlaceholder: 'search',
-                        info: "_START_ - _END_ of _TOTAL_ items",
+                        search: 'بحث:',
+                        sLengthMenu: 'عرض _MENU_ عناصر',
+                        searchPlaceholder: 'بحث...',
+                        info: 'عرض _START_ إلى _END_ من أصل _TOTAL_ عنصر',
                     },
                     initComplete: (settings, json) => {
                         $('.dataTables_filter').appendTo('#tableSearch');
                         $('.dataTables_filter').appendTo('.search-input');
                     },
                 });
+
 
             },
             error: function(xhr, status, error) {

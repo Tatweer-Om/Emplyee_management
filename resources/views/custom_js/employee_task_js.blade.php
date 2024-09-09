@@ -71,7 +71,6 @@
 
         //datatable
 
-
         // Initialize DataTables
         let companyTable = $('#company_table').DataTable();
         let employeeTable = $('#employee_table').DataTable();
@@ -179,7 +178,7 @@
                                             data-document-id="${document.id}"
                                              style="display:block; text-align:center;"
                                             data-doc-name="${document.companydoc_name}"
-                                            data-source="2"> Renew
+                                            data-source="2"> تجديد
                                          </a>
 
                                     </li>
@@ -281,7 +280,7 @@
                                    data-document-id="${document.id}"
                                     data-doc-name="${document.employeedoc_name}"
                                    data-source="1">
-                                   Renew
+                                  تجديد
                                 </a>
                             </li>
                         </ul>
@@ -514,17 +513,18 @@ function showRenewModal(documentId, documentName, source) {
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-10">
-                                    <span class="text-muted mb-3 lh-1 d-block text-truncate">Document Name: ${documentName}</span>
-                                    <span class="text-muted mb-3 lh-1 d-block text-truncate">Expiry Date: ${documentExpiryDate}</span>
+                                    <span class="text-muted mb-3 lh-1 d-block text-truncate">اسم المستند: ${documentName}</span>
+                                    <span class="text-muted mb-3 lh-1 d-block text-truncate">تاريخ الانتهاء: ${documentExpiryDate}</span>
                                 </div>
                             </div>
                             <div class="text-nowrap">
-                                <button class="btn btn-success" id="confirm-renew-btn" data-source="${source}" data-document-id="${documentId}">Renew</button>
+                                <button class="btn btn-success" id="confirm-renew-btn" data-source="${source}" data-document-id="${documentId}">تجديد</button>
                             </div>
-                        </div><!-- end card body -->
-                    </div><!-- end card -->
+                        </div><!-- نهاية محتوى الكارد -->
+                    </div><!-- نهاية الكارد -->
                 </div>
             `);
+
 
             // Show the modal
             $('#renew_modal').modal('show');
@@ -567,4 +567,7 @@ $(document).on('click', '#confirm-renew-btn', function(e) {
 
 
     });
+
+
+
 </script>

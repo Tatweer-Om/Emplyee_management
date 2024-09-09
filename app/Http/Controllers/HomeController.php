@@ -314,10 +314,10 @@ class HomeController extends Controller
                 $office_user = $value->added_by;
 
                 $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
-                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs("' . $value->id . '","1")>Renew</a></li>';
+                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs("' . $value->id . '","1")>تجديد</a></li>';
                 if($value->doc_status==2)
                 {
-                    $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","1")>Finish Renew</a></li>';
+                    $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","1")>إنهاء التجديد </a></li>';
                 }
                 $add_data=get_date_only($value->created_at);
                 $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
@@ -387,10 +387,10 @@ class HomeController extends Controller
                 $office_user = $value->added_by;
 
                 $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
-                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs("' . $value->id . '","2")>Renew</a></li>';
+                $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs("' . $value->id . '","2")>تجديد</a></li>';
                 if($value->doc_status==2)
                 {
-                    $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","2")>Finish Renew</a></li>';
+                    $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","2")> إنهاء التجديد</a></li>';
                 }
                 $add_data=get_date_only($value->created_at);
                 $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
@@ -542,39 +542,25 @@ public function under_process (){
 public function all_expired_docs2(Request $request)
 {
     $sno=0;
-    // Get today's date
+
     $today = date('Y-m-d');
-
-    // Get the date 30 days from now
-
-
-    // Example user ID to filter by
     $userId = Auth::id(); // Get the current user ID
     $user_type = Auth::user()->user_type; // Get the user type
-
-    // For employee_docs table
     $employeeDocsQuery = EmployeeDoc::where('doc_status', 2);
 
-    // If the user type is not 1, filter by user_id
     if ($user_type != 1) {
         $employeeDocsQuery->where('user_id', $userId);
     }
 
-    // Fetch the employee_docs records
     $employeeDocs = $employeeDocsQuery->get();
-
-    // For company_docs table
     $companyDocsQuery = CompanyDocs::where('doc_status', 2);
 
-    // If the user type is not 1, filter by user_id
     if ($user_type != 1) {
         $companyDocsQuery->where('user_id', $userId);
     }
 
-    // Fetch the company_docs records
     $companyDocs = $companyDocsQuery->get();
 
-    // Calculate total notifications
     $total_noti = $companyDocs->count() + $employeeDocs->count();
     $emp_docs = $employeeDocs;
     $comp_docs = $companyDocs;
@@ -610,11 +596,8 @@ public function all_expired_docs2(Request $request)
                 $daysText = $diffInDays > 1 ? 'أيام' : 'يوم';
 
                 $timeLeft = "$diffInYears $yearsText, $diffInMonths $monthsText, $diffInDays $daysText";
-
-                // Determine badge color based on total days remaining
                 $badgeClass = $totalDaysRemaining < 60 ? 'badge badge-soft-danger font-size-15' : 'badge badge-soft-success font-size-15';
 
-                // Output the time left and total days remaining
                 $renewl_period = '<p style="text-align:center;">' . $timeLeft . '</p>'
                     . '<br>'
                     . '<span class="' . $badgeClass . '" >' . $totalDaysRemaining . ' يوم متبقي</span>';
@@ -626,10 +609,10 @@ public function all_expired_docs2(Request $request)
             $office_user = $value->added_by;
 
             $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
-            $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs2("' . $value->id . '","1")>Renew</a></li>';
+            $modal = '<a class="btn btn-success" href="javascript:void(0);" onclick="renew_docs2(\'' . $value->id . '\', \'1\')">تجديد</a>';
             if($value->doc_status==2)
             {
-                $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","1")>Finish Renew</a></li>';
+                $modal = '<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick="finish_renew(\'' . $value->id . '\', \'1\')">إنهاء التجديد</a>';
             }
             $add_data=get_date_only($value->created_at);
             $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
@@ -637,20 +620,17 @@ public function all_expired_docs2(Request $request)
             $sno++;
             $json[]= array(
                       '<span style="text-align: center; display: block;">' . $sno . '</span>',
-                        $value->company_name,
-                        $value->added_by,
+                        $value->company_name ?? '',
+                        '<span style="text-align: center; display: block;">' .  $value->added_by ?? '' . '</span>',
                         $document_name,
                         $expiry_date,
-                        '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
+                        // '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
                         $add_date,
                         $modal,
                         'DT_RowAttr' => array('data-status' => $value->doc_status)
                     );
         }
-        // $response = array();
-        // $response['success'] = true;
-        // $response['aaData'] = $json;
-        // echo json_encode($response);
+
     }
     if(count($emp_docs)>0)
     {
@@ -699,35 +679,33 @@ public function all_expired_docs2(Request $request)
             $office_user = $value->added_by;
 
             $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
-            $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs("' . $value->id . '","2")>Renew</a></li>';
+            $modal='<a class="btn btn-success" href="javascript:void(0);" onclick=renew_docs("' . $value->id . '","2")>تجديد</a></li>';
             if($value->doc_status==2)
             {
-                $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","2")>Finish Renew</a></li>';
+                $modal='<a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#renew_modal" href="javascript:void(0);" onclick=finish_renew("' . $value->id . '","2")>إنهاء التجديد</a></li>';
             }
             $add_data=get_date_only($value->created_at);
             $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
 
             $employee = Employee::where('id', $value->employee_id)->first();
-            $company = Company::where('id', $employee->employee_company)->first();
+            // $company = Company::where('id', $employee->employee_company)->first();
 
             $sno++;
             $json[]= array(
-                      '<span style="text-align: center; display: block;">' . $sno . '</span>',
+                '<span style="text-align: center; display: block;">' . $sno . '</span>',
+                ($value ? ($value->employee_name ?? '') . '<br>' . ($value->employee_company ?? '') : ''),
 
-                        $value->employee_name .'<br>'.$company->company_name,
-                        $value->added_by,
-                        $document_name,
-                        $expiry_date,
-                        '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
-                        $add_date,
-                        $modal,
-                        'DT_RowAttr' => array('data-status' => $value->doc_status)
-                    );
+                '<span style="text-align: center; display: block;">' .  $value->added_by ?? '' . '</span>',
+                $document_name ?? '',
+                $expiry_date ?? '',
+                $add_date ?? '',
+                $modal ?? '',
+                'DT_RowAttr' => array('data-status' => $value->doc_status)
+            );
+
+
         }
-        // $response = array();
-        // $response['success'] = true;
-        // $response['aaData'] = $json;
-        // echo json_encode($response);
+
     }
 
     if(!empty($json))
