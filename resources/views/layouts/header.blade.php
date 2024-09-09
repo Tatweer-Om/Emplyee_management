@@ -354,6 +354,7 @@
                                         <span data-key="t-chat">عن المكتب</span>
                                     </a>
                                 </li>
+                                <li><a href="{{ url('document') }}" data-key="t-maintenance">إضافة مستند</a></li>
 
                             </ul>
                         </li>
@@ -366,7 +367,7 @@
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="{{ url('company') }}" data-key="t-starter-page">الشركات</a></li>
                                 <li><a href="{{ url('employee') }}" data-key="t-maintenance">الموظفون</a></li>
-                                <li><a href="{{ url('document') }}" data-key="t-maintenance">إضافة مستند</a></li>
+
 
                             </ul>
                         </li>
@@ -383,7 +384,7 @@
                                 <li><a href="{{ url('employee_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الموظف</a></li>
                                 <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الشركة</a></li>
                                 <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
-                                <li><a href="{{ url('employee_task_report') }}" data-key="t-starter-page">  Employee Task Report</a></li>
+                                <li><a href="{{ url('employee_task_report') }}" data-key="t-starter-page">تقرير مهام الموظفين</a></li>
                             </ul>
                         </li>
                         <li>
@@ -403,7 +404,7 @@
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="{{ url('show_expired_docs')}}" data-key="t-starter-page"> الوثائق قيد المعالجة </a></li>
-                                <li><a href="{{ url('show_expired_docs')}}" data-key="t-starter-page">  Uder Process Documents  </a></li>
+                                <li><a href="{{ url('under_process')}}" data-key="t-starter-page">  المستندات قيد المعالجة  </a></li>
                             </ul>
                         </li>
 

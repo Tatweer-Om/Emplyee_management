@@ -35,16 +35,13 @@ class EmployeeController extends Controller
 
 
                 $company = Company::where('id', $value->employee_company)->first();
-                $company_name="";
-                if(!empty($company))
-                {
+                $company_name = "";
+                if (!empty($company)) {
                     $company_name = $company->company_name;
                 }
+                $employee_company = '<p style="width:20px;" href="javascript:void(0);">' . $company_name . '</p>';
                 $employee_name='<a style="width:20px;" href="' . url('employee_document_addition/' . $value->id) . '">'.$value->employee_name.'</a>';
-                $employee_company='<p tyle="width:20px;" href="javascript:void(0);">'. $company_name.'</p>';
                 $employee_contact = '<p style="width:20px;" href="javascript:void(0);">' . $value->employee_email . ' <br> ' . $value->employee_phone . '</p>';
-
-
                 $employee_detail='<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">'.$value->employee_detail.'</p>';
                 $cr_no='<p href="javascript:void(0);">'.$value->cr_no.'</p>';
 
@@ -53,11 +50,12 @@ class EmployeeController extends Controller
                             type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                         <li><a class="dropdown-item" href="' . url('employee_document_addition/' . $value->id) . '">Add Document</a></li>
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#employee_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
-                        </ul>
+                     <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="' . url('employee_document_addition/' . $value->id) . '">إضافة مستند</a></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#employee_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">تعديل</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">حذف</a></li>
+                    </ul>
+
                     </div>';
                 $add_data=get_date_only($value->created_at);
 

@@ -51,9 +51,10 @@ class UserController extends Controller
                 $user_phone='<p style="width:20px;" href="javascript:void(0);">'.$value->user_phone.'</p>';
                 $user_email='<p style="width:20px;" href="javascript:void(0);">'.$value->user_email.'</p>';
 
-                $user_type = '<p style="width:20px;" href="javascript:void(0);">' . ($value->user_type == 1 ? 'Admin' : 'User') . '</p>';
-                $user_detail='<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">'.$value->user_detail.'</p>';
-                $user_all = '<p style="width:20px;" href="javascript:void(0);">' . ($value->user_all ? 'All Branches' :  $branch) . '</p>';
+                $user_type = '<p style="width:20px;" href="javascript:void(0);">' . ($value->user_type == 1 ? 'مدير' : 'مستخدم') . '</p>';
+                $user_detail = '<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">' . $value->user_detail . '</p>';
+                $user_all = '<p style="width:20px;" href="javascript:void(0);">' . ($value->user_all ? 'جميع الفروع' : $branch) . '</p>';
+
 
 
                 $modal='<div class="dropdown">
@@ -61,10 +62,11 @@ class UserController extends Controller
                             type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#user_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
-                        </ul>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#user_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">تعديل</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">حذف</a></li>
+                    </ul>
+
                     </div>';
                 $add_data=get_date_only($value->created_at);
 
@@ -182,7 +184,7 @@ class UserController extends Controller
 
     public function delete_user(Request $request){
         $user_id = $request->input('id');
-        $user = User::where('user_id', $user_id)->first();
+        $user = User::where('id', $user_id)->first();
         if (!$user) {
             return response()->json([trans('messages.error_lang', [], session('locale')) => trans('messages.user_not_found', [], session('locale'))], 404);
         }

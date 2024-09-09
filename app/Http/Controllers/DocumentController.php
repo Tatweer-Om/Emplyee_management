@@ -47,17 +47,18 @@ class DocumentController extends Controller
                             type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#document_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">Delete</a></li>
-                        </ul>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#document_modal" href="javascript:void(0);" onclick="edit(' . $value->id . ')">تعديل</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="del(' . $value->id . ')">حذف</a></li>
+                    </ul>
+
                     </div>';
                 $add_data=get_date_only($value->created_at);
                 $added_by='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $value->added_by . '<br>' . $add_data.'</p>';
                 if ($value->document_type == 1) {
-                    $doc = 'Company Document';
+                    $doc = 'وثيقة الشركة';
                 } else {
-                    $doc = 'Employee Document';
+                    $doc = 'وثيقة الموظف';
                 }
                 $sno++;
                 $json[]= array(

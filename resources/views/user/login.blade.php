@@ -183,12 +183,7 @@
                                                     <div class="testi-contain text-white">
                                                         <i class="bx bxs-quote-alt-left text-success display-6"></i>
 
-                                                        <h4 class="mt-4 fw-medium lh-base text-white">“Our task must be to
-                                                            free ourselves by widening our circle of compassion to embrace
-                                                            all living
-                                                            creatures and
-                                                            the whole of quis consectetur nunc sit amet semper justo. nature
-                                                            and its beauty.”</h4>
+                                                        <h4 class="mt-4 fw-medium lh-base text-white">"الإدارة ليست فقط اتخاذ القرارات وتوجيه الآخرين، بل هي القدرة على خلق بيئة عمل إيجابية تشجع على الإبداع والتعاون، حيث يكون الجميع جزءًا من الحلول وليس فقط المنفذين للمهام."</h4>
                                                         <div class="mt-4 pt-3 pb-5">
                                                             <div class="d-flex align-items-start">
                                                                 <div class="flex-shrink-0">
