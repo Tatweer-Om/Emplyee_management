@@ -326,12 +326,21 @@ class CompanyController extends Controller
 
 
 
-    public function company_profile($id){
+    public function company_profile($id)
+    {
+        // Check if the user is authenticated and their user type is 1
+        if (Auth::check() && Auth::user()->user_type == 1) {
+            // Retrieve the company by ID
+            $company = Company::where('id', $id)->first();
 
-        $company = Company::where('id', $id)->first();
-
-        return view('main_pages.company_profile', compact('company'));
+            // Return the view with the company data
+            return view('main_pages.company_profile', compact('company'));
+        } else {
+            // If not authenticated or user type is not 1, redirect to the login page
+            return redirect()->route('login')->with('error', 'You must be logged in as a user to view the company profile.');
+        }
     }
+
 
 
 

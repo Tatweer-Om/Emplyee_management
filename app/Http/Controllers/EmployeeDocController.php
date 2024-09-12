@@ -92,8 +92,8 @@ class EmployeeDocController extends Controller
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_employeedoc(' . $value->id . ')">Edit</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_employee_doc(' . $value->id . ')">Delete</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_employeedoc(' . $value->id . ')">تعديل</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_employee_doc(' . $value->id . ')">حذف</a></li>
                         </ul>
                     </div>';
                 $add_data=get_date_only($value->created_at);

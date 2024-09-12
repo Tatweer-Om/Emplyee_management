@@ -46,8 +46,7 @@ class UserController extends Controller
                 $branch = $branch_check->branch_name ?? '';
 
 
-                $user_name='<a style="width:20px;" href="javascript:void(0);">'.$value->user_name.'</a>';
-
+                $user_name = '<a style="width:20px;" href="' . url('employee_task_page/' . $value->id) . '">' . $value->user_name . '</a>';
                 $user_phone='<p style="width:20px;" href="javascript:void(0);">'.$value->user_phone.'</p>';
                 $user_email='<p style="width:20px;" href="javascript:void(0);">'.$value->user_email.'</p>';
 
@@ -74,8 +73,7 @@ class UserController extends Controller
                 $json[]= array(
                             $sno,
                             $user_name,
-                            $user_phone,
-                            $user_email,
+                            $user_email .'<br>'.$user_phone,
                             $user_detail,
                             $user_type . '<br>' . $user_all,
                             $value->added_by . '<br>' . $add_data,

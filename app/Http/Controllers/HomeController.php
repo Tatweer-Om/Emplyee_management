@@ -16,214 +16,156 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
 
-
-    // public function home()
-    // {
-    //     // Check if the user is authenticated and is of user_type 1 (admin or authorized user)
-    //     if (Auth::check() && Auth::user()->user_type == 1) {
-    //         // Retrieve counts of various models
-    //         $users = User::count();
-    //         $employee = Employee::count();
-    //         $employee_doc = EmployeeDoc::count();
-
-    //         $comp_docs = CompanyDocs::count();
-    //         $company = Company::count();
-    //         $renewed = DocumentHistory::where('status', 2)->count();
-
-    //         $employee_doc = EmployeeDoc::count();
-    //         $comp_docs = CompanyDocs::count();
-    //         $employee_doc_count = EmployeeDoc::where('doc_status', 2)->count();
-    //         $company_doc_count = CompanyDocs::where('doc_status', 2)->count();
-
-
-    //         $total_docs= $employee_doc+$comp_docs;
-
-    //         $companyCounts = DB::table('companies')
-    //         ->select('user_id', DB::raw('count(*) as count'))
-    //         ->groupBy('user_id')
-    //         ->get();
-
-    //     $employeeCounts = DB::table('employees')
-    //         ->select('user_id', DB::raw('count(*) as count'))
-    //         ->groupBy('user_id')
-    //         ->get();
-
-    //     $companyDocsCounts = DB::table('company_docs')
-    //         ->select('user_id', DB::raw('count(*) as count'))
-    //         ->groupBy('user_id')
-    //         ->get();
-
-    //     $employeeDocsCounts = DB::table('employee_docs')
-    //         ->select('user_id', DB::raw('count(*) as count'))
-    //         ->groupBy('user_id')
-    //         ->get();
-
-    //     // Merge all counts and sum by user_id
-    //     $userActivity = collect()
-    //         ->merge($companyCounts)
-    //         ->merge($employeeCounts)
-    //         ->merge($companyDocsCounts)
-    //         ->merge($employeeDocsCounts)
-    //         ->mapToGroups(function ($item) {
-    //             return [$item->user_id => $item->count];
-    //         })
-    //         ->map(function ($group) {
-    //             return $group->sum();
-    //         })
-    //         ->sortDesc()
-    //         ->take(8);  // Limit to the top 8 users
-
-    //     // Fetch user details and prepare data for the view
-    //     $carouselItems = [];
-    //     foreach ($userActivity as $userId => $count) {
-    //         $user = User::find($userId); // Use find() to get the user by ID
-    //         if ($user) { // Ensure user exists
-    //             $carouselItems[] = [
-    //                 'user_id' => $userId,
-    //                 'count' => $count,
-    //                 'user_name' => $user->user_name, // Adjust field name as needed
-    //             ];
-    //         }
-    //     }
-
-
-    //         // Pass the data to the view
-    //         return view('dashboard.home', compact('users', 'carouselItems', 'employee',
-    //         'employee_doc', 'total_docs', 'comp_docs', 'company', 'renewed',
-    //         'employee_doc_count', 'company_doc_count'));
-    //     } else {
-    //         // If the user is not authorized, redirect to the login page with an error message
-    //         return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
-    //     }
-    // }
-
     public function home()
-{
-    // Check if the user is authenticated and authorized
-    if (Auth::check()) {
-        // Retrieve counts of various models
-        $users = User::count();
-        $employee = Employee::count();
-        $employee_doc = EmployeeDoc::count();
-        $comp_docs = CompanyDocs::count();
-        $company = Company::count();
-        $renewed = DocumentHistory::where('status', 2)->count();
+    {
+        // Check if the user is authenticated and authorized
+        if (Auth::check()) {
+            // Retrieve counts of various models
+            $users = User::count();
+            $employee = Employee::count();
+            $employee_doc = EmployeeDoc::count();
+            $comp_docs_cout = CompanyDocs::count();
+            $company = Company::count();
+            $renewed = DocumentHistory::where('status', 2)->count();
 
-        $employee_doc_count = EmployeeDoc::where('doc_status', 2)->count();
-        $company_doc_count = CompanyDocs::where('doc_status', 2)->count();
+            $employee_doc_count = EmployeeDoc::where('doc_status', 2)->count();
+            $company_doc_count = CompanyDocs::where('doc_status', 2)->count();
 
-        $totalDocs = $employee_doc + $comp_docs + $renewed;
-        $total_docs = $employee_doc + $comp_docs;
+            $total_docs= $employee_doc + $comp_docs_cout;
+            // Calculate percentages if totalDocs > 0
 
-        if ($totalDocs > 0) {
-            $employeeDocsPercent = ($employee_doc / $totalDocs) * 100;
-            $companyDocsPercent = ($comp_docs / $totalDocs) * 100;
-            $renewedDocsPercent = ($renewed / $totalDocs) * 100;
-        } else {
-            // Handle the case where totalDocs is 0
-            $employeeDocsPercent = 0;
-            $companyDocsPercent = 0;
-            $renewedDocsPercent = 0;
-        }
-        // Get counts per user_id from various tables
-        $companyCounts = DB::table('companies')
-            ->select('user_id', DB::raw('count(*) as count'))
-            ->groupBy('user_id')
-            ->get()
-            ->keyBy('user_id');
-
-        $employeeCounts = DB::table('employees')
-            ->select('user_id', DB::raw('count(*) as count'))
-            ->groupBy('user_id')
-            ->get()
-            ->keyBy('user_id');
-
-        $companyDocsCounts = DB::table('company_docs')
-            ->select('user_id', DB::raw('count(*) as count'))
-            ->groupBy('user_id')
-            ->get()
-            ->keyBy('user_id');
-
-        $employeeDocsCounts = DB::table('employee_docs')
-            ->select('user_id', DB::raw('count(*) as count'))
-            ->groupBy('user_id')
-            ->get()
-            ->keyBy('user_id');
-
-        // Merge all counts and sum by user_id
-        $userActivity = collect()
-            ->merge($companyCounts)
-            ->merge($employeeCounts)
-            ->merge($companyDocsCounts)
-            ->merge($employeeDocsCounts)
-            ->mapToGroups(function ($item, $key) {
-                return [$key => $item->count];
-            })
-            ->map(function ($group) {
-                return $group->sum();
-            })
-            ->sortDesc()
-            ->take(8);  // Limit to the top 8 users
-
-        // Fetch user details and prepare data for the view
-        $carouselItems = [];
-        foreach ($userActivity as $userId => $count) {
-            $user = User::find($userId); // Use find() to get the user by ID
-            if ($user) { // Ensure user exists
-                $carouselItems[] = [
-                    'user_id' => $userId,
-                    'count' => $count,
-                    'user_name' => $user->user_name,
-                    'user_detail'=>$user->user_detail, // Adjust field name as needed
-                ];
+            if ($total_docs > 0) {
+                $employeeDocsPercent = ($employee_doc / $total_docs) * 100;
+                $companyDocsPercent = ($comp_docs_cout / $total_docs) * 100;
+                $renewedDocsPercent = ($renewed / $total_docs) * 100;
+            } else {
+                $employeeDocsPercent = 0;
+                $companyDocsPercent = 0;
+                $renewedDocsPercent = 0;
             }
+
+            // Get counts per user_id from various tables
+            $companyCounts = DB::table('companies')
+                ->select('user_id', DB::raw('count(*) as count'))
+                ->groupBy('user_id')
+                ->get()
+                ->keyBy('user_id');
+
+            $employeeCounts = DB::table('employees')
+                ->select('user_id', DB::raw('count(*) as count'))
+                ->groupBy('user_id')
+                ->get()
+                ->keyBy('user_id');
+
+            $companyDocsCounts = DB::table('company_docs')
+                ->select('user_id', DB::raw('count(*) as count'))
+                ->groupBy('user_id')
+                ->get()
+                ->keyBy('user_id');
+
+            $employeeDocsCounts = DB::table('employee_docs')
+                ->select('user_id', DB::raw('count(*) as count'))
+                ->groupBy('user_id')
+                ->get()
+                ->keyBy('user_id');
+
+            // Merge all counts and sum by user_id
+            $userActivity = collect()
+                ->merge($companyCounts)
+                ->merge($employeeCounts)
+                ->merge($companyDocsCounts)
+                ->merge($employeeDocsCounts)
+                ->mapToGroups(function ($item, $key) {
+                    return [$key => $item->count];
+                })
+                ->map(function ($group) {
+                    return $group->sum();
+                })
+                ->sortDesc()
+                ->take(8);  // Limit to the top 8 users
+
+            // Prepare carousel items with user details
+            $carouselItems = [];
+            foreach ($userActivity as $userId => $count) {
+                $user = User::find($userId);
+                if ($user) {
+                    $carouselItems[] = [
+                        'user_id' => $userId,
+                        'count' => $count,
+                        'user_name' => $user->user_name,
+                        'user_detail' => $user->user_detail, // Adjust field name as needed
+                    ];
+                }
+            }
+
+            // Variables for storing docs
+            $emps = $comps = $docs = $allData = [];
+
+            // If the user is an admin (user_type == 1), fetch the latest 10 records
+            if (Auth::user()->user_type == 1) {
+                $emps = Employee::latest()->take(10)->get();
+                $comps = EmployeeDoc::latest()->take(10)->get();
+                $docs = CompanyDocs::latest()->take(10)->get();
+            } else {
+                // For non-admin users, retrieve their companies and related docs
+                $comps2 = Company::where('user_id', Auth::id())->latest()->get();
+                foreach ($comps2 as $comp) {
+                    // Get latest 10 EmployeeDocs for each company
+                    $employeedoc = EmployeeDoc::where('employee_company_id', $comp->id)
+                    ->whereNotNull('expiry_date') // Ensure expiry_date is not null
+                    ->orderBy('expiry_date', 'asc') // Ascending order: closest expiry dates first
+                    ->latest() // Maintain latest records ordering after expiry date ordering
+                    ->take(15)
+                    ->get();
+
+                // Get latest 10 CompanyDocs for each company, ordered by closest expiry date
+                $comp_docs = CompanyDocs::where('company_id', $comp->id)
+                    ->whereNotNull('expiry_date') // Ensure expiry_date is not null
+                    ->orderBy('expiry_date', 'asc') // Ascending order: closest expiry dates first
+                    ->latest() // Maintain latest records ordering after expiry date ordering
+                    ->take(15)
+                    ->get();
+
+                    $array = $comps2->toArray(); // Convert to array
+
+                    // Print the array
+
+                    // Store data in an array
+                    $allData[] = [
+                        'company2' => $comps2,
+                        'employee_docs' => $employeedoc,
+                        'company_docs' => $comp_docs,
+                    ];
+                }
+            }
+
+            // Pass the data to the view
+            return view('dashboard.home', compact(
+                'users', 'carouselItems', 'employee',
+                'employee_doc', 'total_docs', 'comp_docs_cout',
+                'company', 'renewed', 'employee_doc_count',
+                'company_doc_count', 'employeeDocsPercent', 'allData',
+                'companyDocsPercent', 'renewedDocsPercent', 'emps', 'comps', 'docs',
+            ));
+        } else {
+            // If the user is not authorized, redirect to the login page with an error message
+            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
         }
-
-        $emps = Employee::latest()->take(10)->get();
-        $comps = EmployeeDoc::latest()->take(10)->get();
-        $docs = CompanyDocs::latest()->take(10)->get();
-
-
-        // Pass the data to the view
-        return view('dashboard.home', compact(
-            'users', 'carouselItems', 'employee',
-            'employee_doc', 'total_docs', 'comp_docs',
-            'company', 'renewed', 'employee_doc_count',
-            'company_doc_count', 'employeeDocsPercent', 'companyDocsPercent', 'renewedDocsPercent', 'emps', 'comps', 'docs',
-        ));
-    } else {
-        // If the user is not authorized, redirect to the login page with an error message
-        return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
-    }
-}
-
-
-    public function calender (){
-
-        return view ('main_pages.calender');
     }
 
 
-
-
-    public function company_detail (){
-
-        return view ('main_pages.company_detail');
-    }
-
-    public function timeline (){
-
-        return view ('main_pages.timeline');
-    }
-
-    public function email (){
-
-        return view ('main_pages.email');
-    }
 
     public function show_expired_docs (){
+        $user = Auth::user();
 
-        return view ('main_pages.expired_document');
+        // Check if the user_type is 1
+        if ($user ) {
+            // User has the correct type, so show the view
+            return view('main_pages.expired_document');
+        } else {
+            // User does not have the correct type, redirect to the home page
+            return redirect('/');
+        }
     }
     public function all_expired_docs(Request $request)
     {
@@ -333,10 +275,7 @@ class HomeController extends Controller
                             'DT_RowAttr' => array('data-status' => $value->doc_status)
                         );
             }
-            // $response = array();
-            // $response['success'] = true;
-            // $response['aaData'] = $json;
-            // echo json_encode($response);
+
         }
         if(count($emp_docs)>0)
         {
@@ -410,10 +349,7 @@ class HomeController extends Controller
                             'DT_RowAttr' => array('data-status' => $value->doc_status)
                         );
             }
-            // $response = array();
-            // $response['success'] = true;
-            // $response['aaData'] = $json;
-            // echo json_encode($response);
+
         }
 
         if(!empty($json))
@@ -533,32 +469,56 @@ class HomeController extends Controller
 
 //under_process
 
-public function under_process (){
+public function under_process()
+{
+    // Get the currently authenticated user
+    $user = Auth::user();
 
-    return view ('main_pages.under_process');
+    // Check if the user_type is 1
+    if ($user) {
+        // User has the correct type, so show the view
+        return view('main_pages.under_process');
+    } else {
+        // User does not have the correct type, redirect to the home page
+        return redirect('/');
+    }
 }
+
+
+
 public function all_expired_docs2(Request $request)
 {
     $sno=0;
 
     $today = date('Y-m-d');
     $userId = Auth::id(); // Get the current user ID
-    $user_type = Auth::user()->user_type; // Get the user type
-    $employeeDocsQuery = EmployeeDoc::where('doc_status', 2);
+    $user = Auth::user();
 
-    if ($user_type != 1) {
-        $employeeDocsQuery->where('user_id', $userId);
+    // Check if the user is an admin
+    $isAdmin = $user->user_type == 1;
+    // Initialize collections to store documents
+    $companyDocs = collect();
+    $employeeDocs = collect();
+
+    if ($isAdmin) {
+        // Admin can see all company documents with doc_status = 2
+        $companyDocs = CompanyDocs::where('doc_status', 2)->get();
+    } else {
+        // Fetch companies related to the user
+        $companies = Company::where('user_id', $userId)->get();
+
+        foreach ($companies as $comp) {
+            // Get employee documents for the current company where doc_status = 2
+            $employeeDocsQuery = EmployeeDoc::where('doc_status', 2)->where('employee_company_id', $comp->id);
+            $employeeDocs = $employeeDocs->merge($employeeDocsQuery->get());
+
+            // Get company documents for the current company where doc_status = 2
+            $companyDocsQuery = CompanyDocs::where('doc_status', 2)->where('company_id', $comp->id);
+            $companyDocs = $companyDocs->merge($companyDocsQuery->get());
+        }
     }
 
-    $employeeDocs = $employeeDocsQuery->get();
-    $companyDocsQuery = CompanyDocs::where('doc_status', 2);
-
-    if ($user_type != 1) {
-        $companyDocsQuery->where('user_id', $userId);
-    }
-
-    $companyDocs = $companyDocsQuery->get();
-
+    // Calculate total notifications
     $total_noti = $companyDocs->count() + $employeeDocs->count();
     $emp_docs = $employeeDocs;
     $comp_docs = $companyDocs;
@@ -725,6 +685,8 @@ public function all_expired_docs2(Request $request)
     //
 
 }
+
+
 public function renew_docs_request2(Request $request){
     $doc_id = $request->input('id');
     $type = $request->input('type');
@@ -819,5 +781,126 @@ public function update_employee_doc2(Request $request){
 
 
 }
+
+
+public function renewed_docs()
+{
+    // Get the currently authenticated user
+    $user = Auth::user();
+
+    // Check if the user_type is 1
+    if ($user) {
+        // User has the correct type, so show the view
+        return view('main_pages.renewed_docs');
+    } else {
+        // User does not have the correct type, redirect to the home page
+        return redirect('/');
+    }
+}
+
+
+
+public function all_renewed_docs(Request $request)
+{
+    $sno=0;
+
+    $today = date('Y-m-d');
+    $userId = Auth::id(); // Get the current user ID
+    $user = Auth::user();
+
+    // Check if the user is an admin
+    $isAdmin = $user->user_type == 1;
+    // Initialize collections to store documents
+    $companyDocs = collect();
+    $employeeDocs = collect();
+    $documents_renewed = collect();
+
+    if ($isAdmin) {
+        // Admin can see all company documents with doc_status = 2
+        $documents_renewed = DocumentHistory::where('status', 2)->get();
+    } else {
+        // Fetch companies related to the user
+        $companies = Company::where('user_id', $userId)->get();
+
+        foreach ($companies as $comp) {
+
+          $documents_renewed = DocumentHistory::where('status', 2)->where('company_id', $comp->id)->get();
+
+        }
+    }
+
+
+    $emp_docs = $employeeDocs;
+    $comp_docs = $companyDocs;
+    $documents_renewed= $documents_renewed;
+
+    if(count($documents_renewed)>0)
+    {
+        foreach($documents_renewed as $value)
+        {
+
+            $company_name = null;
+            $employee_name = null;
+
+            if ($value->company_id) {
+                // If company_id is not null, fetch company name
+                $company_name = Company::where('id', $value->company_id)->value('company_name');
+            }
+
+            if ($value->employee_id) {
+                // If employee_id is not null, fetch employee name
+                $employee_name = Employee::where('id', $value->employee_id)->value('employee_name');
+            }
+
+            $document_name='<p style="text-align:center;" href="javascript:void(0);">'.$value->doc_name.'</p>';
+
+
+            $new_expiry = get_date_only($value->new_expiry);
+            $old_expiry= get_date_only($value->old_expiry);
+
+
+            $office_user = $value->added_by;
+
+            $sanad_employee='<p style="text-align:center;" href="javascript:void(0);">'.$office_user.'</p>';
+
+            $add_data=get_date_only($value->created_at);
+            $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
+
+            $sno++;
+            $json[]= array(
+                      '<span style="text-align: center; display: block;">' . $sno . '</span>',
+                      $document_name,
+                       $employee_name ?? $company_name,
+                     '<span style="text-align: center; display: block;">' .  $new_expiry . '</span>',
+                     '<span style="text-align: center; display: block;">' .  $old_expiry. '</span>',
+                        '<span style="text-align: center; display: block;">' .  $value->added_by ?? '' . '</span>',
+                        $add_date,
+                    );
+        }
+
+    }
+
+    if(!empty($json))
+    {
+        $response = array();
+        $response['success'] = true;
+        $response['aaData'] = $json;
+        echo json_encode($response);
+    }
+    else
+    {
+        $response = array();
+        $response['sEcho'] = 0;
+        $response['iTotalRecords'] = 0;
+        $response['iTotalDisplayRecords'] = 0;
+        $response['aaData'] = [];
+        echo json_encode($response);
+    }
+
+
+}
+
+
+
 
 }

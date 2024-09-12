@@ -160,15 +160,23 @@
 
                     ?>
                     <div class="dropdown d-inline-block">
-                        <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i data-feather="bell" class="icon-lg"></i>
-                            <span class="badge bg-danger rounded-pill"><?php echo $total_noti;  ?></span>
-                        </button>
+                        <button type="button" class="btn header-item noti-icon position-relative"
+                        id="page-header-notifications-dropdown"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="المستندات التي ستنتهي قريبًا">
+                    <i data-feather="bell" class="icon-lg"></i>
+                    <span class="badge bg-danger rounded-pill"><?php echo $total_noti; ?></span>
+                </button>
+
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
                             <div class="p-3">
                                 <div class="row align-items-center">
                                     <div class="col">
-                                        <h6 class="m-0">الإشعارات</h6>
+                                        <h6 class="m-0">المستندات التي ستنتهي قريبًا</h6>
                                     </div>
                                     {{-- <div class="col-auto">
                                         <a href="#!" class="small text-reset text-decoration-underline"> غير مقروء (3)</a>
@@ -294,6 +302,215 @@
                         </div>
                     </div>
 
+                    {{-- new --}}
+
+                    @php
+    // Fetch and merge the documents
+                    $employeeDocs = DB::table('employee_docs')->where('doc_status', 2)->get()->map(function($doc) {
+                        $doc->doc_name = $doc->employeedoc_name;
+                        $doc->company_name= $doc->employee_company;
+                        $doc->employee_name= $doc->employee_name; // Rename field for consistency
+                        $doc->type = 'employee'; // Add type for badge color
+                        return $doc;
+                    });
+
+                    $companyDocs = DB::table('company_docs')->where('doc_status', 2)->get()->map(function($doc) {
+                        $doc->doc_name = $doc->companydoc_name;
+                        $doc->company_name = $doc->company_name; // Rename field for consistency
+                        $doc->type = 'company'; // Add type for badge color
+                        return $doc;
+                    });
+
+                        $allDocs = $employeeDocs->merge($companyDocs)->sortByDesc('updated_at')->take(6);
+                    @endphp
+
+<div class="dropdown d-inline-block">
+
+    @if(Auth::check() && Auth::user()->user_type == 1)
+
+
+    <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown"
+        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title=" مستندات عملية التجديد ">
+
+
+        <i data-feather="file-text" class="icon-lg"></i>
+
+        <span class="badge bg-danger rounded-pill">{{ $allDocs->count() }}</span>
+
+    </button>
+    @endif
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+        aria-labelledby="page-header-notifications-dropdown">
+        <div class="p-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h6 class="m-0">{{ __('مستندات عملية التجديد') }}</h6>
+                </div>
+                {{-- <div class="col-auto">
+                    <a href="#!" class="small text-reset text-decoration-underline">{{ __('غير المقروءة') }} ({{ $allDocs->where('read', 0)->count() }})</a>
+                </div> --}}
+            </div>
+        </div>
+        @if($allDocs->isNotEmpty())
+            <div data-simplebar style="max-height: 230px;">
+                @foreach($allDocs as $doc)
+                    @php
+                        $updatedAt = \Carbon\Carbon::parse($doc->updated_at);
+                        // Determine badge class and text
+                        $badgeClass = $doc->type == 'company' ? 'bg-success' : 'bg-info';
+                        $badgeText = $doc->type == 'company' ? __('شركة مستند') : __('مستند موظف');
+                    @endphp
+                    <a href="#!" class="text-reset notification-item">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ $doc->doc_name }}</h6>
+                                <span>{{ $doc->employee_name ?? ''}}</span>
+                                <div class="font-size-13 text-muted">
+                                    <span>{{ $doc->company_name ?? ''}}</span>
+
+                                    <p class="mb-0">
+                                        <i class="mdi mdi-clock-outline"></i>
+                                        <span class="mb-1">{{ $updatedAt->format('Y-m-d g:i a') }} {{ $updatedAt->format('a') == 'am' ? 'ص' : 'م' }}</span>
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="ms-2">
+                                <span class="badge {{ $badgeClass }}">{{ $badgeText }}</span>
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        @else
+            <p>{{ __('لم يتم العثور على مستندات.') }}</p>
+        @endif
+        <div class="p-2 border-top d-grid">
+            <a class="btn btn-sm btn-link font-size-14 text-center" href="{{ url('under_process') }}">
+                <i class="mdi mdi-arrow-right-circle me-1"></i> <span>{{ __('عرض المزيد..') }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+ {{-- endnew  --}}
+
+ {{-- second --}}
+
+ @php
+    // Fetch document history where status is 2
+    $documentHistories = DB::table('document_history')
+        ->where('status', 2)
+        ->leftJoin('employees', 'document_history.employee_id', '=', 'employees.id')
+        ->leftJoin('companies', 'document_history.company_id', '=', 'companies.id')
+        ->select(
+            'document_history.*',
+            'employees.employee_name as employee_name',
+            'companies.company_name as company_name'
+        )
+        ->get()
+        ->map(function ($doc) {
+            // Determine the document name and type
+            $doc->name = $doc->doc_name; // Use doc_name directly from document_history
+            $doc->type = $doc->employee_name ? 'employee' : 'company'; // Add type for badge color
+            return $doc;
+        })
+        ->sortByDesc('updated_at')
+        ->take(6); // Get only the latest 6 records
+@endphp
+
+<div class="dropdown d-inline-block">
+    @if(Auth::check() && Auth::user()->user_type == 1)
+    <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown"
+        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="المستندات التي تم تجديدها مؤخرًا">
+        <i data-feather="clipboard" class="icon-lg"></i>
+        <span class="badge bg-danger rounded-pill">{{ $documentHistories->count() }}</span>
+    </button>
+    @endif
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+        aria-labelledby="page-header-notifications-dropdown">
+        <div class="p-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h6 class="m-0">{{ __('المستندات التي تم تجديدها مؤخرًا') }}</h6>
+                </div>
+                {{-- <div class="col-auto">
+                    <a href="#!" class="small text-reset text-decoration-underline">{{ __('غير المقروءة') }} ({{ $documentHistories->where('read', 0)->count() }})</a>
+                </div> --}}
+            </div>
+        </div>
+        @if($documentHistories->isNotEmpty())
+            <div data-simplebar style="max-height: 230px;">
+                @foreach($documentHistories as $doc)
+                    @php
+                        $updatedAt = \Carbon\Carbon::parse($doc->updated_at);
+                        $now = \Carbon\Carbon::now();
+                        $diffInHours = $updatedAt->diffInHours($now);
+                        $diffInDays = $updatedAt->diffInDays($now);
+                        $diffInMonths = $updatedAt->diffInMonths($now);
+
+                        // Determine time ago format
+                        if ($diffInMonths > 0) {
+                            $timeAgo = $diffInMonths . ' ' . __('شهر') . ($diffInMonths > 1 ? __('شهور') : '');
+                        } elseif ($diffInDays > 0) {
+                            $timeAgo = $diffInDays . ' ' . __('يوم') . ($diffInDays > 1 ? __('أيام') : '');
+                        } else {
+                            $timeAgo = $diffInHours . ' ' . __('ساعة') . ($diffInHours > 1 ? __('ساعات') : '');
+                        }
+
+                        // Determine badge class and text
+                        $badgeClass = $doc->type == 'company' ? 'bg-success' : 'bg-info';
+                        $badgeText = $doc->type == 'company' ? __('شركة مستند') : __('مستند موظف');
+                        $companyNames = DB::table('companies')->where('id', $doc->company_id)->value('company_name');
+                        $employeeNames = DB::table('employees')->where('id', $doc->employee_id)->value('employee_name');
+                        $emp_company_id = DB::table('employees')->where('id', $doc->employee_id)->value('employee_company');
+                        $emp_comp_name = DB::table('companies')->where('id', $emp_company_id)->value('company_name');
+
+                    @endphp
+                    <a href="#!" class="text-reset notification-item">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ $doc->name }}</h6>
+                                <div class="font-size-13 text-muted">
+                                    <span class="mb-1">{{ $employeeNames ?? $companyNames }}</span>
+                                    <span class="mb-1">{{ $emp_comp_name ?? '' }}</span>
+
+                                    <p class="mb-0">
+                                        <i class="mdi mdi-clock-outline"></i>
+                                        <span class="mb-1">{{ $updatedAt->format('Y-m-d g:i a') }} {{ $updatedAt->format('a') == 'am' ? 'ص' : 'م' }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="ms-2">
+                                <span class="badge {{ $badgeClass }}">{{ $badgeText }}</span>
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        @else
+            <p>{{ __('لم يتم العثور على مستندات.') }}</p>
+        @endif
+        <div class="p-2 border-top d-grid">
+            <a class="btn btn-sm btn-link font-size-14 text-center" href="{{ url('renewed_docs') }}">
+                <i class="mdi mdi-arrow-right-circle me-1"></i> <span>{{ __('عرض المزيد..') }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+ {{-- endsecond --}}
+
+
+
+
+
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img class="rounded-circle header-profile-user" src="{{  asset('images/users/user.png')}}" alt="صورة الملف الشخصي">
@@ -393,6 +610,7 @@
                                 <li><a href="{{ url('company_doc_report') }}" data-key="t-starter-page"> تقرير وثائق الشركة</a></li>
                                 <li><a href="{{ url('doc_expiry') }}" data-key="t-starter-page"> تقرير انتهاء صلاحية الوثائق</a></li>
                                 <li><a href="{{ url('employee_task_report') }}" data-key="t-starter-page">تقرير مهام الموظفين</a></li>
+                                <li><a href="{{ url('complete') }}" data-key="t-starter-page"> تقرير إتمام مهام الموظف </a></li>
                             </ul>
                             @endif
                         </li>
@@ -407,7 +625,7 @@
                             </ul>
                         </li>
                         <li>
-                            @if(Auth::check() && Auth::user()->user_type == 1)
+
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="share-2"></i>
                                 <span data-key="t-pages"> الوثائق المنتهية </span>
@@ -415,8 +633,11 @@
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="{{ url('show_expired_docs')}}" data-key="t-starter-page"> الوثائق قيد المعالجة </a></li>
                                 <li><a href="{{ url('under_process')}}" data-key="t-starter-page">  المستندات قيد المعالجة  </a></li>
+                                @if(Auth::check() && Auth::user()->user_type == 1)
+                                <li><a href="{{ url('renewed_docs')}}" data-key="t-starter-page">   الوثائق المجددة   </a></li>
+                                @endif
                             </ul>
-                            @endif
+
                         </li>
 
 

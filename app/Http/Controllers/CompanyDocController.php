@@ -44,10 +44,7 @@ class CompanyDocController extends Controller
             {
 
                 $document_name='<p style="text-align:center;" href="javascript:void(0);">'.$value->companydoc_name.'</p>';
-
-
                 $expiryDate = Carbon::parse($value->expiry_date);
-
                 // Get the current date
                 $today = Carbon::now();
 
@@ -92,11 +89,11 @@ class CompanyDocController extends Controller
                             type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bx bx-dots-horizontal-rounded"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_company_doc(' . $value->id . ')">Edit</a></li>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="edit_company_doc('. $value->id.')">تعديل</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc('.$value->id.')">حذف</a></li>
+                    </ul>
 
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="del_company_doc(' . $value->id . ')">Delete</a></li>
-                        </ul>
                     </div>';
                 $add_data=get_date_only($value->created_at);
                 $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
@@ -131,7 +128,6 @@ class CompanyDocController extends Controller
     public function add_doc(Request $request)
 
     {
-
         $user_id = Auth::id();
         $data= User::find( $user_id)->first();
         $user= $data->user_name;

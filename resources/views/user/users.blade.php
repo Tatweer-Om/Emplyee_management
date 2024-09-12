@@ -50,14 +50,13 @@
                                         <thead>
                                             <tr class="bg-transparent">
 
-                                                <th style="text-align: right;">الرقم التسلسلي</th>
-                                                <th style="text-align: right; width: 20px;">اسم المستخدم</th>
-                                                <th style="text-align: right;">هاتف المستخدم</th>
-                                                <th style="text-align: right;">بريد المستخدم</th>
-                                                <th style="text-align: right;">تفاصيل المستخدم</th>
-                                                <th style="text-align: right;">نوع المستخدم</th>
-                                                <th style="text-align: right; width: 20px;">أضيف بواسطة</th>
-                                                <th style="text-align: right; width: 20px;">الإجراء</th>
+                                                <th style="text-align: center; width:20px;">الرقم </th>
+                                                <th style="text-align: center; "> المستخدم</th>
+                                                <th style="text-align: center; "> التواصل</th>
+                                                <th style="text-align: center;">تفاصيل </th>
+                                                <th style="text-align: center;">نوع </th>
+                                                <th style="text-align: center; width: 20px;">أضيف بواسطة</th>
+                                                <th style="text-align: center; width: 20px;">الإجراء</th>
 
                                             </tr>
                                         </thead>
