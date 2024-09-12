@@ -50,9 +50,9 @@ class UserController extends Controller
                 $user_phone='<p style="width:20px;" href="javascript:void(0);">'.$value->user_phone.'</p>';
                 $user_email='<p style="width:20px;" href="javascript:void(0);">'.$value->user_email.'</p>';
 
-                $user_type = '<p style="width:20px;" href="javascript:void(0);">' . ($value->user_type == 1 ? 'مدير' : 'مستخدم') . '</p>';
-                $user_detail = '<p style="white-space:pre-line; text-align:justify;" href="javascript:void(0);">' . $value->user_detail . '</p>';
-                $user_all = '<p style="width:20px;" href="javascript:void(0);">' . ($value->user_all ? 'جميع الفروع' : $branch) . '</p>';
+                $user_type = '<p  href="javascript:void(0);">' . ($value->user_type == 1 ? 'مدير' : 'مستخدم') . '</p>';
+                $user_detail = '<p style="white-space:pre-line; " href="javascript:void(0);">' . $value->user_detail . '</p>';
+                $user_all = '<p  href="javascript:void(0);">' . ($value->user_all ? 'جميع الفروع' : $branch) . '</p>';
 
 
 
@@ -70,15 +70,18 @@ class UserController extends Controller
                 $add_data=get_date_only($value->created_at);
 
                 $sno++;
-                $json[]= array(
-                            $sno,
-                            $user_name,
-                            $user_email .'<br>'.$user_phone,
-                            $user_detail,
-                            $user_type . '<br>' . $user_all,
-                            $value->added_by . '<br>' . $add_data,
-                            $modal
-                        );
+
+                $json[] = array(
+                    '<div style="text-align: center;">' . $sno . '</div>',
+                    '<div style="text-align: center;">' . $user_name . '</div>',
+                    '<div style="text-align: center;">' . $user_email . '<br>' . $user_phone . '</div>',
+                    '<div style="text-align: center;">' . $user_detail . '</div>',
+                    '<div style="text-align: center;">' . $user_type . '<br>' . $user_all . '</div>',
+                    '<div style="text-align: center;">' . $value->added_by . '<br>' . $add_data . '</div>',
+                    '<div style="text-align: center;">' . $modal . '</div>'
+                );
+                
+
             }
             $response = array();
             $response['success'] = true;

@@ -50,6 +50,7 @@
                                         <thead>
                                             <tr class="bg-transparent">
 
+
                                                 <th style="text-align: center; width:20px;">الرقم </th>
                                                 <th style="text-align: center; "> المستخدم</th>
                                                 <th style="text-align: center; "> التواصل</th>
@@ -57,6 +58,7 @@
                                                 <th style="text-align: center;">نوع </th>
                                                 <th style="text-align: center; width: 20px;">أضيف بواسطة</th>
                                                 <th style="text-align: center; width: 20px;">الإجراء</th>
+
 
                                             </tr>
                                         </thead>
