@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Http\Controllers\Controller;
 use App\Models\EmployeeDoc;
-use App\Models\CompanyDocs;  
+use App\Models\CompanyDocs;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-// use App\Mail\SendReminderEmail; // Use your mailable class
+use App\Mail\SendReminderEmail; // Use your mailable class
 
 class CronJobController extends Controller
 {
     public function getAndSendEmails()
     {
-        
+
         $today = date('Y-m-d');
         // Get the date 30 days from now
         $dateIn30Days = date('Y-m-d', strtotime('+30 days'));

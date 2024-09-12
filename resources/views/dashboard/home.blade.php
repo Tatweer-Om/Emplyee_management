@@ -90,7 +90,7 @@
                                         <div class="col-6">
                                             <span class="text-muted mb-3 lh-1 d-block text-truncate">وثائق الشركات</span>
                                             <h4 class="mb-3">
-                                                <span class="counter-value" data-target="{{ $comp_docs ?? '' }}"></span>
+                                                <span class="counter-value" data-target="{{ $comp_docs_cout ?? '' }}"></span>
                                             </h4>
                                         </div>
                                         <div class="col-6">
@@ -305,7 +305,12 @@
                         <div class="col-xl-4">
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
+
+                                    @if (Auth::check() && Auth::user()->user_type == 1)
                                     <h4 class="card-title mb-0 flex-grow-1">أحدث الموظفين المضافين</h4>
+                                    @else
+                                    <h4 class="card-title mb-0 flex-grow-1"> مستندات الموظفين</h4>
+                                    @endif
                                     <div class="flex-shrink-0">
                                         <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs" role="tablist">
                                         </ul>
@@ -319,6 +324,7 @@
                                             <div class="table-responsive px-3" style="max-height: 352px;">
                                                 <table class="table align-middle table-nowrap table-borderless">
                                                     <tbody>
+                                                        @if (Auth::check() && Auth::user()->user_type == 1)
                                                         @foreach ( $emps as $emp)
                                                         <tr>
                                                             <td style="width: 50px;">
@@ -366,6 +372,81 @@
 
                                                         </tr>
                                                         @endforeach
+                                                        @else
+                                                        @foreach ($allData as $data)
+                                                        @foreach ($data['employee_docs'] as $doc)
+                                                        <tr>
+                                                            <td style="width: 50px;">
+                                                                <div class="font-size-22 text-success">
+                                                                    <i class="bx bx-down-arrow-circle d-block"></i>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div>
+                                                                    <h5 class="font-size-14 mb-1">اسم الموظف</h5>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $doc->employee_name ?? '' }}</p>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $doc->employee_company ?? '' }}</p>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="text-end">
+                                                                    <h5 class="font-size-14 mb-0">Document </h5>
+                                                                        <p class="text-muted mb-0 font-size-12">{{ $doc->employeedoc_name ?? '' }}</p>
+
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="text-end">
+                                                                    <h5 class="font-size-14 mb-0">تاريخ الانتهاء</h5>
+
+                                                                    @php
+                                                                        if ($doc->expiry_date) {
+                                                                            // Parse the expiry date using Carbon
+                                                                            $expiryDate = \Carbon\Carbon::parse($doc->expiry_date);
+                                                                            // Get the remaining days as a natural number (whole number)
+                                                                            $remainingDays = \Carbon\Carbon::now()->diffInDays($expiryDate, false); // false flag ensures negative value if past
+                                                                            $remainingDays = floor($remainingDays); // Ensure whole number (natural number)
+
+                                                                            // Determine the badge color based on remaining days
+                                                                            if ($remainingDays > 60) {
+                                                                                $badgeClass = 'badge bg-success'; // Green badge for more than 60 days
+                                                                            } elseif ($remainingDays > 0 && $remainingDays <= 60) {
+                                                                                $badgeClass = 'badge bg-danger'; // Red badge for less than 60 days
+                                                                            } else {
+                                                                                $badgeClass = 'badge bg-danger'; // Red badge for expired or zero days
+                                                                            }
+                                                                        }
+                                                                    @endphp
+
+                                                                    @if (isset($remainingDays))
+                                                                        <p class="mb-0 font-size-12">
+                                                                            <span class="{{ $badgeClass }}">
+                                                                                @if ($remainingDays > 0)
+                                                                                    {{ $remainingDays }} أيام متبقية
+                                                                                @elseif ($remainingDays == 0)
+                                                                                    منتهي اليوم
+                                                                                @else
+                                                                                    منتهي منذ {{ abs($remainingDays) }} أيام
+                                                                                @endif
+                                                                            </span>
+                                                                        </p>
+                                                                    @else
+                                                                        <p class="text-muted mb-0 font-size-12">لا يوجد تاريخ انتهاء</p>
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+
+
+
+
+                                                        </tr>
+                                                        @endforeach
+                                                        @endforeach
+                                                        @endif
+
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -383,7 +464,12 @@
                         <div class="col-xl-4">
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
+                                    @if (Auth::check() && Auth::user()->user_type == 1)
                                     <h4 class="card-title mb-0 flex-grow-1">  أحدث الموظفين والشركات المضافة</h4>
+                                    @else
+                                    <h4 class="card-title mb-0 flex-grow-1"> مستندات الشركات </h4>
+
+                                    @endif
                                     <div class="flex-shrink-0">
                                         <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs" role="tablist">
                                         </ul>
@@ -397,6 +483,7 @@
                                             <div class="table-responsive px-3" style="max-height: 352px;">
                                                 <table class="table align-middle table-nowrap table-borderless">
                                                     <tbody>
+                                                        @if (Auth::check() && Auth::user()->user_type == 1)
                                                         @foreach ($comps as $comp)
                                                         <tr>
                                                             <td style="width: 50px;">
@@ -430,6 +517,77 @@
                                                             </td>
                                                         </tr>
                                                         @endforeach
+
+                                                        @else
+                                                        @foreach ($allData as $data)
+                                                        @foreach ($data['company_docs'] as $doc)
+                                                        <tr>
+                                                            <td style="width: 50px;">
+                                                                <div class="font-size-22 text-success">
+                                                                    <i class="bx bx-down-arrow-circle d-block"></i>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div>
+                                                                    <h5 class="font-size-14 mb-1"> {{ $doc->company_name ?? '' }}</h5>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $doc->companydoc_name ?? '' }}</p>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $doc->expiry_date ?? '' }}</p>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="text-end">
+                                                                    <h5 class="font-size-14 mb-0">تاريخ الانتهاء</h5>
+
+                                                                    @php
+                                                                        if ($doc->expiry_date) {
+                                                                            // Parse the expiry date using Carbon
+                                                                            $expiryDate = \Carbon\Carbon::parse($doc->expiry_date);
+                                                                            // Get the remaining days as a natural number (whole number)
+                                                                            $remainingDays = \Carbon\Carbon::now()->diffInDays($expiryDate, false); // false flag ensures negative value if past
+                                                                            $remainingDays = floor($remainingDays); // Ensure whole number (natural number)
+
+                                                                            // Determine the badge color based on remaining days
+                                                                            if ($remainingDays > 60) {
+                                                                                $badgeClass = 'badge bg-success'; // Green badge for more than 60 days
+                                                                            } elseif ($remainingDays > 0 && $remainingDays <= 60) {
+                                                                                $badgeClass = 'badge bg-danger'; // Red badge for less than 60 days
+                                                                            } else {
+                                                                                $badgeClass = 'badge bg-danger'; // Red badge for expired or zero days
+                                                                            }
+                                                                        }
+                                                                    @endphp
+
+                                                                    @if (isset($remainingDays))
+                                                                        <p class="mb-0 font-size-12">
+                                                                            <span class="{{ $badgeClass }}">
+                                                                                @if ($remainingDays > 0)
+                                                                                    {{ $remainingDays }} أيام متبقية
+                                                                                @elseif ($remainingDays == 0)
+                                                                                    منتهي اليوم
+                                                                                @else
+                                                                                    منتهي منذ {{ abs($remainingDays) }} أيام
+                                                                                @endif
+                                                                            </span>
+                                                                        </p>
+                                                                    @else
+                                                                        <p class="text-muted mb-0 font-size-12">لا يوجد تاريخ انتهاء</p>
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="text-end">
+                                                                    <h5 class="font-size-14 text-muted mb-0">أضيف بواسطة</h5>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $doc->added_by ?? '' }}</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                        @endforeach
+
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -448,7 +606,11 @@
                         <div class="col-xl-4">
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
+                                    @if (Auth::check() && Auth::user()->user_type == 1)
                                     <h4 class="card-title mb-0 flex-grow-1">أحدث الوثائق</h4>
+                                    @else
+                                    <h4 class="card-title mb-0 flex-grow-1">الشركات </h4>
+                                    @endif
                                     <div class="flex-shrink-0">
                                         <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs" role="tablist">
                                         </ul>
@@ -462,6 +624,7 @@
                                             <div class="table-responsive px-3" style="max-height: 352px;">
                                                 <table class="table align-middle table-nowrap table-borderless">
                                                     <tbody>
+                                                        @if (Auth::check() && Auth::user()->user_type == 1)
                                                         @foreach ($docs as $doc)
                                                         <tr>
                                                             <td style="width: 50px;">
@@ -494,6 +657,43 @@
                                                             </td>
                                                         </tr>
                                                         @endforeach
+                                                        @else
+                                                        @foreach ($allData as $data)
+                                                        @foreach ($data['company2'] as $comp)
+                                                        <tr>
+                                                            <td style="width: 50px;">
+                                                                <div class="font-size-22 text-success">
+                                                                    <i class="bx bx-down-arrow-circle d-block"></i>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div>
+                                                                    <h5 class="font-size-14 mb-1">{{ $comp->company_name ?? '' }} </h5>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $comp->company_phone ?? '' }}</p>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="text-end">
+                                                                    <h5 class="font-size-14 mb-0">تاريخ الإضافة</h5>
+                                                                    <p class="text-muted mb-0 font-size-12">
+
+                                                                        {{ $comp->created_at ? \Carbon\Carbon::parse($comp->created_at)->format('Y-m-d') : '' }}
+                                                                    </p>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="text-end">
+                                                                    <h5 class="font-size-14 text-muted mb-0">أضيف بواسطة</h5>
+                                                                    <p class="text-muted mb-0 font-size-12">{{ $comp->added_by ?? '' }}</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                        @endforeach
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -504,6 +704,7 @@
                                     </div>
                                     <!-- end tab content -->
                                 </div>
+
                                 <!-- end card body -->
                             </div>
                             <!-- end card -->
@@ -522,6 +723,7 @@
 
         </div>
         <!-- end main content-->
+
 
     </div>
     <!-- END layout-wrapper -->

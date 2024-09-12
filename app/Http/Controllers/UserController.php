@@ -46,8 +46,7 @@ class UserController extends Controller
                 $branch = $branch_check->branch_name ?? '';
 
 
-                $user_name='<a style="width:20px;" href="javascript:void(0);">'.$value->user_name.'</a>';
-
+                $user_name = '<a style="width:20px;" href="' . url('employee_task_page/' . $value->id) . '">' . $value->user_name . '</a>';
                 $user_phone='<p style="width:20px;" href="javascript:void(0);">'.$value->user_phone.'</p>';
                 $user_email='<p style="width:20px;" href="javascript:void(0);">'.$value->user_email.'</p>';
 
@@ -71,6 +70,7 @@ class UserController extends Controller
                 $add_data=get_date_only($value->created_at);
 
                 $sno++;
+
                 $json[] = array(
                     '<div style="text-align: center;">' . $sno . '</div>',
                     '<div style="text-align: center;">' . $user_name . '</div>',
@@ -81,6 +81,7 @@ class UserController extends Controller
                     '<div style="text-align: center;">' . $modal . '</div>'
                 );
                 
+
             }
             $response = array();
             $response['success'] = true;

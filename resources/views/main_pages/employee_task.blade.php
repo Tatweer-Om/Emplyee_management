@@ -92,6 +92,8 @@
                                             <h5 class="card-title me-2">{{ $user->user_name ?? '' }} المهام</h5>
                                         </div>
 
+                                        <input type="hidden" class="emp_id" value="{{ $user->id }}" id="emp_id" name="emp_id" hidden>
+
                                         <div class="row align-items-center">
                                             <div class="col-sm">
                                                 <div id="invested-overview" data-colors='["#5156be", "#34c38f"]'
@@ -195,7 +197,6 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="transactions-buy-tab" role="tabpanel">
-                                        <a href="#" class="btn btn-success" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#employee_modal4">إضافة موظف</a> <br><br>
                                         <div class="table-responsive">
                                             <table class="table align-middle datatable dt-responsive table-check nowrap"
                                                 style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;"
@@ -371,7 +372,7 @@
                                 <input type="text" class="employee_name form-control" name="employee_name" id="employee_name">
                             </div>
                             {{-- new --}}
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label for="choices-single-groups" class="form-label font-size-13">الشركات</label>
                                 <select class="employee_company searchable_select select2 form-control" searchable name="employee_company" id="choices-single-groups">
                                     <option value="">اختر الشركة</option>
@@ -379,7 +380,7 @@
                                         <option value="{{ $company->id }}">{{ $company->company_name ?? 'غير متوفر' }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
 
                             {{-- endnew  --}}
                             <input type="text" class="employee_id" name="employee_id" id="employee_id" hidden>

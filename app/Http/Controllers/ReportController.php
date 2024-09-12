@@ -7,6 +7,7 @@ use App\Models\CompanyDocs;
 use Carbon\Carbon;
 use App\Models\About;
 use App\Models\Company;
+use App\Models\DocumentHistory;
 use App\Models\EmployeeDoc;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -124,6 +125,39 @@ class ReportController extends Controller
 
         // Return data to the view, passing the about object
         return view('reports.employee_task_report', compact('users', 'user_id', 'report_name', 'companyDocs', 'sdate', 'edate', 'about'));
+    }
+
+
+
+    public function task_complete(Request $request){
+
+        $users = User::get();
+
+
+        $about = About::first();
+
+        // Get today's date
+        $today = date('Y-m-d');
+
+        // Date range selection, defaults to today's date
+        $sdate = !empty($request['date_from']) ? $request['date_from'] : $today;
+        $edate = !empty($request['to_date']) ? $request['to_date'] : $today;
+
+        // Get the selected user ID, or fallback to old input if available
+        $user_id = $request->input('user_id') ?? old('user_id');
+
+        // Fetch company documents filtered by user ID and date range
+        $tasks = DocumentHistory::where('user_id', $user_id)
+            ->whereDate('created_at', '>=', $sdate)
+            ->whereDate('created_at', '<=', $edate)
+            ->get();
+
+        // Report name
+        $report_name = 'Employee Task COMPLETION Report';
+
+        // Return data to the view, passing the about object
+        return view('reports.task_completion_report', compact('users', 'user_id', 'report_name', 'tasks', 'sdate', 'edate', 'about'));
+
     }
 
 

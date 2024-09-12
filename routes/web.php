@@ -19,20 +19,31 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 
 
-
+// UserController
 Route::get('getAndSendEmails', [CronJobController::class, 'getAndSendEmails']);
 Route::match(['get', 'post'], 'login', [UserController::class, 'login'])->name('login');
 Route::match(['get', 'post'], 'logout', [UserController::class, 'logout'])->name('logout');
 Route::match(['get', 'post'], 'login_user', [UserController::class, 'login_user'])->name('login_user');
 
+
+// HomeController
+
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('calender', [HomeController::class, 'calender'])->name('calender');
-
 Route::get('company_detail', [HomeController::class, 'company_detail'])->name('company_detail');
-
 Route::get('timeline', [HomeController::class, 'timeline'])->name('timeline');
+Route::get('renewed_docs', [HomeController::class, 'renewed_docs'])->name('renewed_docs');
+Route::get('all_renewed_docs', [HomeController::class, 'all_renewed_docs'])->name('all_renewed_docs');
+Route::get('show_expired_docs', [HomeController::class, 'show_expired_docs'])->name('show_expired_docs');
+Route::get('all_expired_docs', [HomeController::class, 'all_expired_docs'])->name('all_expired_docs');
+Route::post('renew_docs_request', [HomeController::class, 'renew_docs_request'])->name('renew_docs_request');
+Route::post('update_employee_doc', [HomeController::class, 'update_employee_doc'])->name('update_employee_doc');
+Route::get('under_process', [HomeController::class, 'under_process'])->name('under_process');
+Route::get('all_expired_docs2', [HomeController::class, 'all_expired_docs2'])->name('all_expired_docs2');
+Route::post('renew_docs_request2', [HomeController::class, 'renew_docs_request2'])->name('renew_docs_request2');
+Route::post('update_employee_doc2', [HomeController::class, 'update_employee_doc2'])->name('update_employee_doc2');
 
-// UserController
+
 
 //company routes
 
@@ -127,20 +138,6 @@ Route::post('update_employeedoc', [EmployeeDocController::class, 'update_employe
 Route::post('delete_employeedoc', [EmployeeDocController::class, 'delete_employeedoc'])->name('delete_employeedoc');
 
 
-// notification
-Route::get('show_expired_docs', [HomeController::class, 'show_expired_docs'])->name('show_expired_docs');
-Route::get('all_expired_docs', [HomeController::class, 'all_expired_docs'])->name('all_expired_docs');
-Route::post('renew_docs_request', [HomeController::class, 'renew_docs_request'])->name('renew_docs_request');
-Route::post('update_employee_doc', [HomeController::class, 'update_employee_doc'])->name('update_employee_doc');
-
-Route::get('under_process', [HomeController::class, 'under_process'])->name('under_process');
-Route::get('all_expired_docs2', [HomeController::class, 'all_expired_docs2'])->name('all_expired_docs2');
-Route::post('renew_docs_request2', [HomeController::class, 'renew_docs_request2'])->name('renew_docs_request2');
-Route::post('update_employee_doc2', [HomeController::class, 'update_employee_doc2'])->name('update_employee_doc2');
-
-
-
-
 //task
 Route::get('employee_task_page/{id}', [TaskController::class, 'employee_task_page'])->name('employee_task_page');
 Route::get('employee_task', [TaskController::class, 'employee_task'])->name('employee_task');// web.php (routes file)
@@ -157,7 +154,7 @@ Route::match(['get', 'post'],'employee_doc_report', [ReportController::class, 'e
 Route::match(['get', 'post'],'doc_expiry', [ReportController::class, 'doc_expiry'])->name('doc_expiry');
 Route::match(['get', 'post'],'company_doc_report', [ReportController::class, 'company_doc_report'])->name('company_doc_report');
 Route::match(['get', 'post'],'employee_task_report', [ReportController::class, 'employee_task_report'])->name('employee_task_report');
-
+Route::match(['get', 'post'],'task_complete', [ReportController::class, 'task_complete'])->name('task_complete');
 
 
 

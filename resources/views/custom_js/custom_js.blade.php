@@ -101,46 +101,7 @@
         }
     }
 
-    // $('.login_user').on('submit', function(e) {
-    //     e.preventDefault(); // Prevent the default form submission
 
-    //     // Get form data
-    //     var username = $('#username').val().trim();
-    //     var password = $('#password').val().trim();
-
-    //     // Validate form fields
-    //     if (username === '') {
-    //         show_notification('error', 'اسم المستخدم غير صحيح');
-    //         return; // Stop form submission
-    //     }
-
-    //     if (password === '') {
-    //         show_notification('error', 'كلمة المرور غير صحيحة');
-    //         return; // Stop form submission
-    //     }
-
-    //     $.ajax({
-    //         url: "{{ route('login_user') }}",
-    //         type: "POST",
-    //         data: {
-    //             _token: $('meta[name="csrf-token"]').attr('content'), // CSRF token
-    //             username: username,
-    //             password: password
-    //         },
-    //         success: function(response) {
-    //             if (response.status === 1) {
-    //                 window.location.href = response.redirect_url;
-    //                 show_notification('success', 'تم تسجيل الدخول بنجاح');
-    //             } else {
-    //                 show_notification('error', 'خطأ في تسجيل الدخول');
-    //             }
-    //         },
-    //         error: function(xhr) {
-    //             console.log(xhr.responseText);
-    //             show_notification('error', 'خطأ في تسجيل الدخول');
-    //         }
-    //     });
-    // });
 
     function renew_docs(id, type) {
         Swal.fire({
@@ -208,6 +169,30 @@
     });
 
 
+
+    //renewed
+
+    $('#all_renewed_documents').DataTable({
+            "sAjaxSource": "{{ url('all_renewed_docs') }}",
+            "bFilter": true,
+            "sDom": 'fBtlpi',
+            'pagingType': 'numbers',
+            "ordering": true,
+            "language": {
+                search: ' ',
+                sLengthMenu: '_MENU_',
+                searchPlaceholder: 'بحث',
+                info: "_START_ - _END_ من _TOTAL_ العناصر",
+            },
+            "rowCallback": function( data) {
+                // Access the doc_status via the data attribute
+
+            },
+            initComplete: (settings, json) => {
+                $('.dataTables_filter').appendTo('#tableSearch');
+                $('.dataTables_filter').appendTo('.search-input');
+            },
+        });
     //under_process
 
     $('#all_expired_documents2').DataTable({
@@ -263,10 +248,12 @@
                     },
                     error: function() {
                         show_notification('error', 'فشل تجديد الوثائق');
+
                     },
                     success: function(data) {
                         $('#all_expired_documents2').DataTable().ajax.reload();
                         show_notification('success', 'بدأت عملية التجديد');
+
                     }
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {

@@ -10,18 +10,30 @@ use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
-    public function index (){
+    public function index()
+{
+    // Retrieve all companies
+    $companies = Company::all();
 
-        $companies= Company::all();
+    // Check if the user is authenticated
+    if (Auth::check()) {
+        // Retrieve the currently authenticated user
+        $user = Auth::user();
 
-        if (Auth::check() ) {
-            // If the conditions are met, show the dashboard
-            return view ('main_pages.employee', compact('companies'));
+        // Check if the user type is 1
+        if ($user->user_type == 1) {
+            // If the user type matches, show the dashboard
+            return view('main_pages.employee', compact('companies'));
         } else {
-            // If the conditions are not met, redirect to the login page with an Arabic error message
-            return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
+            // If the user type does not match, redirect to the login page with an error message
+            return redirect()->route('home')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
         }
+    } else {
+        // If the user is not authenticated, redirect to the login page with an error message
+        return redirect()->route('home')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
     }
+}
+
 
     public function show_employee()
     {
