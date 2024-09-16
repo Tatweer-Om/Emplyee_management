@@ -159,8 +159,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link" data-bs-toggle="tab" href="#transactions-buy-tab"
                                                 role="tab">
-                                                مستندات الموظف
-                                            </a>
+                                                مستندات العامل                                            </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" data-bs-toggle="tab" href="#comps"

@@ -369,8 +369,7 @@
                                            إضافة مستند
                                         </a>
                                         <a data-bs-toggle="modal" class="dropdown-item" data-bs-target="#employee_modal4" data-comp-id="${comp.id || ''}">
-                                                إضافة موظف
-                                            </a>
+إضافة عامل                                            </a>
                                     </li>
                                 </ul>
                             </div>

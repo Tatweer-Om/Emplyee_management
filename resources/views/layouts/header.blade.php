@@ -120,45 +120,46 @@
                     </div>
 
                     <?php
-                        // الحصول على تاريخ اليوم
-                        $today = date('Y-m-d');
+                    // الحصول على تاريخ اليوم
+                    $today = date('Y-m-d');
 
-                        // الحصول على التاريخ بعد 30 يومًا
-                        $dateIn30Days = date('Y-m-d', strtotime('+30 days'));
-                        $today = date('Y-m-d');
-                        $userId = Auth::id();
-                        $user_type = Auth::user()->user_type; // افتراض أن user_type هو عمود في جدول المستخدمين
+                    // الحصول على التاريخ بعد 30 يومًا
+                    $dateIn30Days = date('Y-m-d', strtotime('+30 days'));
+                    $userId = Auth::id();
+                    $user_type = Auth::user()->user_type; // افتراض أن user_type هو عمود في جدول المستخدمين
 
-                        // لجدول employee_docs
-                        $employeeDocs = DB::table('employee_docs')
-                            ->whereBetween('expiry_date', [$today, $dateIn30Days]);
+                    // لجدول employee_docs
+                    $employeeDocsQuery = DB::table('employee_docs')
+                        ->whereBetween('expiry_date', [$today, $dateIn30Days]);
 
-                        if ($user_type != 1) {
-                            $employeeDocs->where('user_id', $userId);
-                        }
+                    if ($user_type != 1) {
+                        $employeeDocsQuery->where('user_id', $userId);
+                    }
 
-                        // استرجاع سجلات employee_docs
-                        $employeeDocs = $employeeDocs->get();
+                    // استرجاع سجلات employee_docs
+                    $employeeDocs = $employeeDocsQuery->get();
+                    $companies = DB::table('companies')->where('user_id', $userId)->pluck('id'); // Get only company IDs
 
-                        // لجدول company_docs
+                    // Initialize an empty collection for company documents
+                    $companyDocs = collect();
+
+                    // Fetch all company_docs records where company_id is in the user's companies and expiry_date is within the range
+                    if ($companies->isNotEmpty()) {
                         $companyDocs = DB::table('company_docs')
-                            ->whereBetween('expiry_date', [$today, $dateIn30Days]);
+                            ->whereIn('company_id', $companies)
+                            ->whereBetween('expiry_date', [$today, $dateIn30Days])
+                            ->get();
+                    }
 
-                        if ($user_type != 1) {
-                            $companyDocs->where('user_id', $userId);
-                        }
+                    // Calculate total notifications by summing the count of both collections
+                    $total_noti = $companyDocs->count() + $employeeDocs->count();
 
-                        // استرجاع سجلات company_docs
-                        $companyDocs = $companyDocs->get();
-
-                        // حساب إجمالي الإشعارات
-                        $total_noti = $companyDocs->count() + $employeeDocs->count();
-
-                        // الآن $employeeDocs و $companyDocs هما مجموعات
-                        $emp_docs = $employeeDocs;
-                        $comp_docs = $companyDocs;
+                    // Assign employee and company documents to variables
+                    $emp_docs = $employeeDocs;
+                    $comp_docs = $companyDocs;
 
                     ?>
+
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon position-relative"
                         id="page-header-notifications-dropdown"

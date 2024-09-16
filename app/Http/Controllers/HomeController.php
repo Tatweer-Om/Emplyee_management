@@ -20,12 +20,38 @@ class HomeController extends Controller
     {
         // Check if the user is authenticated and authorized
         if (Auth::check()) {
+
+            $userId = Auth::id();
+            $user= Auth::User();
+
             // Retrieve counts of various models
             $users = User::count();
-            $employee = Employee::count();
-            $employee_doc = EmployeeDoc::count();
-            $comp_docs_cout = CompanyDocs::count();
-            $company = Company::count();
+
+
+        $employee = 0;
+        $employee_doc = 0;
+        $comp_docs_cout = 0;
+        $company=0;
+
+        $companies = Company::get();
+        $company= $companies->count();
+
+            if($user->user_type != 1){
+
+
+
+                $employee=0;
+                $employee_doc= 0;
+                $comp_docs_cout= 0;
+                foreach($companies as $comp){
+
+                    $employee += Employee::where('employee_company', $comp->id)->count();
+                    $employee_doc += EmployeeDoc::where('employee_company_id', $comp->id)->count();
+                    $comp_docs_cout += CompanyDocs::where('company_id', $comp->id)->count();
+                }
+
+            }
+
             $renewed = DocumentHistory::where('status', 2)->count();
 
             $employee_doc_count = EmployeeDoc::where('doc_status', 2)->count();
@@ -180,6 +206,7 @@ class HomeController extends Controller
         $userId = Auth::id(); // Get the current user ID
         $user_type = Auth::user()->user_type; // Get the user type
 
+
         // For employee_docs table
         $employeeDocsQuery = EmployeeDoc::whereBetween('expiry_date', [$today, $dateIn30Days]);
 
@@ -191,21 +218,27 @@ class HomeController extends Controller
         // Fetch the employee_docs records
         $employeeDocs = $employeeDocsQuery->get();
 
-        // For company_docs table
-        $companyDocsQuery = CompanyDocs::whereBetween('expiry_date', [$today, $dateIn30Days]);
+                // Fetch all companies for the user
+        $companies = Company::where('user_id', $userId)->pluck('id'); // Get only company IDs
 
-        // If the user type is not 1, filter by user_id
-        if ($user_type != 1) {
-            $companyDocsQuery->where('user_id', $userId);
+        // Initialize an empty array for company documents
+        $companyDocs = [];
+
+        // Fetch all company_docs records where company_id is in the user's companies and expiry_date is within the range
+        if ($companies->isNotEmpty()) {
+            $companyDocs = CompanyDocs::whereIn('company_id', $companies)
+                            ->whereBetween('expiry_date', [$today, $dateIn30Days])
+                            ->get();
         }
 
-        // Fetch the company_docs records
-        $companyDocs = $companyDocsQuery->get();
-
-        // Calculate total notifications
+        // Assuming $employeeDocs is defined somewhere above
+        // Calculate total notifications by summing the count of both collections
         $total_noti = $companyDocs->count() + $employeeDocs->count();
+
+        // Assign employee and company documents to variables
         $emp_docs = $employeeDocs;
         $comp_docs = $companyDocs;
+
 
         if(count($comp_docs)>0)
         {
