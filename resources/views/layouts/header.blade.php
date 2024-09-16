@@ -90,7 +90,7 @@
                                 <img src="#" alt="" height="24">
                             </span>
                             <span class="logo-lg">
-                                <img src="#" alt="" height="24"> <span class="logo-txt">{{  $company_name ?? '' }}</span>
+                                <img src="#" alt="" height="10"> <span class="logo-txt" style="font-size: 10px">{{  $company_name ?? '' }}</span>
                             </span>
                         </a>
                     </div>
@@ -120,45 +120,50 @@
                     </div>
 
                     <?php
-                        // الحصول على تاريخ اليوم
+                        // Get today's date
                         $today = date('Y-m-d');
 
-                        // الحصول على التاريخ بعد 30 يومًا
+                        // Get the date 30 days from today
                         $dateIn30Days = date('Y-m-d', strtotime('+30 days'));
-                        $today = date('Y-m-d');
                         $userId = Auth::id();
-                        $user_type = Auth::user()->user_type; // افتراض أن user_type هو عمود في جدول المستخدمين
+                        $user_type = Auth::user()->user_type; // Assuming user_type is a column in the users table
 
-                        // لجدول employee_docs
-                        $employeeDocs = DB::table('employee_docs')
-                            ->whereBetween('expiry_date', [$today, $dateIn30Days]);
+                        // Query for employee_docs
+                        $employeeDocsQuery = DB::table('employee_docs')
+                            ->whereBetween('expiry_date', [$today, $dateIn30Days])
+                            ->orderBy('expiry_date', 'asc'); // Sort by expiry_date in ascending order
 
+                        // Filter by user_id if not admin
                         if ($user_type != 1) {
-                            $employeeDocs->where('user_id', $userId);
+                            $employeeDocsQuery->where('user_id', $userId);
                         }
 
-                        // استرجاع سجلات employee_docs
-                        $employeeDocs = $employeeDocs->get();
+                        // Fetch employee_docs records
+                        $employeeDocs = $employeeDocsQuery->get();
 
-                        // لجدول company_docs
-                        $companyDocs = DB::table('company_docs')
-                            ->whereBetween('expiry_date', [$today, $dateIn30Days]);
+                        // Get company IDs for the current user
+                        $companies = DB::table('companies')->where('user_id', $userId)->pluck('id');
 
-                        if ($user_type != 1) {
-                            $companyDocs->where('user_id', $userId);
+                        // Initialize companyDocs collection
+                        $companyDocs = collect();
+
+                        if ($companies->isNotEmpty()) {
+                            // Query for company_docs
+                            $companyDocs = DB::table('company_docs')
+                                ->whereIn('company_id', $companies)
+                                ->whereBetween('expiry_date', [$today, $dateIn30Days])
+                                ->orderBy('expiry_date', 'asc') // Sort by expiry_date in ascending order
+                                ->get();
                         }
 
-                        // استرجاع سجلات company_docs
-                        $companyDocs = $companyDocs->get();
-
-                        // حساب إجمالي الإشعارات
+                        // Calculate total notifications
                         $total_noti = $companyDocs->count() + $employeeDocs->count();
 
-                        // الآن $employeeDocs و $companyDocs هما مجموعات
+                        // Assign data to variables
                         $emp_docs = $employeeDocs;
                         $comp_docs = $companyDocs;
+                        ?>
 
-                    ?>
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon position-relative"
                         id="page-header-notifications-dropdown"
@@ -239,38 +244,29 @@
                                     </a>
                                 <?php } ?>
                                 <?php foreach ($emp_docs as $key => $ed) {
-                                    // تحليل تاريخ انتهاء الصلاحية
                                     $expiryDate = new DateTime($ed->expiry_date);
 
-                                    // الحصول على التاريخ الحالي
                                     $today = new DateTime();
 
-                                    // حساب الفرق ككائن DateInterval
                                     $interval = $today->diff($expiryDate);
 
-                                    // استخراج الفرق بالسنوات والشهور والأيام
                                     $diffInYears = (int)$interval->y;
                                     $diffInMonths = (int)$interval->m;
                                     $diffInDays = (int)$interval->d;
 
-                                    // حساب إجمالي الأيام المتبقية
                                     $totalDaysRemaining = (int)$today->diff($expiryDate)->days;
 
-                                    // تحديد إذا كان منتهي الصلاحية
                                     if ($totalDaysRemaining < 1) {
                                         $renewl_period = '<p style="text-align:center; color: red;">منتهي الصلاحية</p>';
                                     } else {
-                                        // تنسيق الفرق باللغة العربية
                                         $yearsText = $diffInYears > 1 ? 'سنوات' : 'سنة';
                                         $monthsText = $diffInMonths > 1 ? 'أشهر' : 'شهر';
                                         $daysText = $diffInDays > 1 ? 'أيام' : 'يوم';
 
                                         $timeLeft = "$diffInYears $yearsText, $diffInMonths $monthsText, $diffInDays $daysText";
 
-                                        // تحديد لون الشارة بناءً على إجمالي الأيام المتبقية
                                         $badgeClass = $totalDaysRemaining < 60 ? 'badge badge-soft-danger font-size-15' : 'badge badge-soft-success font-size-15';
 
-                                        // إخراج الوقت المتبقي وإجمالي الأيام المتبقية
                                         $renewl_period = '<span class="' . $badgeClass . '" >' . $totalDaysRemaining . ' يوم متبقي</span>';
                                     }
 
