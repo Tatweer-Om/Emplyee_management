@@ -104,27 +104,27 @@
 
 
         //employee
-        function add_employee(id) {
+
+    });
+    function add_employee(id) {
             $('.employee_company').val(id);
         }
 
         $('.add_employee').off().on('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
 
-            var formdatas = new FormData(this); // Create FormData object from the form
-            var title = $('.employee_name').val(); // Get employee name
-            var id = $('.employee_id').val(); // Get employee ID
+            var formdatas = new FormData(this);
+            var title = $('.employee_name').val();
+            var id = $('.employee_id').val();
 
-            // Validate form input
             if (title === "") {
                 show_notification('error', 'يرجى إدخال اسم الموظف');
-                return false; // Exit if validation fails
+                return false;
             }
 
-            // Send AJAX request
             $.ajax({
                 type: "POST",
-                url: "{{ url('add_employee2') }}", // Set your API endpoint
+                url: "{{ url('add_employee2') }}",
                 data: formdatas,
                 contentType: false,
                 processData: false,
@@ -149,7 +149,6 @@
                 }
             });
         });
-    });
 
 
     //employee3

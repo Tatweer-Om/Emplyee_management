@@ -233,7 +233,7 @@ class HomeController extends Controller
 
         // Assuming $employeeDocs is defined somewhere above
         // Calculate total notifications by summing the count of both collections
-        $total_noti = $companyDocs->count() + $employeeDocs->count();
+        $total_noti = count($companyDocs) + count($employeeDocs);
 
         // Assign employee and company documents to variables
         $emp_docs = $employeeDocs;
@@ -364,23 +364,28 @@ class HomeController extends Controller
                 }
                 $add_data=get_date_only($value->created_at);
                 $add_date='<p style="white-space:pre-line; text-align:center;" href="javascript:void(0);">'. $add_data .'</p>';
-
                 $employee = Employee::where('id', $value->employee_id)->first();
-                $company = Company::where('id', $employee->employee_company)->first();
+
+                if ($employee) {
+                    $company = Company::where('id', $employee->employee_company)->first();
+                } else {
+                    // Handle the case where $employee is null
+                    $company = null;
+                }
 
                 $sno++;
                 $json[]= array(
-                          '<span style="text-align: center; display: block;">' . $sno . '</span>',
+                    '<span style="text-align: center; display: block;">' . $sno . '</span>',
+                    $value->employee_name .'<br>' . ($company ? $company->company_name : 'لا توجد شركة'),
+                    $value->added_by,
+                    $document_name,
+                    $expiry_date,
+                    '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
+                    $add_date,
+                    $modal,
+                    'DT_RowAttr' => array('data-status' => $value->doc_status)
+                );
 
-                            $value->employee_name .'<br>'.$company->company_name,
-                            $value->added_by,
-                            $document_name,
-                            $expiry_date,
-                            '<span style="text-align: center; display: block;">' . $renewl_period . '</span>',
-                            $add_date,
-                            $modal,
-                            'DT_RowAttr' => array('data-status' => $value->doc_status)
-                        );
             }
 
         }

@@ -57,7 +57,7 @@
                                                 <th style="text-align: right;">السجل</th>
                                                 <th style="text-align: right; width: 20px;">الإضافة</th>
                                                 <th style="text-align: right; width: 20px;">إجراء</th>
-                                                
+
 
                                             </tr>
                                         </thead>
@@ -151,13 +151,13 @@
                         <div class="modal-body">
                             <form class="add_employee" id="add_employee" method="POST" action="#">
                                 @csrf
-                                <input type="hidden" class="employee_company">
+                                <input type="hidden" class="employee_company" name="employee_company">
                                 <div class="mb-3">
                                     <label for="employee_name" class="col-form-label ">اسم الموظف</label>
                                     <input type="text" class="employee_name form-control" name="employee_name" id="employee_name">
                                 </div>
                                 {{-- new --}}
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="choices-single-groups" class="form-label font-size-13" hidden>الشركات</label>
                                     <select class="employee_company form-control" searchable name="employee_company" hidden
                                         id="choices-single-groups">
@@ -167,7 +167,7 @@
                                         @endforeach
 
                                     </select>
-                                </div>
+                                </div> --}}
 
                                 {{-- endnew --}}
                                 <input type="text" class="employee_id" name="employee_id" id="employee_id" hidden>
