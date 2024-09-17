@@ -26,8 +26,8 @@ class ReportController extends Controller
         $company_id = $request->input('company_id');
 
 
-        $employeeDocs = EmployeeDoc::whereDate('created_at', '>=', $sdate)
-                ->whereDate('created_at', '<=', $edate);
+        $employeeDocs = EmployeeDoc::whereDate('expiry_date', '>=', $sdate)
+                ->whereDate('expiry_date', '<=', $edate);
 
         // Filter by company if a company is selected and it's not "All"
         if (!empty($company_id)) {

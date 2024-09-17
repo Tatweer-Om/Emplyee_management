@@ -281,11 +281,13 @@ class CompanyController extends Controller
 
 
 
+
         $employee = new Employee();
 
         $employee->employee_id = genUuid() . time();
         $employee->employee_name = $request['employee_name'];
         $employee->employee_company = $request['employee_company'];
+
         $employee->employee_email = $request['employee_email'];
         $employee->employee_phone = $request['employee_phone'];
 
