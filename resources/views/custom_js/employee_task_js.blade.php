@@ -130,208 +130,281 @@
             }
         });
 
-
-
         function populateCompanyTable(data) {
-            companyTable.clear(); // مسح بيانات الجدول الحالية
+    companyTable.clear(); // مسح بيانات الجدول الحالية
 
-            let companies = data.companies;
-            let companyDocuments = data.company_documents;
-            let serialNumber = 1; // Track the serial number globally
-            let allDocuments = []; // Array to store all documents with company info
+    let companies = data.companies;
+    let companyDocuments = data.company_documents;
+    let serialNumber = 1; // Track the serial number globally
+    let allDocuments = []; // Array to store all documents with company info
 
-            // دالة لحساب الوقت المتبقي من تاريخ الانتهاء
-            function getRemainingTime(expiryDate) {
-                let now = new Date();
-                let expiry = new Date(expiryDate);
-                let diff = expiry - now;
+    // دالة لحساب الوقت المتبقي من تاريخ الانتهاء
+    function getRemainingTime(expiryDate) {
+        let now = new Date();
+        let expiry = new Date(expiryDate);
+        let diff = expiry - now;
 
-                if (diff <= 0) return 'منتهي الصلاحية';
+        if (diff <= 0) return 'منتهي الصلاحية';
 
-                let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                let years = Math.floor(days / 365);
-                days -= years * 365;
-                let months = Math.floor(days / 30);
-                days -= months * 30;
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let years = Math.floor(days / 365);
+        days -= years * 365;
+        let months = Math.floor(days / 30);
+        days -= months * 30;
 
-                let result = '';
-                if (years > 0) result += `${years} سنة `;
-                if (months > 0) result += `${months} شهر `;
-                if (days > 0) result += `${days} يوم `;
-                else if (diff > 0 && diff <= (1000 * 60 * 60 * 24)) result += 'يوم واحد ';
+        let result = '';
+        if (years > 0) result += `${years} سنة `;
+        if (months > 0) result += `${months} شهر `;
+        if (days > 0) result += `${days} يوم `;
+        else if (diff > 0 && diff <= (1000 * 60 * 60 * 24)) result += 'يوم واحد ';
 
-                return result + 'متبقي';
-            }
+        return result + 'متبقي';
+    }
 
-            // Combine all documents from all companies into one array
-            $.each(companies, function(index, company) {
-                let documents = companyDocuments[company.id] || []; // تأكد أن documents هو مصفوفة
+    // Combine all documents from all companies into one array
+    $.each(companies, function(index, company) {
+        let documents = companyDocuments[company.id] || []; // تأكد أن documents هو مصفوفة
 
-                // Attach the company info to each document
-                $.each(documents, function(docIndex, document) {
-                    allDocuments.push({
-                        company: company,
-                        document: document
-                    });
+        if (documents.length > 0) {
+            // Attach the company info to each document if documents exist
+            $.each(documents, function(docIndex, document) {
+                allDocuments.push({
+                    company: company,
+                    document: document
                 });
             });
-
-            // Sort all documents by expiry_date in ascending order
-            allDocuments.sort(function(a, b) {
-                return new Date(a.document.expiry_date) - new Date(b.document.expiry_date);
-            });
-
-            // Render the sorted documents into the table
-            $.each(allDocuments, function(index, item) {
-                let company = item.company;
-                let document = item.document;
-
-                let statusDisplay = document.doc_status ?
-                    `<div class="badge badge-soft-success font-size-12">${document.doc_status}</div>` :
-                    `<div class="badge badge-soft-danger font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
-
-                let row = [
-                    serialNumber++, // Increment the serial number for each document
-                    company.company_name, // Always show the company name
-                    document.companydoc_name,
-                    statusDisplay,
-                    `<div class="dropdown">
-                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bx bx-dots-horizontal-rounded"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                        <a class="dropdown-item update-status"
-                            href="javascript:void(0);"
-                            style="display:block; text-align:center;"
-                            data-document-id="${document.id}"
-                            data-source="company">
-                            تاريخ
-                        </a>
-                        <a class="dropdown-item" href="/document_addition/${document.company_id}">
-                            إضافة مستند</a>
-                        <a class="dropdown-item renew_modal"
-                            href="javascript:void(0);"
-                            data-document-id="${document.id}"
-                            style="display:block; text-align:center;"
-                            data-doc-name="${document.companydoc_name}"
-                            data-source="2"> تجديد
-                         </a>
-                    </li>
-                </ul>
-            </div>`
-                ];
-
-                let tableRow = companyTable.row.add(row).draw();
-                // Apply the color class to the newly added row
-                $(tableRow.node()).addClass('');
+        } else {
+            // Add an entry for companies with no documents
+            allDocuments.push({
+                company: company,
+                document: null // No document for this company
             });
         }
+    });
+
+    // Sort all documents by expiry_date in ascending order, placing companies with no documents at the bottom
+    allDocuments.sort(function(a, b) {
+        if (!a.document && !b.document) return 0;
+        if (!a.document) return 1; // Place companies with no documents at the bottom
+        if (!b.document) return -1;
+        return new Date(a.document.expiry_date) - new Date(b.document.expiry_date);
+    });
+
+    // Render the sorted documents into the table
+    $.each(allDocuments, function(index, item) {
+        let company = item.company;
+        let document = item.document;
+
+        if (document) {
+            // If the company has documents, display them
+            let statusDisplay = document.doc_status ?
+                `<div class="badge badge-soft-success font-size-12">${document.doc_status}</div>` :
+                `<div class="badge badge-soft-danger font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
+
+            let row = [
+                serialNumber++, // Increment the serial number for each document
+                company.company_name, // Always show the company name
+                document.companydoc_name,
+                statusDisplay,
+                `<div class="dropdown">
+                    <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-dots-horizontal-rounded"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item update-status"
+                                href="javascript:void(0);"
+                                style="display:block; text-align:center;"
+                                data-document-id="${document.id}"
+                                data-source="company">
+                                تاريخ
+                            </a>
+                            <a class="dropdown-item" href="/document_addition/${document.company_id}">
+                                إضافة مستند</a>
+                            <a class="dropdown-item renew_modal"
+                                href="javascript:void(0);"
+                                data-document-id="${document.id}"
+                                style="display:block; text-align:center;"
+                                data-doc-name="${document.companydoc_name}"
+                                data-source="2"> تجديد
+                            </a>
+                        </li>
+                    </ul>
+                </div>`
+            ];
+
+            let tableRow = companyTable.row.add(row).draw();
+            // Apply the color class to the newly added row if needed
+            $(tableRow.node()).addClass('');
+        } else {
+            // If the company has no documents, display a placeholder row
+            let row = [
+                serialNumber++, // Increment the serial number even when there are no documents
+                company.company_name,
+                ' لا يوجد مستند ',
+                '',
+                `<div class="dropdown">
+                    <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-dots-horizontal-rounded"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="/document_addition/${company.id}">
+                                إضافة مستند</a>
+                        </li>
+                    </ul>
+                </div>`
+            ];
+
+            let tableRow = companyTable.row.add(row).draw();
+            // Apply a class to distinguish rows without documents if necessary
+            $(tableRow.node()).addClass('company-row-no-docs');
+        }
+    });
+}
 
 
 
-        function populateEmployeeTable(data) {
-            employeeTable.clear(); // Clear the current table data
 
-            let employees = data.employees;
-            let employeeDocuments = data.employee_documents;
-            let companies = data.companies; // Assuming company names are passed
-            let serialNumber = 1; // Track the serial number globally
+function populateEmployeeTable(data) {
+    employeeTable.clear(); // Clear the current table data
 
-            // Function to calculate remaining time from expiry date
-            function getRemainingTime(expiryDate) {
-                let now = new Date();
-                let expiry = new Date(expiryDate);
-                let diff = expiry - now;
+    let employees = data.employees;
+    let employeeDocuments = data.employee_documents;
+    let companies = data.companies; // Assuming company names are passed
+    let serialNumber = 1; // Track the serial number globally
 
-                if (diff <= 0) return 'منتهي الصلاحية';
+    // Function to calculate remaining time from expiry date
+    function getRemainingTime(expiryDate) {
+        let now = new Date();
+        let expiry = new Date(expiryDate);
+        let diff = expiry - now;
 
-                let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                let years = Math.floor(days / 365);
-                days -= years * 365;
-                let months = Math.floor(days / 30);
-                days -= months * 30;
+        if (diff <= 0) return 'منتهي الصلاحية';
 
-                let result = '';
-                if (years > 0) result += `${years} سنة `;
-                if (months > 0) result += `${months} شهر `;
-                if (days > 0) result += `${days} يوم `;
-                else if (diff > 0 && diff <= (1000 * 60 * 60 * 24)) result += 'يوم واحد ';
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let years = Math.floor(days / 365);
+        days -= years * 365;
+        let months = Math.floor(days / 30);
+        days -= months * 30;
 
-                return result + 'متبقي';
-            }
+        let result = '';
+        if (years > 0) result += `${years} سنة `;
+        if (months > 0) result += `${months} شهر `;
+        if (days > 0) result += `${days} يوم `;
+        else if (diff > 0 && diff <= (1000 * 60 * 60 * 24)) result += 'يوم واحد ';
 
-            // Build a mapping of company IDs to company names
-            let companyObj = {};
-            companies.forEach(company => {
-                companyObj[company.id] = company.company_name;
-            });
+        return result + 'متبقي';
+    }
 
-            // Combine all employee documents into one array
-            let combinedDocuments = [];
+    // Build a mapping of company IDs to company names
+    let companyObj = {};
+    companies.forEach(company => {
+        companyObj[company.id] = company.company_name;
+    });
 
-            $.each(employees, function(index, employee) {
-                let documents = employeeDocuments[employee.id] || [];
-                $.each(documents, function(docIndex, document) {
-                    combinedDocuments.push({
-                        employee: employee,
-                        document: document,
-                        companyName: companyObj[employee.employee_company] ||
-                            'شركة غير معروفة'
-                    });
+    // Combine all employee documents into one array
+    let combinedDocuments = [];
+
+    $.each(employees, function(index, employee) {
+        let documents = employeeDocuments[employee.id] || [];
+        let companyName = companyObj[employee.employee_company] || 'شركة غير معروفة';
+
+        if (documents.length > 0) {
+            // If documents exist, loop through them and add to the combinedDocuments array
+            $.each(documents, function(docIndex, document) {
+                combinedDocuments.push({
+                    employee: employee,
+                    document: document,
+                    companyName: companyName
                 });
             });
-
-            // Sort the combined documents by expiry date in ascending order
-            combinedDocuments.sort(function(a, b) {
-                return new Date(a.document.expiry_date) - new Date(b.document.expiry_date);
-            });
-
-            // Render the sorted documents into the table
-            $.each(combinedDocuments, function(index, entry) {
-                let employee = entry.employee;
-                let document = entry.document;
-                let companyName = entry.companyName;
-
-                let statusDisplay = document.doc_status ?
-                    `<div class="badge badge-soft-success font-size-12">${document.doc_status}</div>` :
-                    `<div class="badge badge-soft-danger font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
-
-                let row = [
-                    serialNumber++,
-                    `<a class="dropdown-item" href="/employee_document_addition/${employee.id}">${employee.employee_name} </a><small>${companyName}</small>`,
-                    document.employeedoc_name,
-                    statusDisplay,
-                    `<div class="dropdown">
-                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bx bx-dots-horizontal-rounded"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                        <a class="dropdown-item update-status"
-                           href="#"
-                           data-document-id="${document.id}"
-                           data-source="employee">
-                           تاريخ
-                        </a>
-                        <a class="dropdown-item" href="/employee_document_addition/${employee.id}">إضافة مستند</a>
-                        <a class="dropdown-item renew_modal"
-                           href="#"
-                           data-document-id="${document.id}"
-                           data-doc-name="${document.employeedoc_name}"
-                           data-source="1">
-                          تجديد
-                        </a>
-                    </li>
-                </ul>
-            </div>`
-                ];
-
-                employeeTable.row.add(row).draw();
+        } else {
+            // If no documents found, add a placeholder entry for the employee
+            combinedDocuments.push({
+                employee: employee,
+                document: null,
+                companyName: companyName
             });
         }
+    });
+
+    // Sort the combined documents by expiry date in ascending order, putting those with no documents at the bottom
+    combinedDocuments.sort(function(a, b) {
+        if (!a.document && !b.document) return 0;
+        if (!a.document) return 1; // Place employees with no documents at the bottom
+        if (!b.document) return -1;
+        return new Date(a.document.expiry_date) - new Date(b.document.expiry_date);
+    });
+
+    // Render the sorted documents into the table
+    $.each(combinedDocuments, function(index, entry) {
+        let employee = entry.employee;
+        let document = entry.document;
+        let companyName = entry.companyName;
+
+        if (document) {
+            let statusDisplay = document.doc_status ?
+                `<div class="badge badge-soft-success font-size-12">${document.doc_status}</div>` :
+                `<div class="badge badge-soft-danger font-size-12">${getRemainingTime(document.expiry_date)}</div>`;
+
+            let row = [
+                serialNumber++,
+                `<a class="dropdown-item" href="/employee_document_addition/${employee.id}">${employee.employee_name} </a><small>${companyName}</small>`,
+                document.employeedoc_name,
+                statusDisplay,
+                `<div class="dropdown">
+                    <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-dots-horizontal-rounded"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item update-status"
+                               href="#"
+                               data-document-id="${document.id}"
+                               data-source="employee">
+                               تاريخ
+                            </a>
+                            <a class="dropdown-item" href="/employee_document_addition/${employee.id}">إضافة مستند</a>
+                            <a class="dropdown-item renew_modal"
+                               href="#"
+                               data-document-id="${document.id}"
+                               data-doc-name="${document.employeedoc_name}"
+                               data-source="1">
+                              تجديد
+                            </a>
+                        </li>
+                    </ul>
+                </div>`
+            ];
+            employeeTable.row.add(row).draw();
+        } else {
+            // Render a row for employees without documents
+            let row = [
+                serialNumber++,
+                `<a class="dropdown-item" href="/employee_document_addition/${employee.id}">${employee.employee_name} </a><br><small>${companyName}</small>`,
+                'لا يوجد مستند',
+                '',
+                `<div class="dropdown">
+                    <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-dots-horizontal-rounded"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="/employee_document_addition/${employee.id}">إضافة مستند</a>
+                        </li>
+                    </ul>
+                </div>`
+            ];
+            employeeTable.row.add(row).draw();
+        }
+    });
+}
+
 
 
         function populatecomps(data) {
