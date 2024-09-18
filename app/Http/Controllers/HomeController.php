@@ -22,35 +22,36 @@ class HomeController extends Controller
         if (Auth::check()) {
 
             $userId = Auth::id();
-            $user= Auth::User();
+            $user = Auth::User();
 
             // Retrieve counts of various models
             $users = User::count();
 
+            $employee = 0;
+            $employee_doc = 0;
+            $comp_docs_cout = 0;
+            $company = 0;
 
-        $employee = 0;
-        $employee_doc = 0;
-        $comp_docs_cout = 0;
-        $company=0;
+            if ($user->user_type == 1) {
+                // Eager load companies with their related documents and employees
+                $employee = Employee::count();
+                $employee_doc = EmployeeDoc::count();
+                $comp_docs_cout = CompanyDocs::count();
+                $companies = Company::get();
+                $company = $companies->count();
+            } else {
+                // Non-admin users, eager load companies and related employee and document counts
+                $companies = Company::where('user_id', $userId)->get();
+                $company = $companies->count();
 
-        $companies = Company::get();
-        $company= $companies->count();
-
-            if($user->user_type != 1){
-
-
-
-                $employee=0;
-                $employee_doc= 0;
-                $comp_docs_cout= 0;
-                foreach($companies as $comp){
-
+                foreach ($companies as $comp) {
                     $employee += Employee::where('employee_company', $comp->id)->count();
                     $employee_doc += EmployeeDoc::where('employee_company_id', $comp->id)->count();
                     $comp_docs_cout += CompanyDocs::where('company_id', $comp->id)->count();
                 }
-
             }
+
+
 
             $renewed = DocumentHistory::where('status', 2)->count();
 
@@ -178,6 +179,8 @@ class HomeController extends Controller
             return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
         }
     }
+
+
 
 
 
