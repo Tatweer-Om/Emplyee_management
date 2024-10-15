@@ -964,15 +964,19 @@ public function show_leaves(Request $request)
         foreach($view_leaves as $value)
         {
 
-            $modal='<div class="dropdown" style="text-align:center";>
+            $modal = '<div class="dropdown" style="text-align:center";>
             <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
                 type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bx bx-dots-horizontal-rounded"></i>
             </button>
          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#employee_leave_history" href="javascript:void(0);" onclick="leave_history(' . $value->employee_id . ')">تاريخ الإجازات</a></li>
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#action" href="javascript:void(0);" onclick="action(' . $value->id . ')">عمل</a></li>
-        </ul>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#employee_leave_history" href="javascript:void(0);" onclick="leave_history(' . $value->employee_id . ')">تاريخ الإجازات</a></li>';
+
+if ($value->approval_status == 0) {
+    $modal .= '<li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#action" href="javascript:void(0);" onclick="action(' . $value->id . ')">عمل</a></li>';
+}
+
+$modal .= '</ul>
         </div>';
         $add_date=get_date_only($value->created_at);
 
@@ -1096,17 +1100,26 @@ public function leave_approve(Request $request)
     }
 
         $duration= $leave->duration;
-        $employee= $leave->user_id;
+        $employee= $leave->employee_id;
         $data_user= User::where('id', $employee)->first();
         if (!$data_user) {
             return response()->json(['success' => false, 'message' => 'Employee not found.'], 404);
         }
         $remain=  $data_user->remaining_leaves;
         $baki= $remain - $duration;
-        $data_user->remaining_leaves= $baki;
+        if($leave->leave_type==2){
+            $data_user->remaining_leaves= $baki;
+            $leave->remaining_leaves= $baki;
+
+        }
+        else{
+            $data_user->remaining_leaves= $remain;
+            $leave->remaining_leaves= $remain;
+
+        }
         $data_user->save();
         $leave->approval_status= 1;
-        $leave->remaining_leaves= $baki;
+
         $leave->save();
 
 
@@ -1118,7 +1131,13 @@ public function leave_approve(Request $request)
     $approve->approval_status = 1;
     $approve->notes = $notes; // Save notes if needed
     $approve->approved_by = $user;
-    $approve->remaining_leaves = $baki;
+    if($approve->leave_type==2){
+        $approve->remaining_leaves = $baki;
+    }
+    else{
+        $approve->remaining_leaves = $remain;
+    }
+
     $approve->approved_id = $user_id;
     $approve->approved_at = now(); // Set the approval time
     $approve->save();
