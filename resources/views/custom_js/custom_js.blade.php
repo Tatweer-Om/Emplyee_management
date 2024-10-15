@@ -472,20 +472,20 @@ $(document).ready(function() {
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-                // Handle success response
-                show_notification('success', 'Leave approved successfully.');
-                $('#action').modal('hide');
-                $('#all_leaves').DataTable().ajax.reload();
+    // Handle success response
+            show_notification('success', 'تمت الموافقة على الإجازة بنجاح.');
+            $('#action').modal('hide');
+            $('#all_leaves').DataTable().ajax.reload();
 
-                // Optionally refresh the leave history or table
             },
             error: function(xhr) {
                 // Handle error response
-                show_notification('error', 'Failed to approve leave.');
+                show_notification('error', 'فشل في الموافقة على الإجازة.');
                 $('#all_leaves').DataTable().ajax.reload();
 
                 console.log(xhr);
             }
+
         });
     });
 
@@ -503,20 +503,21 @@ $(document).ready(function() {
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-                // Handle success response
-                $('#all_leaves').DataTable().ajax.reload();
-                show_notification('success', 'Leave rejected successfully.');
-                $('#action').modal('hide');
+    // Handle success response
+    $('#all_leaves').DataTable().ajax.reload();
+    show_notification('success', 'تم رفض الإجازة بنجاح.');
+    $('#action').modal('hide');
 
-                // Optionally refresh the leave history or table
-            },
-            error: function(xhr) {
-                // Handle error response
-                show_notification('error', 'Failed to reject leave.');
-                $('#all_leaves').DataTable().ajax.reload();
+    // Optionally refresh the leave history or table
+        },
+        error: function(xhr) {
+            // Handle error response
+            show_notification('error', 'فشل في رفض الإجازة.');
+            $('#all_leaves').DataTable().ajax.reload();
 
-                console.log(xhr);
-            }
+            console.log(xhr);
+        }
+
         });
     });
 });
