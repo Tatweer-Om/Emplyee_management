@@ -21,6 +21,8 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 // UserController
 Route::get('getAndSendEmails', [CronJobController::class, 'getAndSendEmails']);
+Route::get('reset_leaves', [CronJobController::class, 'reset_leaves'])->name('reset_leaves');
+
 Route::match(['get', 'post'], 'login', [UserController::class, 'login'])->name('login');
 Route::match(['get', 'post'], 'logout', [UserController::class, 'logout'])->name('logout');
 Route::match(['get', 'post'], 'login_user', [UserController::class, 'login_user'])->name('login_user');
@@ -42,6 +44,18 @@ Route::get('under_process', [HomeController::class, 'under_process'])->name('und
 Route::get('all_expired_docs2', [HomeController::class, 'all_expired_docs2'])->name('all_expired_docs2');
 Route::post('renew_docs_request2', [HomeController::class, 'renew_docs_request2'])->name('renew_docs_request2');
 Route::post('update_employee_doc2', [HomeController::class, 'update_employee_doc2'])->name('update_employee_doc2');
+Route::get('all_leaves', [HomeController::class, 'all_leaves'])->name('all_leaves');
+Route::get('show_leaves', [HomeController::class, 'show_leaves'])->name('show_leaves');
+Route::post('leave_history', [HomeController::class, 'leave_history'])->name('leave_history');
+Route::post('leave_approve', [HomeController::class, 'leave_approve'])->name('leave_approve');
+Route::post('leave_reject', [HomeController::class, 'leave_reject'])->name('leave_reject');
+Route::post('delete_leave', [HomeController::class, 'delete_leave'])->name('delete_leave');
+
+
+
+
+
+
 
 
 
@@ -148,6 +162,9 @@ Route::post('add_employee4', [TaskController::class, 'add_employee4'])->name('ad
 Route::match(['get', 'post'],'show_employee4', [TaskController::class, 'show_employee4'])->name('show_employee4');
 Route::post('add_company4', [TaskController::class, 'add_company4'])->name('add_company4');
 Route::match(['get', 'post'], 'show_company4', [TaskController::class, 'show_company4'])->name('show_company4');
+Route::post( 'add_leave', [TaskController::class, 'add_leave'])->name('add_leave');
+
+
 
 
 Route::match(['get', 'post'],'employee_doc_report', [ReportController::class, 'employee_doc_report'])->name('employee_doc_report');

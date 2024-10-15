@@ -135,4 +135,16 @@ class CronJobController extends Controller
         }
     }
 
+
+    public function reset_leaves()
+{
+    // Update the total_leaves and remaining_leaves for all users
+    User::query()->update([
+        'total_leaves' => 30,
+        'remaining_leaves' => 30
+    ]);
+
+
+}
+
 }

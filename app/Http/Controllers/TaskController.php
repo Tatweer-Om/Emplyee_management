@@ -2,21 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Approval;
 use App\Models\User;
+use App\Models\Leave;
 use App\Models\Branch;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Models\CompanyDocs;
 use App\Models\EmployeeDoc;
 use Illuminate\Http\Request;
-use App\Models\Companydochistory;
 use App\Models\DocumentHistory;
+use App\Models\Companydochistory;
 use App\Models\Employeedochistory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class TaskController extends Controller
 {
-     public function employee_task_page($id) {
+    public function employee_task_page($id)
+    {
+
+
 
 
         // Get the authenticated user
@@ -26,10 +32,15 @@ class TaskController extends Controller
             return redirect()->route('login')->with('error', 'أنت غير مفوض للوصول إلى هذه الصفحة');
         }
 
+
+
         // Determine user type
         $user_type = $users->user_type == 1 ? 'Admin' : 'Employee';
         // Fetch the user's branch (ensure the branch exists)
         $user = User::where('id', $id)->first();
+
+        $gained_holidays= $user->total_leaves - $user->remaining_leaves;
+
         $branch = Branch::where('user_id', $id)->first();
         $branch_name = $branch ? $branch->branch_name : 'No Branch';
 
@@ -43,9 +54,31 @@ class TaskController extends Controller
         if ($users->user_type == 1 || $users->id == $id) {
             // Admin can see any user's profile, or user can see their own profile
 
+           // Sum of durations for sick leaves
+            $sick = Approval::where('employee_id', $id)
+            ->where('approval_status', 1)
+            ->where('leave_type', 1)
+            ->sum('duration');
+
+            // Sum of durations for yearly leaves
+            $years = Approval::where('employee_id', $id)
+            ->where('approval_status', 1)
+            ->where('leave_type', 2)
+            ->sum('duration');
+
+            $total= $sick + $years;
             return view('main_pages.employee_task', compact(
-                'user', 'branch_name', 'user_type', 'companies',
-                'comps', 'employees', 'company_count'
+                'user',
+                'branch_name',
+                'user_type',
+                'sick',
+                'years',
+                'companies',
+                'comps',
+                'employees',
+                'company_count',
+                'total'
+
             ));
         } else {
             // Redirect to login with an error message if unauthorized
@@ -56,111 +89,11 @@ class TaskController extends Controller
 
 
 
-    // public function employee_task(Request $request) {
-    //     $user = Auth::user();
-    //     $user_id = $user->id;
-
-    //     $id= $request->input('emp_id');
-
-    //     $companies = Company::where('user_id', $id)->get();
-
-
-    //     $employees = Employee::where('user_id', $user_id)->get();
-    //     $employee_docs = EmployeeDoc::where('user_id', $user_id)
-    //     ->where('doc_status', 2)
-    //     ->get();
-    //     $employee_docs_total = EmployeeDoc::where('user_id', $user_id)->get();
-    //     $company_docs_total = CompanyDocs::where('user_id', $user_id)->get();
-
-    //     $company_docs = CompanyDocs::where('user_id', $user_id) // Adjust the condition as needed
-    //         ->where('doc_status', 2)
-    //         ->get();
-
-    //         // print_r($company_docs->toArray()); exit;
-
-    //     $company_count = $companies->count();
-
-    //     // Initialize arrays to hold documents for each company and employee
-    //     $company_documents = [];
-    //     $employee_documents = [];
-
-    //     // Loop through each company to get its documents
-    //     // $documents_company=[];
-    //     $renew_company_documents=[];
-    //     foreach ($companies as $company) {
-    //         $documents = CompanyDocs::where('company_id', $company->id)->orderBy('expiry_date', 'asc')->get();
-    //         $documents_company = CompanyDocs::where('company_id', $company->id)->where('doc_status', 2)->get();
-    //         foreach ($documents as $doc) {
-    //             $company_documents[$company->id][] = [
-    //                 'id' => $doc->id,
-    //                 'companydoc_name' => $doc->companydoc_name,
-    //                 'status' =>$doc->doc_status, // Translate status here
-    //                 'expiry_date' => $doc->expiry_date,
-    //                 'company_id' => $doc->company_id,
-    //             ];
-    //         }
-
-    //         foreach ($documents_company as $docs) {
-    //             $renew_company_documents[] = [
-    //                 'id' => $doc->id,
-    //                 'companydoc_name' => $docs->companydoc_name,
-    //                 'company_name' => $doc->company_name,
-    //                 'status' =>$docs->doc_status, // Translate status here
-    //                 'expiry_date' => $docs->expiry_date,
-    //                 'company_id' => $docs->company_id,
-    //             ];
-    //         }
-    //     }
 
 
 
-
-    //     $renew_employee_documents=[];
-    //     // Loop through each employee to get their documents
-    //     foreach ($employees as $employee) {
-    //         $documents = EmployeeDoc::where('employee_id', $employee->id)
-    //         ->orderBy('expiry_date', 'asc')
-    //         ->get();
-    //         $documents_emp = EmployeeDoc::where('employee_id', $employee->id)->where('doc_status', 2)->get();
-    //         foreach ($documents as $doc) {
-    //             $employee_documents[$employee->id][] = [
-    //                 'id' => $doc->id,
-    //                 'employeedoc_name' => $doc->employeedoc_name,
-    //                 'status' => $doc->doc_status, // Translate status here
-    //                 'employee_id' => $doc->employee_id,
-    //                 'expiry_date' => $doc->expiry_date,
-    //             ];
-    //         }
-
-    //         foreach ($documents_emp as $docss) {
-    //             $renew_employee_documents[] = [
-    //                 'id' => $docss->id,
-    //                 'employeedoc_name' => $docss->employeedoc_name,
-    //                 'employee_name' => $doc->employee_name,
-    //                 'status' => $docss->doc_status, // Translate status here
-    //                 'employee_id' => $docss->employee_id,
-    //                 'expiry_date' => $docss->expiry_date,
-    //             ];
-    //         }
-    //     }
-
-
-    //     // Return the data as a JSON response
-    //     return response()->json([
-    //         'company_count' => $company_count,
-    //         'companies' => $companies,
-    //         'employees' => $employees,
-    //         'company_documents' => $company_documents,
-    //         'employee_documents' => $employee_documents,
-    //         'employee_docs' => $renew_employee_documents,
-    //         'company_docs' => $renew_company_documents,
-    //         'employee_docs_total'=>$employee_docs_total,
-    //         'company_docs_total'=>$company_docs_total,
-    //     ]);
-    // }
-
-
-    public function employee_task(Request $request) {
+    public function employee_task(Request $request)
+    {
         $user = Auth::user();
         $user_id = $user->id;
         $id = $request->input('emp_id');
@@ -278,10 +211,11 @@ class TaskController extends Controller
     }
 
 
-    public function add_employee4(Request $request){
+    public function add_employee4(Request $request)
+    {
         $user_id = Auth::id();
-        $data= User::find( $user_id)->first();
-        $user= $data->user_name;
+        $data = User::find($user_id)->first();
+        $user = $data->user_name;
 
 
 
@@ -298,18 +232,19 @@ class TaskController extends Controller
         $employee->user_id =  $user_id;
         $employee->save();
         $lastInsertedId = $employee->id;
-        return response()->json(['employee_id' => $employee->employee_id,'last_id'=>$lastInsertedId]);
+        return response()->json(['employee_id' => $employee->employee_id, 'last_id' => $lastInsertedId]);
     }
 
 
 
 
 
-    public function add_company4(Request $request){
+    public function add_company4(Request $request)
+    {
 
         $user_id = Auth::id();
-        $data= User::find( $user_id)->first();
-        $user= $data->user_name;
+        $data = User::find($user_id)->first();
+        $user = $data->user_name;
 
         $company = new Company();
 
@@ -325,8 +260,7 @@ class TaskController extends Controller
         $company->user_id = $user_id;
         $company->save();
         $lastInsertedId = $company->id;
-        return response()->json(['company_id' => $company->company_id,'last_id'=>$lastInsertedId]);
-
+        return response()->json(['company_id' => $company->company_id, 'last_id' => $lastInsertedId]);
     }
 
 
@@ -381,7 +315,6 @@ class TaskController extends Controller
                     'expiry_date' => $formattedExpiryDate
                 ]
             ]);
-
         } catch (\Exception $e) {
             // Handle unexpected errors
             return response()->json([
@@ -392,7 +325,8 @@ class TaskController extends Controller
     }
 
 
-    public function document_renew_confirm(Request $request) {
+    public function document_renew_confirm(Request $request)
+    {
         // Validate the request data
         $request->validate([
             'id' => 'required|integer',
@@ -433,7 +367,113 @@ class TaskController extends Controller
     }
 
 
+    public function add_leave(Request $request)
+    {
 
+        $user_id = Auth::id();
+        $data = User::find($user_id)->first();
+        $user = $data->user_name;
+
+
+        $user_data = User::where('id', $request['user'])->first();
+        $employee_name = $user_data->user_name ?? '';
+        $employee_phone = $user_data->user_phone ?? '';
+        $leave_type = $request['leave_type'];
+
+
+        $user_leaves = $user_data->total_leaves ?? 0;
+
+        $duration = $request['days'];
+        $leaveu = Leave::where('user_id', $request['user'])->latest()->first();
+
+        if ($leaveu === null) {
+
+            $remaining_leave = $user_leaves;
+        } else {
+
+            $remaining_leave = $user_data->remaining_leaves ?? 0;
+        }
+
+
+
+        $duration = is_numeric($request['days']) ? $request['days'] : 0;
+        $remaining_leave = is_numeric($remaining_leave) ? $remaining_leave : 0;
+
+        if ($duration > $remaining_leave && $leave_type == 2) {
+            return response(['status' => 3]);
+        }
+
+
+        $leave_image = "";
+        if ($request->hasFile('leave_image')) {
+            $folderPath = public_path('images/leave_images');
+
+            if (!File::isDirectory($folderPath)) {
+                File::makeDirectory($folderPath, 0777, true, true);
+            }
+            $leave_image = time() . '.' . $request->file('leave_image')->extension();
+            $request->file('leave_image')->move(public_path('images/leave_images'), $leave_image);
+        }
+
+
+        $leave = new Leave();
+
+        $leave->leave_type = $leave_type;
+        $leave->employee_id = $request['user'];
+        $leave->employee_name = $employee_name;
+        $leave->employee_phone = $employee_phone;
+        $leave->approval_status =  0;
+
+        if( $leave->leave_type==1){
+            $leave->total_leaves = $leaveu->total_leaves;
+            $leave->remaining_leaves = $leaveu->remaining_leaves;
+        }
+        else{
+            $leave->remaining_leaves = $remaining_leave;
+            $leave->total_leaves = $user_leaves;
+        }
+        $leave->leave_image = $leave_image;
+        $leave->start_date = $request['start_date'];
+        $leave->end_date = $request['end_date'];
+        $leave->duration = $duration;
+        $leave->notes = $request['notes'];
+        $leave->added_by = $user;
+        $leave->user_id = $user_id;
+        $saved = $leave->save();
+
+        if ($saved) {
+
+            $approve = new Approval();
+
+            $approve->leave_id = $leave->id;
+            $approve->leave_type = $leave->leave_type;
+            $approve->employee_id =  $leave->employee_id;
+            $approve->employee_name = $leave->employee_name;
+            $approve->employee_phone =  $leave->employee_phone;
+            if( $approve->leave_type==1){
+                $approve->total_leaves = $leaveu->total_leaves;
+                $approve->remaining_leaves = $leaveu->remaining_leaves;
+            }
+            else{
+                $approve->remaining_leaves = $remaining_leave;
+                $approve->total_leaves = $user_leaves;
+            }
+            $approve->start_date =  $leave->start_date;
+            $approve->end_date =  $leave->end_date;
+            $approve->attachment =  $leave->leave_image;
+            $approve->duration =  $leave->duration;
+            $approve->approval_status =  0;
+            $approve->notes = $request['notes'];
+            $approve->approved_by = null;
+            $approve->approved_id = null;
+            $approve->approved_at = null;
+            $approve->added_by = $user;
+            $approve->user_id = $user_id;
+            $approve->save();
+        }
+
+        return response()->json(['leave_id' => $leave->leave_id]);
+    }
 
 
 }

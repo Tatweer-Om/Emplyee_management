@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Leave;
 use App\Models\Company;
+use App\Models\Approval;
 use App\Models\Document;
 use App\Models\Employee;
 use App\Models\CompanyDocs;
@@ -13,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Models\DocumentHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+
 class HomeController extends Controller
 {
 
@@ -942,6 +945,250 @@ public function all_renewed_docs(Request $request)
 }
 
 
+public function all_leaves(){
+    return view ('leaves.all_leaves');
+}
 
+
+public function show_leaves(Request $request)
+{
+    $sno=0;
+
+    $userId = Auth::id(); // Get the current user ID
+    $user = Auth::user();
+
+    $view_leaves= Leave::all();
+
+    if(count($view_leaves)>0)
+    {
+        foreach($view_leaves as $value)
+        {
+
+            $modal='<div class="dropdown" style="text-align:center";>
+            <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
+                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bx bx-dots-horizontal-rounded"></i>
+            </button>
+         <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#employee_leave_history" href="javascript:void(0);" onclick="leave_history(' . $value->employee_id . ')">تاريخ الإجازات</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#action" href="javascript:void(0);" onclick="action(' . $value->id . ')">عمل</a></li>
+        </ul>
+        </div>';
+        $add_date=get_date_only($value->created_at);
+
+        $leave_type = '';
+        if ($value->leave_type == 1) {
+            $leave_type = 'إجازة مرضية';  // Sick Leave
+        } else {
+            $leave_type = 'إجازة سنوية';  // Yearly Leave
+        }
+
+        $approval= Approval::where('leave_id', $value->id)->first();
+
+// تحديد نص الحالة واللون بناءً على حالة الموافقة
+if ($approval->approval_status == 0) {
+    $statusText = '<span style="color: orange; font-weight: bold;">قيد الانتظار</span>';
+} elseif ($approval->approval_status == 1) {
+    $statusText = '<span style="color: green; font-weight: bold;">موافقة</span>';
+} elseif ($approval->approval_status == 2) {
+    $statusText = '<span style="color: red; font-weight: bold;">مرفوضة</span>';
+}
+
+// إعداد تفاصيل الموافقة بناءً على حالة الموافقة
+$approvalDetails = '';
+
+if ($approval->approval_status == 1) { // موافقة
+    $approvalDetails =
+        '<span>تاريخ الموافقة:</span> <span>' . $approval->approved_at . '</span><br>' .
+        '<span>تمت الموافقة بواسطة:</span> <span>' . $approval->approved_by . '</span><br>';
+} elseif ($approval->approval_status == 2) { // مرفوضة
+    $approvalDetails =
+        '<span>تاريخ الرفض:</span> <span>' . $approval->approved_at . '</span><br>' .
+        '<span>تم الرفض بواسطة:</span> <span>' . $approval->approved_by . '</span><br>';
+}
+
+$sno++;
+// إنشاء مصفوفة JSON النهائية
+$json[] = array(
+    '<span style="text-align: center; display: block;">' . $sno . '</span>',
+    '<span>اسم المستخدم:</span> <span>' . ($value->employee_name ?? 'غير متوفر') . '</span><br>' .
+    '<span>رقم الهاتف:</span> <span>' . ($value->employee_phone ?? 'غير متوفر') . '</span>',
+    '<span>تاريخ البدء:</span> <span>' . $value->start_date . '</span><br>' .
+    '<span>تاريخ الانتهاء:</span> <span>' . $value->end_date . '</span><br>' .
+    '<span>مدة الإجازة:</span> <span>' . $value->duration . '</span><br>' . // إضافة <br> هنا لفصل الأسطر
+    '<span>إجمالي الإجازات المخصصة:</span> <span>' . $value->total_leaves . '</span><br>' .
+    '<span>الإجازات المتبقية:</span> <span>' . $value->remaining_leaves . '</span><br>' ,
+    '<span style="font-weight: bold;">نوع الإجازة:</span> <span>' . $leave_type . '</span><br>' .
+    ($value->leave_type == 1 ?  // نفترض أن 1 تعني إجازة مرضية
+        '<a href="' . asset('images/leave_images/' . $value->leave_image) . '" target="_blank">' .
+            '<img src="' . asset('images/pdf.jpg') . '" alt="رمز PDF" style="width: 20px; height: auto;"/> ' .
+            'تحميل المستند</a>' :
+        '') . // لا توجد نتيجة إذا لم تكن نوع الإجازة 1
+    '<br>' .
+    '<span>ملاحظات:</span> <span>' . ($value->notes ?? 'غير متوفر') . '</span>',
+
+    '<span>تاريخ التقديم:</span> <span>' . $add_date . '</span><br>' .
+    $approvalDetails . // تضمين تفاصيل الموافقة أو الرفض
+    '<span>الحالة:</span> ' . $statusText, // عرض نص الحالة
+    $modal,
+    $value->approval_status,
+);
+
+
+
+
+        }
+
+    }
+
+    if(!empty($json))
+    {
+        $response = array();
+        $response['success'] = true;
+        $response['aaData'] = $json;
+        echo json_encode($response);
+    }
+    else
+    {
+        $response = array();
+        $response['sEcho'] = 0;
+        $response['iTotalRecords'] = 0;
+        $response['iTotalDisplayRecords'] = 0;
+        $response['aaData'] = [];
+        echo json_encode($response);
+    }
+
+
+}
+
+public function leave_history(Request $request)
+{
+    $id = $request->id;
+    $user_id = Auth::id();
+
+    $leaves = Approval::where('employee_id', $id)->get();
+
+    return response()->json([
+        'data' => $leaves,
+        'user'=>$user_id
+    ]);
+}
+
+
+
+
+public function leave_approve(Request $request)
+{
+
+
+    $user_id = Auth::id();
+    $data= User::find( $user_id)->first();
+    $user= $data->user_name;
+    $leaveId = $request->id;
+    $notes = $request->notes;
+
+
+
+    $leave = Leave::where('id',$leaveId)->first();
+
+    if (!$leave) {
+        return response()->json(['success' => false, 'message' => 'Leave not found.'], 404);
+    }
+
+        $duration= $leave->duration;
+        $employee= $leave->user_id;
+        $data_user= User::where('id', $employee)->first();
+        if (!$data_user) {
+            return response()->json(['success' => false, 'message' => 'Employee not found.'], 404);
+        }
+        $remain=  $data_user->remaining_leaves;
+        $baki= $remain - $duration;
+        $data_user->remaining_leaves= $baki;
+        $data_user->save();
+        $leave->approval_status= 1;
+        $leave->remaining_leaves= $baki;
+        $leave->save();
+
+
+    $approve = Approval::where('leave_id', $leaveId)->first();
+    if (!$approve) {
+        return response()->json(['success' => false, 'message' => 'Approval record not found.'], 404);
+    }
+
+    $approve->approval_status = 1;
+    $approve->notes = $notes; // Save notes if needed
+    $approve->approved_by = $user;
+    $approve->remaining_leaves = $baki;
+    $approve->approved_id = $user_id;
+    $approve->approved_at = now(); // Set the approval time
+    $approve->save();
+
+    return response()->json(['success' => true, 'message' => 'Leave approved successfully.']);
+}
+
+public function leave_reject(Request $request)
+{
+
+    $user_id = Auth::id();
+    $data= User::find( $user_id)->first();
+    $user= $data->user_name;
+    $leaveId = $request->id;
+
+    $notes = $request->notes;
+
+    $leave = Leave::where('id',$leaveId)->first();
+    if (!$leave) {
+        return response()->json(['success' => false, 'message' => 'Leave not found.'], 404);
+    }
+
+        $leave->approval_status= 2;
+        $leave->save();
+
+
+    $approve = Approval::where('leave_id', $leaveId)->first();
+    if (!$approve) {
+        return response()->json(['success' => false, 'message' => 'Approval record not found.'], 404);
+    }
+    $approve->approval_status = 2;
+    $approve->notes = $notes; // Save notes if needed
+    $approve->approved_by = $user;
+    $approve->approved_id = $user_id;
+    $approve->approved_at = now(); // Set the approval time
+    $approve->save();
+
+    return response()->json(['success' => true, 'message' => 'Leave rejected successfully.']);
+}
+
+
+public function delete_leave(Request $request){
+    $id = $request->input('id');
+
+
+
+
+    $leave = Leave::where('id', $id)->first();
+    if (!$leave) {
+        return response()->json([
+            'status' => 2,
+
+        ], 404);
+    }
+
+    $leave->delete();
+    $approval = Approval::where('leave_id', $id)->first();
+    if (!$approval) {
+        return response()->json([
+            'status' => 2,
+
+        ], 404);
+    }
+
+    $approval->delete();
+
+    return response()->json([
+        'status' => 1,
+
+    ]);
+}
 
 }

@@ -1,6 +1,131 @@
 <script>
     $(document).ready(function() {
 
+
+
+
+
+        $('#add_leave_modal').on('hidden.bs.modal', function() {
+                $(".add_leave")[0].reset();
+                $('.leave_id').val('');
+                var imagePath = '{{ asset('custom_images/dummy_image/cover-image-icon.png') }}';
+            });
+
+
+            $('.add_leave').off().on('submit', function(e){
+                e.preventDefault();
+                var formdatas = new FormData($('.add_leave')[0]);
+                var start_date=$('.start_date').val();
+                var end_date=$('.end_date').val();
+
+                var leave_type = $('.leave_type').val(); // Assuming leave_type is the correct class
+                var image = $('#ad_cover').val(); // Getting the uploaded file path
+
+                if (leave_type == 1) { // Check if 'Sick Leave' is selected
+                    if (image == "") {
+                        show_notification('error', '{{ trans("messages.add_attahment_lang", [], session("locale")) }}');
+                        return false; // Stop form submission
+                    }
+                }
+                var id=$('.leave_id').val();
+
+                if(id!='')
+                {
+                    if(start_date=="" )
+                    {
+                        show_notification('error','<?php echo trans('messages.start_date',[],session('locale')); ?>'); return false;
+                    }
+
+                    if(leave_type=="" )
+                    {
+                        show_notification('error','<?php echo trans('messages.leave_type',[],session('locale')); ?>'); return false;
+                    }
+                    if(end_date=="" )
+                    {
+                        show_notification('error','<?php echo trans('messages.end_date',[],session('locale')); ?>'); return false;
+                    }
+
+
+
+
+                    var str = $(".add_leave").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('update_leave') }}",
+                        data: formdatas,
+                        contentType: false,
+                        processData: false,
+                        success: function(data) {
+
+                            show_notification('success','<?php echo trans('messages.data_updated_successful_lang',[],session('locale')); ?>');
+                            $('#add_leave_modal').modal('hide');
+                            return false;
+                        },
+                        error: function(data)
+                        {
+
+                            show_notification('error','<?php echo trans('messages.data_updated_failed_lang',[],session('locale')); ?>');
+                            console.log(data);
+                            return false;
+                        }
+                    });
+                }
+                else if(id==''){
+
+
+                    if(start_date=="" )
+                    {
+                        show_notification('error','<?php echo trans('messages.start_date',[],session('locale')); ?>'); return false;
+                    }
+
+                    if(leave_type=="" )
+                    {
+                        show_notification('error','<?php echo trans('messages.leave_type',[],session('locale')); ?>'); return false;
+                    }
+                    if(end_date=="" )
+                    {
+                        show_notification('error','<?php echo trans('messages.end_date',[],session('locale')); ?>'); return false;
+                    }
+
+
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    var formdatas = new FormData($(".add_leave")[0]); // Create FormData
+                    formdatas.append('_token', csrfToken);
+                    var str = $(".add_leave").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('add_leave') }}",
+                        data: formdatas,
+                        contentType: false,
+                        processData: false,
+                        success: function(data) {
+
+                            if(data.status==3)
+
+                            {
+                                show_notification('error','<?php echo trans('messages.you_dont_have balance',[],session('locale')); ?>');
+                                return;
+                            }
+                            show_notification('success','<?php echo trans('messages.data_added_successful_lang',[],session('locale')); ?>');
+                            $('#add_leave_modal').modal('hide');
+                            $(".add_leave")[0].reset();
+                            return false;
+                            },
+                        error: function(data)
+                        {
+
+                            show_notification('error','<?php echo trans('messages.data_added_failed_lang',[],session('locale')); ?>');
+                            console.log(data);
+                            return false;
+                        }
+                    });
+
+                }
+
+            });
+
+
+
         var selectedCompId = '';
 
         $(document).on('click', 'a[data-bs-toggle="modal"]', function() {
@@ -262,6 +387,10 @@
             // Apply a class to distinguish rows without documents if necessary
             $(tableRow.node()).addClass('company-row-no-docs');
         }
+
+
+
+
     });
 }
 
@@ -711,4 +840,93 @@ function populateEmployeeTable(data) {
 
 
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const startDateInput = document.getElementById('start_date');
+        const toDateInput = document.getElementById('end_date');
+        const daysInput = document.getElementById('days');
+        const daysContainer = document.getElementById('days_container');
+
+        function calculateDays() {
+            const startDate = new Date(startDateInput.value);
+            const toDate = new Date(toDateInput.value);
+
+            // Ensure both dates are valid
+            if (startDate && toDate && startDate <= toDate) {
+                const diffTime = Math.abs(toDate - startDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Including both start and end days
+                daysInput.value = diffDays;
+
+                // Show the duration input
+                daysContainer.style.display = 'block';
+            } else {
+                // Hide the duration input if dates are invalid or not filled
+                daysContainer.style.display = 'none';
+                daysInput.value = '';
+            }
+        }
+
+        // Attach event listeners to both date inputs
+        startDateInput.addEventListener('change', calculateDays);
+        toDateInput.addEventListener('change', calculateDays);
+    });
+
+
+
+    document.getElementById('ad_cover').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('ad_cover_preview');
+        const fileNameElement = document.getElementById('file_name'); // Reference to file name display element
+        const fileReader = new FileReader();
+
+        if (file) {
+            // Display the file name
+            fileNameElement.textContent = file.name;
+
+            // Check if the uploaded file is an image
+            if (file.type.startsWith('image/')) {
+                fileReader.onload = function(e) {
+                    // Show the uploaded image
+                    preview.src = e.target.result;
+                    preview.alt = 'Uploaded Image';
+                };
+                fileReader.readAsDataURL(file);
+            }
+            // Check if the uploaded file is a PDF
+            else if (file.type === 'application/pdf') {
+                // Show the PDF icon instead of the image
+                preview.src = "{{ asset('images/pdf.jpg') }}"; // Use your PDF icon image path
+                preview.alt = 'PDF File';
+            }
+            // If another file type, you can handle it as needed
+            else {
+                preview.src = "{{ asset('images/cover-image-icon.png') }}"; // Default icon
+                preview.alt = 'Upload Cover';
+                fileNameElement.textContent = ''; // Clear file name if unsupported type
+                alert('Unsupported file type. Please upload an image or a PDF.');
+            }
+        } else {
+            fileNameElement.textContent = ''; // Clear file name if no file is selected
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const leaveTypeSelect = document.getElementById('leave_type');
+        const fileUploadSection = document.getElementById('ad_cover_container');
+
+        leaveTypeSelect.addEventListener('change', function () {
+            const selectedValue = leaveTypeSelect.value;
+
+            if (selectedValue === '1') { // Show file upload for Sick Leave
+                fileUploadSection.style.display = 'block';
+            } else { // Hide file upload for other leave types
+                fileUploadSection.style.display = 'none';
+            }
+        });
+    });
+
+
+
+
+
 </script>
