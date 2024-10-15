@@ -114,6 +114,7 @@ class ReportController extends Controller
         // Get the selected user ID, or fallback to old input if available
         $user_id = $request->input('user_id') ?? old('user_id');
 
+
         // Fetch company documents filtered by user ID and date range
         $companyDocs = CompanyDocs::where('user_id', $user_id)
             ->whereDate('expiry_date', '>=', $sdate)

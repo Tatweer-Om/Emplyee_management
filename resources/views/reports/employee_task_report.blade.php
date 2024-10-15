@@ -91,12 +91,13 @@
                                             $employee_count = DB::table('employees')->where('employee_company', $doc->company_id)->count();
                                             $employee_doc_count = DB::table('employee_docs')->where('employee_company_id', $doc->company_id)->count();
                                             $company_doc_count = DB::table('company_docs')->where('company_id', $doc->company_id)->count();
+                                            $user_name = DB::table('users')->where('id', $doc->user_id)->value('user_name');
                                         @endphp
                                         <tr>
                                             <td style="width: 120px; text-align:center;">{{ $sno }}</td>
                                             <td style="width: 120px; text-align:center;">
                                                 <a href="{{ url('employee_task_page', $doc->user_id) }}" class="text-decoration-none">
-                                                    {{ $doc->added_by ?? 'غير معروف' }}
+                                                    {{ $user_name ?? 'غير معروف' }}
                                                 </a>
                                             </td>
                                             <td style="width: 120px; text-align:center;">

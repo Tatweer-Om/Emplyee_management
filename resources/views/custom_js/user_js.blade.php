@@ -71,6 +71,7 @@
                         $(".password").val(fetch.password);
                         $(".user_phone").val(fetch.user_phone);
                         $(".user_email").val(fetch.user_email);
+                        $(".leaves").val(fetch.leaves);
                         $(".user_detail").val(fetch.user_detail);
                         $(".user_all").prop('checked', fetch.user_all == 1);
                         $(".user_branch").val(fetch.user_branch).trigger('change');

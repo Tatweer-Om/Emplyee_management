@@ -80,7 +80,7 @@ class UserController extends Controller
                     '<div style="text-align: center;">' . $value->added_by . '<br>' . $add_data . '</div>',
                     '<div style="text-align: center;">' . $modal . '</div>'
                 );
-                
+
 
             }
             $response = array();
@@ -115,6 +115,8 @@ class UserController extends Controller
         $users->user_phone = $request['user_phone'];
         $users->user_email = $request['user_email'];
         $users->user_type = $request['user_type'];
+        $users->total_leaves = $request['leaves'];
+        $users->remaining_leaves =  $request['leaves'];
         $users->user_detail = $request['user_detail'];
         $users->user_branch = $request['user_branch'];
         $users->user_all =  $userAll;
@@ -143,6 +145,7 @@ class UserController extends Controller
             'user_name' => $user_data->user_name,
             'user_phone' => $user_data->user_phone,
             'user_email' => $user_data->user_email,
+            'leaves' => $user_data->total_leaves,
             'user_type' => $user_data->user_type,
             'user_detail' => $user_data->user_detail,
             'user_all' => $user_data->user_all,
@@ -173,6 +176,8 @@ class UserController extends Controller
         $user->user_email = $request->input('user_email');
         $user->user_type= $request->input('user_type');
         $user->user_detail= $request->input('user_detail');
+        $user->total_leaves= $request->input('leaves');
+        $user->remaining_leaves =  $request->input('leaves');
         $user->user_all= $request->input('user_all');
         $user->user_branch= $request->input('user_branch');
         $user->password = bcrypt($request->input('password'));

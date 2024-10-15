@@ -35,7 +35,7 @@
                                     <div class="col-sm">
                                         <div class="mb-4">
                                             <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                data-bs-toggle="modal" data-bs-target="#company_modal"><i
+                                                data-bs-toggle="modal" data-bs-target="#employee_leave_history"><i
                                                 class="bx bx-plus me-1"></i> إضافة شركة</button>
                                         </div>
                                     </div>
@@ -50,12 +50,9 @@
                                             <tr class="bg-transparent">
 
                                                 <th style="text-align: right;">رقم</th>
-                                                <th style="text-align: right; width: 20px;">الشركة</th>
-                                                <th style="text-align: right;">تواصل</th>
-                                                <th style="text-align: right;">المستخدم</th>
-                                                <th style="text-align: right;">التفاصيل</th>
-                                                <th style="text-align: right;">السجل</th>
-                                                <th style="text-align: right; width: 20px;">الإضافة</th>
+                                                <th style="text-align: right; width: 20px;">Employee Name</th>
+                                                <th style="text-align: right;">Holidays</th>
+                                                <th style="text-align: right;">Holidays Gained</th>
                                                 <th style="text-align: right; width: 20px;">إجراء</th>
 
 
@@ -79,63 +76,34 @@
         </div>
 
         <div>
-            <div class="modal fade company_modal" id="company_modal" tabindex="-1" role="dialog"
-                aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalScrollableTitle">نافذة الشركة</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form class="add_company" id="add_company" method="POST" action="#">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="company_name" class="col-form-label ">اسم الشركة</label>
-                                    <input type="text" class="company_name form-control" name="company_name" id="company_name">
-                                </div>
-
-                                <input type="text" class="company_id" name="company_id" id="company_id" hidden>
-                                <div class="mb-3">
-                                    <label for="company_email" class="col-form-label company_email">بريد الشركة الإلكتروني</label>
-                                    <input type="email" class="company_email form-control" name="company_email" id="company_email">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="company_phone" class="col-form-label company_phone">رقم هاتف الشركة</label>
-                                    <input type="tel" class="company_phone form-control" name="company_phone" id="company_phone">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="company_address" class="col-form-label company_address">عنوان الشركة</label>
-                                    <input type="text" class="company_address form-control" name="company_address"
-                                        id="company_address">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="cr_no" class="col-form-label cr_no">رقم السجل التجاري</label>
-                                    <input type="text" class="cr_no form-control" name="cr_no" id="cr_no">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label font-size-13">Assign Company </label>
-                                    <select class="user form-control" searchable name="user">
-                                        <option value="" > Choose A Employee</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->user_name ?? ''}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">تفاصيل الشركة</label>
-                                    <textarea class="company_detail form-control" name="company_detail" id="company_detail"></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">إغلاق</button>
-                                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+            <div class="modal modal-lg fade employee_leave_history" id="employee_leave_history" tabindex="-1"
+            role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Leaves History </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table align-middle dt-responsive table-check nowrap"
+                            style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="all_profile_docs">
+                            <thead>
+                                <tr class="bg-transparent">
+                                    <th style="width: 30px; text-align:center;">الرقم</th>
+                                    <th style="text-align:center;"> Leave Type</th>
+                                    <th style="text-align:center;">Dates </th>
+                                    <th style="text-align:center;"> Balance</th>
+                                    <th style="text-align:center;"> Approved By</th>
+                                    <th style="text-align:center;"> Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         </div>
 
 

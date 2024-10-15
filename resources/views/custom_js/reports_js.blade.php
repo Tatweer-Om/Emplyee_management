@@ -144,7 +144,10 @@ function formatDate(date) {
     return yyyy + '-' + mm + '-' + dd;
 }
 
-// Function to get the start and end dates for different time ranges
+
+
+
+Function to get the start and end dates for different time ranges
 function getDates(timeRange) {
     var endDate = new Date();
     var startDate;
@@ -175,6 +178,9 @@ function getDates(timeRange) {
         end: formatDate(endDate)
     };
 }
+
+
+
 
 
 </script>

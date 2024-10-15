@@ -635,7 +635,9 @@
 
                                                             <td>
                                                                 <div>
-                                                                    <h5 class="font-size-14 mb-1">{{ $doc->company_name ?? '' }} </h5>
+                                                                    <a class="font-size-14 mb-1" href="{{ url('company_profile/' . $doc->company_id) }}" style="color:black;">
+                                                                        {{ $doc->company_name ?? '' }}
+                                                                    </a>
                                                                     <p class="text-muted mb-0 font-size-12">{{ $doc->companydoc_name ?? '' }}</p>
                                                                 </div>
                                                             </td>
